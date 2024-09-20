@@ -79,6 +79,13 @@ dependencies {
     // Lifecycle
     implementation(libs.androidx.lifecycle.runtime.ktx.v262) // Or latest version
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.ui)            // Jetpack Compose UI
+    implementation(libs.androidx.material)    // Material Design
+    implementation(libs.ui.tooling.preview) // Preview support
+    debugImplementation(libs.ui.tooling)       // UI Toolkit
+    debugImplementation(libs.ui.test.manifest) // Test Manifest
 
 }
 

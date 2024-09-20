@@ -27,7 +27,7 @@ import com.example.compose.AppTheme
 import com.example.schoolapp.Presentation.Util.openWebsite
 
 @Composable
-fun StartPage() {
+fun StartPage(MoveToSignIn: () -> Unit) {
 
     val context = LocalContext.current
     val url = "https://www.ammanhighschool.org/"
@@ -65,7 +65,7 @@ fun StartPage() {
                     )
                     Spacer(modifier = Modifier.size(30.dp))
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = { MoveToSignIn() },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.onPrimary,
                             contentColor = MaterialTheme.colorScheme.background

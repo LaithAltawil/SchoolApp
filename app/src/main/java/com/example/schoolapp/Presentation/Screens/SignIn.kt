@@ -11,35 +11,27 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.SavedStateHandle
 import com.example.compose.AppTheme
-import com.example.schoolapp.Presentation.Util.openWebsite
 import com.example.schoolapp.Presentation.VM.AppViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignIn(ViewModel: AppViewModel){
-    val UIState by ViewModel.signInState.collectAsState()
+fun SignIn(ViewModel: AppViewModel) {
+    val state = ViewModel.signInState.collectAsState()
 
     AppTheme {
         Column(
@@ -74,10 +66,24 @@ fun SignIn(ViewModel: AppViewModel){
                     )
                     Spacer(modifier = Modifier.size(30.dp))
                     //TextFields = 2 and a button
+                    TextField(
+                        value = state.value.UserName,
+                        modifier = Modifier.clip(RoundedCornerShape(20.dp)),
+                        onValueChange = {
+                            ViewModel.onUserNameChange(it)
+                        })
+                    Spacer(modifier = Modifier.size(15.dp))
+                    TextField(
+                        value = state.value.password,
+                        modifier = Modifier.clip(RoundedCornerShape(20.dp)),
+                        onValueChange = {
+                            ViewModel.onPasswordChange(it)
+                        })
+                    Spacer(modifier = Modifier.size(15.dp))
+                    Button(onClick = { /*TODO*/ }) {
+                        Text(text = "Sign In", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
 
-
-
-
+                    }
 
 
                 }
@@ -86,10 +92,6 @@ fun SignIn(ViewModel: AppViewModel){
 
 
         }
-
-
-
-
 
 
     }
