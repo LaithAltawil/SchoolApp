@@ -20,8 +20,13 @@ class AppViewModel() : ViewModel() {
     fun onUserNameChange(userName: String) {
         _signInState.update { it.copy(UserName = userName) }
     }
+
     fun onPasswordChange(password: String) {
         _signInState.update { it.copy(password = password) }
+    }
+
+    fun onPasswordVisibilityChange() {
+        _signInState.update { it.copy(isPasswordVisible = !it.isPasswordVisible) }
     }
 
 }
