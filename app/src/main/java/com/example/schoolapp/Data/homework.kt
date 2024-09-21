@@ -5,5 +5,4 @@ data class homework(
     val description: String,
     val dueDate: String,
     val isCompleted: Boolean
-
 )

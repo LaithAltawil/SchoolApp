@@ -38,6 +38,13 @@ fun Navigation() {
                 SignIn(ViewModel)
             }
         }
+        navigation(
+            startDestination = "MainMenu"
+             ,
+            route = "Start"
+        ) {
+
+        }
 
 
     }
