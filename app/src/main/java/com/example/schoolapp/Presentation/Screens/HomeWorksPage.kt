@@ -6,7 +6,9 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -41,17 +43,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.MockData.Mock.HomeworkMock
 import com.example.schoolapp.Data.homework
+import com.example.schoolapp.Presentation.VM.HomeworkPageState
+import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeworkPage() {
+fun HomeworkPage(HomeworkPageState: MainViewModel = MainViewModel()) {
+    val state = HomeworkPageState.state.collectAsStateWithLifecycle()
+
 
     AppTheme {
         Surface(
@@ -103,7 +111,10 @@ fun HomeworkPage() {
                 ) {
                     LazyColumn {
                         items(HomeworkMock.size) { index ->
-                            ExpandableCard(Data = HomeworkMock[index])
+                            ExpandableCard(
+                                Data = HomeworkMock[index],
+                                viewmodel = HomeworkPageState
+                            )
                         }
 
 
@@ -125,9 +136,11 @@ fun HomeworkPagePreview() {
     HomeworkPage()
 }
 
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ExpandableCard(Data: homework) {
+fun ExpandableCard(Data: homework, viewmodel: MainViewModel) {
+
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
@@ -137,13 +150,16 @@ fun ExpandableCard(Data: homework) {
             // Handle the URI and save the file to the database
         }
     }
-    var isExpanded by remember { mutableStateOf(true) }
+    var isExpanded by remember { mutableStateOf(false) }
+
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .combinedClickable { isExpanded = !isExpanded },
+            .combinedClickable {
+                isExpanded = !isExpanded
+            },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary
@@ -153,28 +169,46 @@ fun ExpandableCard(Data: homework) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = Data.title,
-                style = MaterialTheme.typography.headlineSmall
+                style = MaterialTheme.typography.headlineLarge
             )
             if (isExpanded) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = Data.description,
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.titleMedium
                 )
-                Button(
-                    onClick = {
-                        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                            addCategory(Intent.CATEGORY_OPENABLE)
-                            type = "*/*" // Allow all file types
-                        }
-                        launcher.launch(intent)
-                    }, colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.onPrimary,
-                        contentColor = MaterialTheme.colorScheme.primary
-                    )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
                 ) {
-                    Text("Upload File")
+                    Button(
+                        enabled = if (Data.isCompleted) false else true,
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                                addCategory(Intent.CATEGORY_OPENABLE)
+                                type = "*/*" // Allow all file types
+                            }
+                            launcher.launch(intent)
+                        }, colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.onPrimary,
+                            contentColor = MaterialTheme.colorScheme.primary
+                        )
+                    ) {
+                        Text("Upload File")
+                    }
+                    Icon(
+                        modifier = Modifier.size(30.dp),
+                        painter =
+                        if (Data.isCompleted) {
+                            painterResource(id = R.drawable.baseline_check_circle_24)
+                        } else {
+                            painterResource(id = R.drawable.baseline_radio_button_unchecked_24)
+                        }, contentDescription = null
+                    )
+
                 }
+
 
             }
         }
