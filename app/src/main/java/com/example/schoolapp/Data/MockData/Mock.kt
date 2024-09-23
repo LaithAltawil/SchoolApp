@@ -1,6 +1,10 @@
 package com.example.schoolapp.Data.MockData
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
+import com.example.schoolapp.Data.Subjects
 import com.example.schoolapp.Data.homework
+
 
 object Mock {
     val HomeworkMock = listOf<homework>(
@@ -33,5 +37,19 @@ object Mock {
             "2023-12-29",
             false)
     )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
