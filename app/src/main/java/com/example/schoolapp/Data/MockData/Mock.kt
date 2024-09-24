@@ -38,6 +38,17 @@ object Mock {
             false)
     )
 
+    val profilepagetable = listOf(
+        listOf("name :- ", "Laith"),
+        listOf("email :- ", "john.tyler@examplepetstore.com"),
+        listOf("phone :- ", "0123456789"),
+        listOf("address :- ", "123 Main Street"),
+        listOf("gender :- ", "Male"),
+        listOf("dob :- ", "01/01/2000"),
+        listOf("nationality :- ", "Kenyan"),
+        listOf("language :- ", "English"),
+        listOf("religion :- ", "Christian"),
+    )
 
 
 
