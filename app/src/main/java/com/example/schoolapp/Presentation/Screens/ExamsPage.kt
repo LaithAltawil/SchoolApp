@@ -32,7 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
+
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -42,13 +42,13 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.Subjects
-import com.example.schoolapp.Presentation.VM.ExamViewModel
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExamsPage(MainViewModel: ExamViewModel = ExamViewModel()) {
+fun ExamsPage(MainViewModel: MainViewModel = MainViewModel()) {
+
     val state = MainViewModel.Examstate.collectAsStateWithLifecycle()
     val mainmenuitem = listOf(
         Subjects("Maths", painterResource(id = R.drawable.math)) { },

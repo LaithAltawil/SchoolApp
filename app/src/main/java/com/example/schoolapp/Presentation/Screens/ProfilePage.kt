@@ -63,7 +63,6 @@ fun ProfilePage() {
                     horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
                     verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center
                 ) {
-
                    Column(modifier = Modifier
                        .padding(5.dp)
                        .fillMaxSize(),
