@@ -1,4 +1,4 @@
-package com.example.schoolapp.Presentation.VM
+package com.example.schoolapp.Presentation.VM.States
 
 data class ExamPageState(
     val showBottomSheet: Boolean = false,

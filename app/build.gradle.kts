@@ -86,6 +86,7 @@ dependencies {
     implementation(libs.ui.tooling.preview) // Preview support
     debugImplementation(libs.ui.tooling)       // UI Toolkit
     debugImplementation(libs.ui.test.manifest) // Test Manifest
+    implementation(libs.androidx.animation)
 
 }
 

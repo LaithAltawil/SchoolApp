@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import com.example.compose.AppTheme
 import com.example.schoolapp.Navigation.Navigation
 import com.example.schoolapp.Presentation.Screens.HomeworkPage
+import com.example.schoolapp.Presentation.Screens.MarksPage
 import com.example.schoolapp.Presentation.Screens.StartPage
 
 class MainActivity : ComponentActivity() {
@@ -15,7 +16,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                HomeworkPage()
+                MarksPage()
 
 
 

@@ -1,4 +1,4 @@
-package com.example.schoolapp.Presentation.VM
+package com.example.schoolapp.Presentation.VM.States
 
 import com.example.schoolapp.Data.homework
 

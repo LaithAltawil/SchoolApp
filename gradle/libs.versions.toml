@@ -21,6 +21,7 @@ uiTooling = "1.7.2"
 uiToolingPreview = "1.7.2"
 
 [libraries]
+androidx-animation = { module = "androidx.compose.animation:animation" }
 androidx-browser = { module = "androidx.browser:browser", version.ref = "browser" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtxVersion" }
