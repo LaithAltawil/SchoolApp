@@ -34,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.Subjects
 import com.example.schoolapp.Presentation.Screens.ScreensPieces.MyTopAppBar
@@ -44,17 +45,18 @@ import com.example.schoolapp.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingPage(
-    MainViewModel: ViewModel =MainViewModel()
+    MainViewModel: MainViewModel = MainViewModel()
 ) {
+    val state = MainViewModel.Settingstate.collectAsStateWithLifecycle()
     //create A state for the settings page and add it to the main view model
 
     val settings = listOf(
-        Subjects("Profile", painterResource(id = R.drawable.baseline_account_box_24)){},
-        Subjects("Notifications", painterResource(id = R.drawable.baseline_notifications_24)){},
-        Subjects("Theme", painterResource(id = R.drawable.help)){},
-        Subjects("Accessibility", painterResource(id = R.drawable.contact_us)){},
-        Subjects("Help & FAQ", painterResource(id = R.drawable.help)){},
-        Subjects("Contact us", painterResource(id = R.drawable.contact_us)){}
+        Subjects("Profile", painterResource(id = R.drawable.baseline_account_box_24)) {},
+        Subjects("Notifications", painterResource(id = R.drawable.baseline_notifications_24)) {},
+        Subjects("Theme", painterResource(id = R.drawable.help)) {},
+        Subjects("Accessibility", painterResource(id = R.drawable.contact_us)) {},
+        Subjects("Help & FAQ", painterResource(id = R.drawable.help)) {},
+        Subjects("Contact us", painterResource(id = R.drawable.contact_us)) {}
 
     )
 
@@ -68,14 +70,12 @@ fun SettingPage(
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
                 topBar = {
-                    MyTopAppBar(viewModel =
-                        //TODO
-                        , modifier =
-                        //TODO
-                          ,
-                         Title =
-                        //TODO
-                          )
+                    MyTopAppBar(
+                        viewModel =
+                        MainViewModel,
+                        modifier = Modifier,
+                        Title = "Settings"
+                    )
                 },
                 // Add content padding
             ) {
@@ -104,11 +104,13 @@ fun SettingPage(
 
 
                             ) {
-                                Column(modifier = Modifier
-                                    .padding(start = 16.dp, end = 16.dp)
-                                    .fillMaxSize(),
+                                Column(
+                                    modifier = Modifier
+                                        .padding(start = 16.dp, end = 16.dp)
+                                        .fillMaxSize(),
                                     horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center) {
+                                    verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center
+                                ) {
                                     Row {
                                         item.ImagePath?.let { it1 ->
                                             Icon(
@@ -124,7 +126,10 @@ fun SettingPage(
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
                                             Text(text = item.name)
-                                            Icon(imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight, contentDescription = null)
+                                            Icon(
+                                                imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
+                                                contentDescription = null
+                                            )
 
 
                                         }

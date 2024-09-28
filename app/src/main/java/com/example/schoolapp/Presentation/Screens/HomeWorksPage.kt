@@ -47,6 +47,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.MockData.Mock.HomeworkMock
 import com.example.schoolapp.Data.homework
+import com.example.schoolapp.Presentation.Screens.ScreensPieces.MyTopAppBar
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 
@@ -65,38 +66,10 @@ fun HomeworkPage(HomeworkPageState: MainViewModel = MainViewModel()) {
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
                 topBar = {
-                    LargeTopAppBar(
-                        modifier = Modifier.clip(
-                            RoundedCornerShape(
-                                bottomEnd = 20.dp, bottomStart = 20.dp
 
-                            )
-                        ),
-                        colors = TopAppBarDefaults.topAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                        ),
-                        title = {
-                            Text(
-                                "Homeworks",
-                                fontSize = 50.sp,
-                                fontFamily = MaterialTheme.typography.titleLarge.fontFamily
-                            )
-                        },
-                        navigationIcon = {
-                            IconButton(onClick = {
-
-                            }) {
-                                Icon(
-                                    modifier = Modifier.size(50.dp),
-                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                    contentDescription = "Localized description",
-                                    tint = MaterialTheme.colorScheme.background
-                                )
-                            }
-                        },
-
-                        )
+                    MyTopAppBar(viewModel = HomeworkPageState,
+                        modifier = Modifier,
+                        Title ="HomeWork")
                 },
                 // Add content padding
             ) { innerPadding ->

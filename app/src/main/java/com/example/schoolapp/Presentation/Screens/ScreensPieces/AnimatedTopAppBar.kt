@@ -55,9 +55,7 @@ fun MyTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: String) {
                     Text(Title,  fontSize = 60.sp,
                         fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
                         modifier =Modifier.padding(start= 40.dp) )
-
                 }
-
                     },
             modifier = modifier.clip(
                 RoundedCornerShape(
@@ -72,10 +70,7 @@ fun MyTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: String) {
             ),
             navigationIcon = {
                 IconButton(onClick = {
-
                 /*TODO*/
-
-
                 }) {
                     Icon(modifier = Modifier.size(50.dp),
                         imageVector = Icons.AutoMirrored.Default.ArrowBack,

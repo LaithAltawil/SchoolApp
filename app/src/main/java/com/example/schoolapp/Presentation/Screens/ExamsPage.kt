@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.Subjects
+import com.example.schoolapp.Presentation.Screens.ScreensPieces.MyTopAppBar
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 
@@ -70,38 +71,11 @@ fun ExamsPage(MainViewModel: MainViewModel = MainViewModel()) {
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
                 topBar = {
-                    LargeTopAppBar(
-                        modifier = Modifier.clip(
-                            RoundedCornerShape(
-                                bottomEnd = 25.dp,
-                                bottomStart = 25.dp
-                            )
-                        ),
-                        colors = TopAppBarDefaults.topAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                        ),
-                        title = {
-                            Text(
-                                "Exams",
-                                fontSize = 50.sp,
-                                fontFamily = MaterialTheme.typography.titleLarge.fontFamily
-                            )
-                        },
-                        navigationIcon = {
-                            IconButton(onClick = {
+                    MyTopAppBar(
+                        viewModel = MainViewModel,
+                        modifier =Modifier,
+                        Title = "Exams")
 
-                            }) {
-                                Icon(
-                                    modifier = Modifier.size(50.dp),
-                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                    contentDescription = "Localized description",
-                                    tint = MaterialTheme.colorScheme.background
-                                )
-                            }
-                        },
-
-                        )
                 },
                 // Add content padding
             ) { innerPadding ->

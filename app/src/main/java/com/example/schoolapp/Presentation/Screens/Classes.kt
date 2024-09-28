@@ -24,6 +24,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,10 +36,15 @@ import com.example.compose.AppTheme
 import com.example.schoolapp.Data.MockData.Mock
 import com.example.schoolapp.Data.MockData.Mock.classList
 import com.example.schoolapp.Data.MockData.Mock.daysOfWeek
+import com.example.schoolapp.Presentation.Screens.ScreensPieces.MyTopAppBar
+import com.example.schoolapp.Presentation.VM.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StudentClass() {
+fun StudentClass(MainViewModel: MainViewModel = MainViewModel()) {
+
+    val state by MainViewModel.state.collectAsState()
+
     AppTheme {
         Surface(
             modifier = Modifier
@@ -46,38 +53,7 @@ fun StudentClass() {
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
                 topBar = {
-                    LargeTopAppBar(
-                        modifier = Modifier.clip(
-                            RoundedCornerShape(
-                                bottomEnd = 25.dp,
-                                bottomStart = 25.dp
-                            )
-                        ),
-                        colors = TopAppBarDefaults.topAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                        ),
-                        title = {
-                            Text(
-                                "Classes",
-                                fontSize = 50.sp,
-                                fontFamily = MaterialTheme.typography.titleLarge.fontFamily
-                            )
-                        },
-                        navigationIcon = {
-                            IconButton(onClick = {
-
-                            }) {
-                                Icon(
-                                    modifier = Modifier.size(50.dp),
-                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                    contentDescription = "Localized description",
-                                    tint = MaterialTheme.colorScheme.background
-                                )
-                            }
-                        },
-
-                        )
+                    MyTopAppBar(viewModel =MainViewModel , modifier =Modifier , Title ="Classes")
                 },
                 // Add content padding
             ) {
@@ -113,7 +89,9 @@ fun StudentClass() {
                                                     .size(150.dp),
                                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
                                             ) {
-                                                Column(modifier = Modifier.fillMaxSize().padding(16.dp),
+                                                Column(modifier = Modifier
+                                                    .fillMaxSize()
+                                                    .padding(16.dp),
                                                     horizontalAlignment = Alignment.CenterHorizontally,
                                                     verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center
                                                     ) {
