@@ -11,6 +11,6 @@ data class homework(
 
 data class Subjects(
     val name: String,
-    val ImagePath: Painter,
+    val ImagePath: Painter? =null,
     val onClick: () -> Unit
 )

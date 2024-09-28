@@ -142,11 +142,7 @@ fun ExamsPage(MainViewModel: MainViewModel = MainViewModel()) {
                                         textAlign = TextAlign.Center,
                                         overflow = TextOverflow.Ellipsis
                                     )
-                                    Icon(
-                                        painter = mainmenuitem[item].ImagePath,
-                                        contentDescription = "",
-                                        tint = Color.White
-                                    )
+
 
                                 }
 

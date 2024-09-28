@@ -19,23 +19,19 @@ class MainViewModel : ViewModel() {
         _Examstate.value = ExamPageState(showBottomSheet = !_Examstate.value.showBottomSheet)
         return _Examstate.value.showBottomSheet
     }
+
     private val _Marksstate = MutableStateFlow(MarkspageState())
     val Marksstate: StateFlow<MarkspageState> = _Marksstate.asStateFlow()
-    fun changeBottomSheetState2(): Boolean {
-        _Marksstate.value = MarkspageState()
-        return _Marksstate.value.showBottomSheet
-    }
 
+    fun changeBottomSheetState2(item: Int) {
+        // Assuming showBottomSheet is a MutableList<Boolean> in your MarkspageState
+
+        val updatedShowBottomSheet = _Marksstate.value.showBottomSheet.toMutableList() // Create a mutable copy
+        updatedShowBottomSheet[item] = !updatedShowBottomSheet[item] // Toggle the value at the specified index
+        _Marksstate.value = _Marksstate.value.copy(showBottomSheet = updatedShowBottomSheet) // Update the state
+    }
     fun isTopappbarVisible() {
         _Marksstate.value = MarkspageState(isTopBarVisible = !_Marksstate.value.isTopBarVisible)
     }
-
-    fun changeBottomSheetStateMarks(): Boolean {
-        _Marksstate.value = MarkspageState(showBottomSheet = !_Examstate.value.showBottomSheet)
-        return _Marksstate.value.showBottomSheet
-    }
-
-
-
 
 }

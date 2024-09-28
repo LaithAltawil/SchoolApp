@@ -33,14 +33,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.Subjects
+import com.example.schoolapp.Presentation.Screens.ScreensPieces.MyTopAppBar
+import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingPage() {
+fun SettingPage(
+    MainViewModel: ViewModel =MainViewModel()
+) {
+    //create A state for the settings page and add it to the main view model
+
     val settings = listOf(
         Subjects("Profile", painterResource(id = R.drawable.baseline_account_box_24)){},
         Subjects("Notifications", painterResource(id = R.drawable.baseline_notifications_24)){},
@@ -61,38 +68,14 @@ fun SettingPage() {
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
                 topBar = {
-                    LargeTopAppBar(
-                        modifier = Modifier.clip(
-                            RoundedCornerShape(
-                                bottomEnd = 25.dp,
-                                bottomStart = 25.dp
-                            )
-                        ),
-                        colors = TopAppBarDefaults.topAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                        ),
-                        title = {
-                            Text(
-                                "Settings",
-                                fontSize = 50.sp,
-                                fontFamily = MaterialTheme.typography.titleLarge.fontFamily
-                            )
-                        },
-                        navigationIcon = {
-                            IconButton(onClick = {
-
-                            }) {
-                                Icon(
-                                    modifier = Modifier.size(50.dp),
-                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                    contentDescription = "Localized description",
-                                    tint = MaterialTheme.colorScheme.background
-                                )
-                            }
-                        },
-
-                        )
+                    MyTopAppBar(viewModel =
+                        //TODO
+                        , modifier =
+                        //TODO
+                          ,
+                         Title =
+                        //TODO
+                          )
                 },
                 // Add content padding
             ) {
@@ -127,11 +110,13 @@ fun SettingPage() {
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center) {
                                     Row {
-                                        Icon(
-                                            painter = item.ImagePath,
-                                            contentDescription = null,
-                                            modifier = Modifier.size(30.dp)
-                                        )
+                                        item.ImagePath?.let { it1 ->
+                                            Icon(
+                                                painter = it1,
+                                                contentDescription = null,
+                                                modifier = Modifier.size(30.dp)
+                                            )
+                                        }
                                         Spacer(modifier = Modifier.width(16.dp))
                                         Row(
                                             modifier = Modifier.fillMaxWidth(),

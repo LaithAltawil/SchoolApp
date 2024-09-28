@@ -1,6 +1,5 @@
 package com.example.schoolapp.Presentation.Screens
 
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,27 +12,19 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -55,18 +46,7 @@ fun MarksPage(MainViewModel: MainViewModel = MainViewModel()) {
     }
 
 
-
-
     val state = MainViewModel.Marksstate.collectAsStateWithLifecycle()
-    val mainmenuitem = listOf(
-        Subjects("Maths", painterResource(id = R.drawable.math)) { },
-        Subjects("Science", painterResource(id = R.drawable.science)) { },
-        Subjects("English", painterResource(id = R.drawable.english)) { },
-        Subjects("History", painterResource(id = R.drawable.history)) {},
-        Subjects("Arabic", painterResource(id = R.drawable.arabic)) {},
-        Subjects("Computer Science", painterResource(id = R.drawable.science)) {},
-        Subjects("Geography", painterResource(id = R.drawable.geography)) {}
-    )
 
 
     AppTheme {
@@ -78,13 +58,7 @@ fun MarksPage(MainViewModel: MainViewModel = MainViewModel()) {
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
                 topBar = {
-                    MyTopAppBar(viewModel = MainViewModel, modifier =Modifier
-                    .clip(
-                        RoundedCornerShape(
-                            bottomEnd = 25.dp,
-                            bottomStart = 25.dp
-                        )
-                    ), "Exams")
+                    MyTopAppBar(viewModel = MainViewModel, modifier = Modifier, "Exams")
                 },
                 // Add content padding
             ) { innerPadding ->
@@ -95,7 +69,7 @@ fun MarksPage(MainViewModel: MainViewModel = MainViewModel()) {
                     LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 128.dp)) {
                         //here we will enter cards which will be the exams coming set in order from left to right depending of its date
 
-                        items(mainmenuitem.size) { item ->
+                        items(state.value.MarksItems.size) { item ->
                             Card(colors = CardDefaults.cardColors(
                                 containerColor = MaterialTheme.colorScheme.primary
                             ),
@@ -106,7 +80,7 @@ fun MarksPage(MainViewModel: MainViewModel = MainViewModel()) {
                                     .size(200.dp)
                                     .width(100.dp)
                                     .clickable {
-                                        MainViewModel.changeBottomSheetStateMarks()
+                                        MainViewModel.changeBottomSheetState2(item)
                                     }
                             ) {
                                 Column(
@@ -118,24 +92,22 @@ fun MarksPage(MainViewModel: MainViewModel = MainViewModel()) {
                                 ) {
                                     Text(
                                         modifier = Modifier.padding(10.dp, top = 40.dp),
-                                        text = mainmenuitem[item].name,
+                                        text = state.value.MarksItems[item].name,
                                         fontSize = 16.sp,
                                         color = Color.White,
                                         textAlign = TextAlign.Center,
                                         overflow = TextOverflow.Ellipsis
                                     )
-                                    Icon(
-                                        painter = mainmenuitem[item].ImagePath,
-                                        contentDescription = "",
-                                        tint = Color.White
-                                    )
 
                                 }
 
                             }
-                            if (state.value.showBottomSheet) {
-                                ModalBottomSheet(containerColor = MaterialTheme.colorScheme.primary,
-                                    onDismissRequest = { MainViewModel.changeBottomSheetState() }
+                            if (state.value.showBottomSheet[item]) {
+
+                                ModalBottomSheet(
+                                    containerColor = MaterialTheme.colorScheme.primary,
+                                    onDismissRequest = {
+                                        MainViewModel.changeBottomSheetState2(item) }
                                 ) {
                                     // Bottom sheet content
                                     Column(
@@ -143,6 +115,8 @@ fun MarksPage(MainViewModel: MainViewModel = MainViewModel()) {
                                             .fillMaxWidth()
                                             .padding(16.dp)
                                     ) {
+                                        Text(text = state.value.MarksItems[item].name,
+                                            fontSize = 30.sp)
 
 
                                     }
