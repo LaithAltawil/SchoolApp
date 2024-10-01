@@ -1,16 +1,22 @@
 package com.example.schoolapp.Presentation.VM
 
 import android.app.DatePickerDialog
+import android.util.Log
 import androidx.compose.runtime.remember
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import com.example.schoolapp.Presentation.VM.States.CounselorsPageState
 import com.example.schoolapp.Presentation.VM.States.ExamPageState
 import com.example.schoolapp.Presentation.VM.States.HomeworkPageState
 import com.example.schoolapp.Presentation.VM.States.MarkspageState
 import com.example.schoolapp.Presentation.VM.States.SettingsPageState
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.type.Date
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 class MainViewModel : ViewModel() {
@@ -50,7 +56,6 @@ class MainViewModel : ViewModel() {
     fun isTopappbarVisible2() {
         _Settingstate.value = SettingsPageState(isTopBarVisible = !_Settingstate.value.isTopBarVisible)
     }
-
     //counselor Page
     private val _Counselorstate = MutableStateFlow(CounselorsPageState())
     val Counselorstate: StateFlow<CounselorsPageState> = _Counselorstate.asStateFlow()
@@ -58,19 +63,26 @@ class MainViewModel : ViewModel() {
     fun isTopappbarVisible3() {
         _Counselorstate.value = CounselorsPageState(topAppBarVisible = !_Counselorstate.value.topAppBarVisible)
     }
-
-    fun IsIDandDateEntered():Boolean{
-        if(_Counselorstate.value.Date.isNotEmpty()&&_Counselorstate.value.Id.isNotEmpty()){
-            _Counselorstate.value=CounselorsPageState(SelectedDateAndEnteredID = true)
-            return true
-
-        }
-        else{
-            _Counselorstate.value=CounselorsPageState(SelectedDateAndEnteredID = false)
-            return false
-
-        }
+    fun openDialog() {
+        _Counselorstate.value = CounselorsPageState(openDialog = true)
     }
+
+    fun closeDialog(){
+        _Counselorstate.value=CounselorsPageState(openDialog = false)
+
+    }
+    fun showDate():String{
+        return _Counselorstate.value.selectedDate
+    }
+
+
+    fun updateSelectedDate(date: String) {
+        Log.d("MainViewModel", "Updating selectedDate: $date")
+        _Counselorstate.value.selectedDate = date
+    }
+
+
+
 
 
 

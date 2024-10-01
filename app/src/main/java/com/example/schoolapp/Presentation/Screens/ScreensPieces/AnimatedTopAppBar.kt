@@ -42,7 +42,7 @@ fun MyTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: String) {
         visible = state.isTopBarVisible,
         enter = slideInVertically(
             animationSpec = tween(durationMillis = 300),
-            initialOffsetY = { 0 }
+            initialOffsetY = { it }
         ),
         exit = slideOutVertically(
             animationSpec = tween(durationMillis = 900, easing = LinearEasing),

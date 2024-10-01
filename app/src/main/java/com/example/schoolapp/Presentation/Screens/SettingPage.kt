@@ -26,6 +26,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,6 +50,10 @@ fun SettingPage(
 ) {
     val state = MainViewModel.Settingstate.collectAsStateWithLifecycle()
     //create A state for the settings page and add it to the main view model
+    LaunchedEffect(Unit) {
+        MainViewModel.isTopappbarVisible()
+    }
+
 
     val settings = listOf(
         Subjects("Profile", painterResource(id = R.drawable.baseline_account_box_24)) {},

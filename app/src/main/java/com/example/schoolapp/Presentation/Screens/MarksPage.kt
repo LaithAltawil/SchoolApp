@@ -58,7 +58,9 @@ fun MarksPage(MainViewModel: MainViewModel = MainViewModel()) {
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
                 topBar = {
-                    MyTopAppBar(viewModel = MainViewModel, modifier = Modifier, "Exams")
+                    MyTopAppBar(viewModel = MainViewModel,
+                        modifier = Modifier,
+                        "Exams")
                 },
                 // Add content padding
             ) { innerPadding ->
