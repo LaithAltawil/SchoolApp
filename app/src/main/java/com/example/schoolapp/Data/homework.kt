@@ -14,3 +14,8 @@ data class Subjects(
     val ImagePath: Painter? =null,
     val onClick: () -> Unit
 )
+data class CalenderDays(
+    val day: String,
+    val event: String,
+    val onClick: () -> Unit
+)

@@ -48,6 +48,7 @@ import com.example.compose.AppTheme
 import com.example.schoolapp.Data.MockData.Mock.HomeworkMock
 import com.example.schoolapp.Data.homework
 import com.example.schoolapp.Presentation.Screens.ScreensPieces.MyTopAppBar
+import com.example.schoolapp.Presentation.Util.ExpandableCard
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 
@@ -105,80 +106,3 @@ fun HomeworkPagePreview() {
 }
 
 
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun ExpandableCard(Data: homework, viewmodel: MainViewModel) {
-
-
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val uri = result.data?.data // The selected file's URI
-            // Handle the URI and save the file to the database
-        }
-    }
-    var isExpanded by remember { mutableStateOf(false) }
-
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .combinedClickable {
-                isExpanded = !isExpanded
-            },
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = Data.title,
-                style = MaterialTheme.typography.headlineLarge
-            )
-            if (isExpanded) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = Data.description,
-                    style = MaterialTheme.typography.titleMedium
-                )
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
-                ) {
-                    Button(
-                        enabled = if (Data.isCompleted) false else true,
-                        onClick = {
-                            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                                addCategory(Intent.CATEGORY_OPENABLE)
-                                type = "*/*" // Allow all file types
-                            }
-                            launcher.launch(intent)
-                        }, colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.onPrimary,
-                            contentColor = MaterialTheme.colorScheme.primary
-                        )
-                    ) {
-                        Text("Upload File")
-                    }
-                    Icon(
-                        modifier = Modifier.size(30.dp),
-                        painter =
-                        if (Data.isCompleted) {
-                            painterResource(id = R.drawable.baseline_check_circle_24)
-                        } else {
-                            painterResource(id = R.drawable.baseline_radio_button_unchecked_24)
-                        }, contentDescription = null
-                    )
-
-                }
-
-
-            }
-        }
-    }
-}
