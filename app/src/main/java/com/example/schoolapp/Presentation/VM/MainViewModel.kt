@@ -2,12 +2,16 @@ package com.example.schoolapp.Presentation.VM
 
 import android.app.DatePickerDialog
 import android.util.Log
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import com.example.schoolapp.Presentation.VM.States.CounselorsPageState
 import com.example.schoolapp.Presentation.VM.States.ExamPageState
 import com.example.schoolapp.Presentation.VM.States.HomeworkPageState
+import com.example.schoolapp.Presentation.VM.States.MainDataClass
 import com.example.schoolapp.Presentation.VM.States.MarkspageState
 import com.example.schoolapp.Presentation.VM.States.SettingsPageState
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -18,12 +22,26 @@ import kotlinx.coroutines.flow.asStateFlow
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+import androidx.compose.runtime.getValue
+
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+
 
 class MainViewModel : ViewModel() {
 
     // Homework Page
     private val _state = MutableStateFlow(HomeworkPageState())
     val state: StateFlow<HomeworkPageState> = _state.asStateFlow()
+
+    var State by mutableStateOf(MainDataClass.HomeworkPageState1())
+            private set
+
+    fun isLoading(){
+        _state.value = HomeworkPageState(isLoading = !_state.value.isLoading)
+    }
+
+
 
     private val _Examstate = MutableStateFlow(ExamPageState())
     val Examstate: StateFlow<ExamPageState> = _Examstate.asStateFlow()

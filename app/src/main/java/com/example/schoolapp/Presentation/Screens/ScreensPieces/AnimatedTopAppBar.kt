@@ -26,15 +26,19 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.schoolapp.Presentation.VM.States.CounselorsPageState
+import kotlinx.coroutines.flow.StateFlow
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: String) {
+fun MyTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: String,
+                state: StateFlow<CounselorsPageState>) {
 
     val state by viewModel.Marksstate.collectAsState()
 

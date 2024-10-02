@@ -33,122 +33,122 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose.AppTheme
 import com.example.schoolapp.Presentation.Screens.ScreensPieces.MyTopAppBar
 import com.example.schoolapp.Presentation.VM.MainViewModel
-//
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun ResourcesPage(MainViewModel: MainViewModel = MainViewModel()){
-//
-//    //val state = MainViewModel.Marksstate.collectAsStateWithLifecycle()
-//
-//    //create A state for the Resources page and add it to the main view model
-//    LaunchedEffect(Unit) {
-//        MainViewModel.isTopappbarVisible()
-//    }
-//
-//    AppTheme {
-//        Surface(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .fillMaxSize(),
-//            color = MaterialTheme.colorScheme.primaryContainer
-//        ) {
-//            Scaffold(
-//                containerColor = MaterialTheme.colorScheme.onPrimary,
-//                topBar = {
-//                    MyTopAppBar(
-//                        viewModel =
-//                        MainViewModel,
-//                        modifier = Modifier,
-//                        Title = "Resources"
-//                    )
-//                },
-//                // Add content padding
-//            ) {
-//                Column(
-//                    modifier = Modifier
-//                        .padding(it)
-//                        .fillMaxSize()
-//                ) {
-//                    Column( modifier = Modifier
-//                        .fillMaxSize())
-//                    {
-//                        LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 128.dp)) {
-//                        //here we will enter cards which will be the exams coming set in order from left to right depending of its date
-//
-//                        items(state.value.MarksItems.size) { item ->
-//                            Card(colors = CardDefaults.cardColors(
-//                                containerColor = MaterialTheme.colorScheme.primary
-//                            ),
-//
-//                                modifier = Modifier
-//                                    .padding(16.dp)
-//                                    .wrapContentHeight()
-//                                    .size(200.dp)
-//                                    .width(100.dp)
-//                                    .clickable {
-//                                        MainViewModel.changeBottomSheetState2(item)
-//                                    }
-//                            ) {
-//                                Column(
-//                                    modifier = Modifier
-//                                        .padding(16.dp)
-//                                        .wrapContentSize(Alignment.Center),
-//                                    horizontalAlignment = Alignment.CenterHorizontally,
-//                                    verticalArrangement = Arrangement.Center
-//                                ) {
-//                                    Text(
-//                                        modifier = Modifier.padding(10.dp, top = 40.dp),
-//                                        text = state.value.MarksItems[item].name,
-//                                        fontSize = 16.sp,
-//                                        color = Color.White,
-//                                        textAlign = TextAlign.Center,
-//                                        overflow = TextOverflow.Ellipsis
-//                                    )
-//
-//                                }
-//
-//                            }
-//                            if (state.value.showBottomSheet[item]) {
-//
-//                                ModalBottomSheet(
-//                                    containerColor = MaterialTheme.colorScheme.primary,
-//                                    onDismissRequest = {
-//                                        MainViewModel.changeBottomSheetState2(item) }
-//                                ) {
-//                                    // Bottom sheet content
-//                                    Column(
-//                                        modifier = Modifier
-//                                            .fillMaxWidth()
-//                                            .padding(16.dp)
-//                                    ) {
-//                                        Text(text = state.value.MarksItems[item].name,
-//                                            fontSize = 30.sp)
-//
-//
-//                                    }
-//                                }
-//                            }
-//
-//
-//                        }
-//
-//                    }
-//
-//
-//
-//
-//                    }
-//
-//
-//                }
-//
-//
-//            }
-//
-//
-//        }
-//
-//    }
-//
-//
-//}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ResourcesPage(MainViewModel: MainViewModel = MainViewModel()){
+
+    //val state = MainViewModel.Marksstate.collectAsStateWithLifecycle()
+
+    //create A state for the Resources page and add it to the main view model
+    LaunchedEffect(Unit) {
+        MainViewModel.isTopappbarVisible()
+    }
+
+    AppTheme {
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxSize(),
+            color = MaterialTheme.colorScheme.primaryContainer
+        ) {
+            Scaffold(
+                containerColor = MaterialTheme.colorScheme.onPrimary,
+                topBar = {
+                    MyTopAppBar(
+                        viewModel =
+                        MainViewModel,
+                        modifier = Modifier,
+                        Title = "Resources"
+                    )
+                },
+                // Add content padding
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(it)
+                        .fillMaxSize()
+                ) {
+                    Column( modifier = Modifier
+                        .fillMaxSize())
+                    {
+                        LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 128.dp)) {
+                        //here we will enter cards which will be the exams coming set in order from left to right depending of its date
+
+                        items(state.value.MarksItems.size) { item ->
+                            Card(colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.primary
+                            ),
+
+                                modifier = Modifier
+                                    .padding(16.dp)
+                                    .wrapContentHeight()
+                                    .size(200.dp)
+                                    .width(100.dp)
+                                    .clickable {
+                                        MainViewModel.changeBottomSheetState2(item)
+                                    }
+                            ) {
+                                Column(
+                                    modifier = Modifier
+                                        .padding(16.dp)
+                                        .wrapContentSize(Alignment.Center),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Text(
+                                        modifier = Modifier.padding(10.dp, top = 40.dp),
+                                        text = state.value.MarksItems[item].name,
+                                        fontSize = 16.sp,
+                                        color = Color.White,
+                                        textAlign = TextAlign.Center,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+
+                                }
+
+                            }
+                            if (state.value.showBottomSheet[item]) {
+
+                                ModalBottomSheet(
+                                    containerColor = MaterialTheme.colorScheme.primary,
+                                    onDismissRequest = {
+                                        MainViewModel.changeBottomSheetState2(item) }
+                                ) {
+                                    // Bottom sheet content
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(16.dp)
+                                    ) {
+                                        Text(text = state.value.MarksItems[item].name,
+                                            fontSize = 30.sp)
+
+
+                                    }
+                                }
+                            }
+
+
+                        }
+
+                    }
+
+
+
+
+                    }
+
+
+                }
+
+
+            }
+
+
+        }
+
+    }
+
+
+}
