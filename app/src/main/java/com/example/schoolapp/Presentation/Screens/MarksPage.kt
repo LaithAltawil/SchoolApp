@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.Subjects
-import com.example.schoolapp.Presentation.Screens.ScreensPieces.MyTopAppBar
+import com.example.schoolapp.Presentation.Screens.ScreensPieces.MarksMyTopAppBar
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 
@@ -58,7 +58,7 @@ fun MarksPage(MainViewModel: MainViewModel = MainViewModel()) {
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
                 topBar = {
-                    MyTopAppBar(viewModel = MainViewModel,
+                    MarksMyTopAppBar(viewModel = MainViewModel,
                         modifier = Modifier,
                         "Exams")
                 },

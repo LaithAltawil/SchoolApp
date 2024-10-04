@@ -5,15 +5,15 @@ import com.example.schoolapp.Data.homework
 
 sealed class MainDataClass{
 
-    data class CounselorsPageState(
-        val topAppBarVisible: Boolean = false,
+    data class CounselorsPageState1(
+        val isTopAppBarVisible: Boolean = false,
         var selectedDate:String="",
         val SelectedDateAndEnteredID:Boolean=false,
         var Id:String="",
         val openDialog:Boolean=false
     ):MainDataClass()
 
-    data class ExamPageState(
+    data class ExamPageState1(
         val showBottomSheet: Boolean = false,
         val Subjects : List<String> = listOf(
             "Math",
@@ -24,16 +24,17 @@ sealed class MainDataClass{
             "French",
             "Arabic",
             "Computer Science",
-        )
+        ),
+        val isTopBarVisible: Boolean = false,
 
     ):MainDataClass()
 
     data class HomeworkPageState1(
         val homework: List<homework> = emptyList(),
-        val isLoading: Boolean = false,
+        val isTopBarVisible: Boolean = false,
     ):MainDataClass()
 
-    data class MarkspageState(
+    data class MarkspageState1(
         val Subjects: List<String> = listOf(
             "Math",
             "Science",
@@ -60,9 +61,39 @@ sealed class MainDataClass{
 
     ):MainDataClass()
 
-    data class SettingsPageState(
+    data class SettingsPageState1(
         val isTopBarVisible: Boolean = false
     ):MainDataClass()
+
+    data class ResourcesPageState(
+        val isTopAppBarVisible: Boolean = false,
+        val Subjects: List<Subjects> = listOf(
+            Subjects("Maths",) { },
+            Subjects("Science",) { },
+            Subjects("English",) { },
+            Subjects("History",) {},
+            Subjects("Arabic",) {},
+            Subjects("Computer Science",) {},
+            Subjects("Geography",) {}
+        ),
+        val showBottomSheet: List<Boolean> = listOf(false,false,false,false,false,false,false)
+
+    ):MainDataClass()
+
+    data class ClassesPageState(
+        val isTopAppBarVisible: Boolean = false,
+    ):MainDataClass()
+
+    data class CalenderPage(
+        val isTopAppBarVisible: Boolean = false,
+
+    ):MainDataClass()
+
+
+
+
+
+
 
 
 

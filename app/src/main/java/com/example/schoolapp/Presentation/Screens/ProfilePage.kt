@@ -26,7 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.MockData.Mock.profilepagetable
-import com.example.schoolapp.Presentation.Screens.ScreensPieces.MyTopAppBar
 import com.example.schoolapp.Presentation.Util.SimpleTable
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
@@ -34,10 +33,7 @@ import com.example.schoolapp.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfilePage(MainViewModel: MainViewModel= MainViewModel()) {
-    LaunchedEffect(Unit) {
-        MainViewModel.isTopappbarVisible()
-    }
-    val state by MainViewModel.Marksstate.collectAsState()
+
 
 
     AppTheme {
@@ -46,13 +42,9 @@ fun ProfilePage(MainViewModel: MainViewModel= MainViewModel()) {
             color = MaterialTheme.colorScheme.primary
         ) {
             Scaffold(
+                //Needs Completetion TODO
                 topBar = {
-                    MyTopAppBar(
-                        viewModel = MainViewModel,
-                        modifier = Modifier,
-                        Title = "Profile"
-
-                    )
+                    LargeTopAppBar(title = { Text(text = "Profile") })
 
                 }
 

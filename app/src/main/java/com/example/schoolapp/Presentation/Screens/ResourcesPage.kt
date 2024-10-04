@@ -31,18 +31,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose.AppTheme
-import com.example.schoolapp.Presentation.Screens.ScreensPieces.MyTopAppBar
+import com.example.schoolapp.Presentation.Screens.ScreensPieces.ResourcesTopAppBar
 import com.example.schoolapp.Presentation.VM.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ResourcesPage(MainViewModel: MainViewModel = MainViewModel()){
 
-    //val state = MainViewModel.Marksstate.collectAsStateWithLifecycle()
+    val state = MainViewModel.Resourcesstate.collectAsStateWithLifecycle()
 
     //create A state for the Resources page and add it to the main view model
     LaunchedEffect(Unit) {
-        MainViewModel.isTopappbarVisible()
+        MainViewModel.isTopappbarVisible4()
     }
 
     AppTheme {
@@ -55,7 +55,7 @@ fun ResourcesPage(MainViewModel: MainViewModel = MainViewModel()){
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
                 topBar = {
-                    MyTopAppBar(
+                    ResourcesTopAppBar(
                         viewModel =
                         MainViewModel,
                         modifier = Modifier,
@@ -75,7 +75,7 @@ fun ResourcesPage(MainViewModel: MainViewModel = MainViewModel()){
                         LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 128.dp)) {
                         //here we will enter cards which will be the exams coming set in order from left to right depending of its date
 
-                        items(state.value.MarksItems.size) { item ->
+                        items(state.value.Subjects.size) { item ->
                             Card(colors = CardDefaults.cardColors(
                                 containerColor = MaterialTheme.colorScheme.primary
                             ),
@@ -98,7 +98,7 @@ fun ResourcesPage(MainViewModel: MainViewModel = MainViewModel()){
                                 ) {
                                     Text(
                                         modifier = Modifier.padding(10.dp, top = 40.dp),
-                                        text = state.value.MarksItems[item].name,
+                                        text = state.value.Subjects[item].name,
                                         fontSize = 16.sp,
                                         color = Color.White,
                                         textAlign = TextAlign.Center,
@@ -113,7 +113,7 @@ fun ResourcesPage(MainViewModel: MainViewModel = MainViewModel()){
                                 ModalBottomSheet(
                                     containerColor = MaterialTheme.colorScheme.primary,
                                     onDismissRequest = {
-                                        MainViewModel.changeBottomSheetState2(item) }
+                                        MainViewModel.changeBottomSheetState(item) }
                                 ) {
                                     // Bottom sheet content
                                     Column(
@@ -121,7 +121,7 @@ fun ResourcesPage(MainViewModel: MainViewModel = MainViewModel()){
                                             .fillMaxWidth()
                                             .padding(16.dp)
                                     ) {
-                                        Text(text = state.value.MarksItems[item].name,
+                                        Text(text = state.value.Subjects[item].name,
                                             fontSize = 30.sp)
 
 

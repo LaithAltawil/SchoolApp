@@ -38,7 +38,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.Subjects
-import com.example.schoolapp.Presentation.Screens.ScreensPieces.MyTopAppBar
+import com.example.schoolapp.Presentation.Screens.ScreensPieces.SettingsTopAppBar
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 
@@ -51,7 +51,7 @@ fun SettingPage(
     val state = MainViewModel.Settingstate.collectAsStateWithLifecycle()
     //create A state for the settings page and add it to the main view model
     LaunchedEffect(Unit) {
-        MainViewModel.isTopappbarVisible()
+        MainViewModel.isTopappbarVisible2()
     }
 
 
@@ -75,7 +75,7 @@ fun SettingPage(
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
                 topBar = {
-                    MyTopAppBar(
+                    SettingsTopAppBar(
                         viewModel =
                         MainViewModel,
                         modifier = Modifier,
@@ -165,8 +165,3 @@ fun SettingPage(
     }
 }
 
-@Composable
-@Preview
-fun SettingPagePreview() {
-    SettingPage()
-}

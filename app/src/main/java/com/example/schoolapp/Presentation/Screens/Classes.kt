@@ -24,6 +24,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -36,14 +37,18 @@ import com.example.compose.AppTheme
 import com.example.schoolapp.Data.MockData.Mock
 import com.example.schoolapp.Data.MockData.Mock.classList
 import com.example.schoolapp.Data.MockData.Mock.daysOfWeek
-import com.example.schoolapp.Presentation.Screens.ScreensPieces.MyTopAppBar
+import com.example.schoolapp.Presentation.Screens.ScreensPieces.ClassesTopAppBar
 import com.example.schoolapp.Presentation.VM.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StudentClass(MainViewModel: MainViewModel = MainViewModel()) {
+    LaunchedEffect(Unit) {
+        MainViewModel.isTopappbarVisible5()
 
-    val state by MainViewModel.state.collectAsState()
+    }
+
+    val state by MainViewModel.Classesstate.collectAsState()
 
     AppTheme {
         Surface(
@@ -53,7 +58,8 @@ fun StudentClass(MainViewModel: MainViewModel = MainViewModel()) {
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
                 topBar = {
-                    MyTopAppBar(viewModel =MainViewModel , modifier =Modifier , Title ="Classes")
+
+                    ClassesTopAppBar(viewModel =MainViewModel , modifier =Modifier , Title ="Classes")
                 },
                 // Add content padding
             ) {

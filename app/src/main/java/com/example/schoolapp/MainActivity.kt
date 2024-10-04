@@ -6,17 +6,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.FragmentManager
 import com.example.compose.AppTheme
-import com.example.schoolapp.Navigation.Navigation
-import com.example.schoolapp.Presentation.Screens.CounselorPage
-import com.example.schoolapp.Presentation.Screens.HomeworkPage
-import com.example.schoolapp.Presentation.Screens.MarksPage
-import com.example.schoolapp.Presentation.Screens.ProfilePage
 
-import com.example.schoolapp.Presentation.Screens.ScreensPieces.CalenderPage
-import com.example.schoolapp.Presentation.Screens.SettingPage
-import com.example.schoolapp.Presentation.Screens.StartPage
+import com.example.schoolapp.Presentation.Screens.CalenderPage
 
 class MainActivity : ComponentActivity() {
 
