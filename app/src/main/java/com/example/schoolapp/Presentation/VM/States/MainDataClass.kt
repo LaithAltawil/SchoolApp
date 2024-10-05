@@ -7,8 +7,7 @@ sealed class MainDataClass{
 
     data class CounselorsPageState1(
         val isTopAppBarVisible: Boolean = false,
-        var selectedDate:String="",
-        val SelectedDateAndEnteredID:Boolean=false,
+        var selectedDate: String ="",
         var Id:String="",
         val openDialog:Boolean=false
     ):MainDataClass()

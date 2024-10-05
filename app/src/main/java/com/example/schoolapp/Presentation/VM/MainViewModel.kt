@@ -1,35 +1,14 @@
 package com.example.schoolapp.Presentation.VM
 
-import android.app.DatePickerDialog
 import android.util.Log
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
-import com.example.schoolapp.Presentation.VM.States.CounselorsPageState
-import com.example.schoolapp.Presentation.VM.States.ExamPageState
-import com.example.schoolapp.Presentation.VM.States.HomeworkPageState
 import com.example.schoolapp.Presentation.VM.States.MainDataClass
-import com.example.schoolapp.Presentation.VM.States.MarkspageState
-import com.example.schoolapp.Presentation.VM.States.SettingsPageState
-import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.type.Date
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import java.text.SimpleDateFormat
-import java.util.Locale
-
-import androidx.compose.runtime.getValue
-
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 
 
 class MainViewModel : ViewModel() {
-
     // Homework Page
     private val _state = MutableStateFlow(MainDataClass.HomeworkPageState1())
     val state: StateFlow<MainDataClass.HomeworkPageState1> = _state.asStateFlow()
@@ -65,7 +44,6 @@ class MainViewModel : ViewModel() {
     }
 
 
-
     //setting page
     private val _Settingstate = MutableStateFlow(MainDataClass.SettingsPageState1())
     val Settingstate: StateFlow<MainDataClass.SettingsPageState1> = _Settingstate.asStateFlow()
@@ -85,18 +63,14 @@ class MainViewModel : ViewModel() {
     fun openDialog() {
         _Counselorstate.value = MainDataClass.CounselorsPageState1(openDialog = true)
     }
-
     fun closeDialog(){
         _Counselorstate.value= MainDataClass.CounselorsPageState1(openDialog = false)
     }
-    fun showDate():String{
-        return _Counselorstate.value.selectedDate
-    }
 
-    fun updateSelectedDate(date: String) {
-        Log.d("MainViewModel", "Updating selectedDate: $date")
-        _Counselorstate.value.selectedDate = date
-    }
+
+
+
+
 
     //ResourcesPage
     private val _Resourcesstate = MutableStateFlow(MainDataClass.ResourcesPageState())

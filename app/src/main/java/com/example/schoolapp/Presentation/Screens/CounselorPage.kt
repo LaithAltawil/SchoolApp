@@ -19,6 +19,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,115 +33,85 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose.AppTheme
 import com.example.schoolapp.Presentation.Screens.ScreensPieces.CounselorTopAppBar
+import com.example.schoolapp.Presentation.Util.DatePickerModal
 import com.example.schoolapp.Presentation.VM.MainViewModel
 
-//I HATE CALENDERSSSSSSSSSSSS
-//
-//@SuppressLint("UnrememberedMutableState")
-//@RequiresApi(Build.VERSION_CODES.O)
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun CounselorPage(
-//    MainviewModel: MainViewModel=MainViewModel()
-//){
-//    LaunchedEffect(Unit) {
-//        MainviewModel.isTopappbarVisible3()
-//    }
-//    Log.d("CounselorPage", "Recomposing")
-//    val state by MainviewModel.Counselorstate.collectAsStateWithLifecycle()
-//    var date by remember { mutableStateOf("") }
-//
-//
-//
-//
-//    AppTheme {
-//
-//        Surface(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .fillMaxSize(), color = MaterialTheme.colorScheme.primaryContainer
-//        ) {
-//            Scaffold(
-//                containerColor = MaterialTheme.colorScheme.onPrimary,
-//                topBar = {
-//                    CounselorTopAppBar(viewModel = MainviewModel,
-//                        modifier = Modifier,
-//                        "Counselor")
-//                },
-//                // Add content padding
-//            ) { innerPadding ->
-//                Column(
-//                    modifier = Modifier.padding(innerPadding),
-//                    horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
-//                ) {
-//
-//                    Button(onClick = {
-//                        MainviewModel.openDialog()
-//                        } ) {
-//                        Text("Select Date")
-//                    }
-//                    Spacer(modifier = Modifier.size(16.dp))
-//                    Text(text = "Selected Date:")
-//                    Spacer(modifier = Modifier.size(16.dp))
-//                    Text(text = date)
-//
-//
-//
-//
-//
-//                }
-//            }
-//            if(state.openDialog){
-//                val datePickerDialog = rememberDatePickerState()
-//                val confirmEnabled = derivedStateOf {
-//                    datePickerDialog.selectedDateMillis != null }
-//                DatePickerDialog(
-//                    onDismissRequest = {
-//                        MainviewModel.closeDialog()
-//                    },
-//                    confirmButton = {
-//                        TextButton(onClick = {
-//                            MainviewModel.closeDialog()
-//                            if(datePickerDialog.selectedDateMillis!=null){
-//                                state.selectedDate=
-//                                    datePickerDialog.selectedDateMillis.toString()
-//                            }
-//                            date=MainviewModel.showDate()
-//
-//
-//
-//
-//
-//                        }, enabled = confirmEnabled.value
-//                        ) {
-//                            Text("OK")
-//
-//                        }
-//
-//                    },
-//
-//                ) {
-//                    DatePicker(state = datePickerDialog)
-//
-//
-//                }
-//
-//
-//
-//
-//            }
-//
-//
-//
-//        }
-//
-//
-//
-//
-//
-//
-//
-//    }
-//
-//
-//}
+
+
+@SuppressLint("UnrememberedMutableState")
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun CounselorPage(
+    MainviewModel: MainViewModel=MainViewModel()
+){
+    LaunchedEffect(Unit) {
+        MainviewModel.isTopappbarVisible3()
+    }
+    var selectedDate by remember { mutableStateOf("") }
+    val state = MainviewModel.Counselorstate.collectAsStateWithLifecycle()
+
+    AppTheme {
+
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxSize(), color = MaterialTheme.colorScheme.primaryContainer
+        ) {
+            Scaffold(
+                containerColor = MaterialTheme.colorScheme.onPrimary,
+                topBar = {
+                    CounselorTopAppBar(viewModel = MainviewModel,
+                        modifier = Modifier,
+                        "Counselor")
+                },
+                // Add content padding
+            ) { innerPadding ->
+                Column(
+                    modifier = Modifier.padding(innerPadding),
+                    horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+                ) {
+
+                    Button(onClick = {
+
+                        MainviewModel.openDialog()
+                        } ) {
+                        Text("Select Date")
+                    }
+                    Spacer(modifier = Modifier.size(16.dp))
+                    Text(text = "Selected Date:")
+                    Spacer(modifier = Modifier.size(16.dp))
+                    Text(text = state.value.selectedDate)
+
+
+
+
+
+                }
+            }
+            if(state.value.openDialog){
+                DatePickerModal(onDateSelected = {
+                    selectedDate=it.toString()
+
+                }){
+                    MainviewModel.closeDialog()
+                }
+
+
+
+
+            }
+
+
+
+        }
+
+
+
+
+
+
+
+    }
+
+
+}

@@ -35,7 +35,7 @@ fun ClassesTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: String
     val state by viewModel.state.collectAsState()
 
     AnimatedVisibility(
-        visible = state.isLoading,
+        visible = state.isTopBarVisible,
         enter = slideInVertically(
             animationSpec = tween(durationMillis = 300),
             initialOffsetY = { it }

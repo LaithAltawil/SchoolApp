@@ -32,17 +32,13 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 @Composable
 fun CounselorTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: String) {
 
-    val state by viewModel.Counselorstate.collectAsState()
+    val state = viewModel.Counselorstate.collectAsState()
 
     AnimatedVisibility(
-        visible = state.isTopAppBarVisible,
+        visible = state.value.isTopAppBarVisible,
         enter = slideInVertically(
             animationSpec = tween(durationMillis = 300),
             initialOffsetY = { it }
-        ),
-        exit = slideOutVertically(
-            animationSpec = tween(durationMillis = 900, easing = LinearEasing),
-            targetOffsetY = { it }
         )
     ) {
         LargeTopAppBar(

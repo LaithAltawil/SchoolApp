@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi
 import com.example.compose.AppTheme
 
 import com.example.schoolapp.Presentation.Screens.CalenderPage
+import com.example.schoolapp.Presentation.Screens.CounselorPage
 
 class MainActivity : ComponentActivity() {
 
@@ -21,7 +22,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             AppTheme {
 
-                CalenderPage()
+                CounselorPage()
 
 
 
