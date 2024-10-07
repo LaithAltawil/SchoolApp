@@ -42,13 +42,13 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CounselorPage(
-    MainviewModel: MainViewModel=MainViewModel()
+    mainviewModel: MainViewModel=MainViewModel()
 ){
     LaunchedEffect(Unit) {
-        MainviewModel.isTopappbarVisible3()
+        mainviewModel.isTopappbarVisible3()
     }
-    var selectedDate by remember { mutableStateOf("") }
-    val state = MainviewModel.Counselorstate.collectAsStateWithLifecycle()
+
+    val state = mainviewModel.Counselorstate.collectAsStateWithLifecycle()
 
     AppTheme {
 
@@ -60,7 +60,7 @@ fun CounselorPage(
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
                 topBar = {
-                    CounselorTopAppBar(viewModel = MainviewModel,
+                    CounselorTopAppBar(viewModel = mainviewModel,
                         modifier = Modifier,
                         "Counselor")
                 },
@@ -73,7 +73,7 @@ fun CounselorPage(
 
                     Button(onClick = {
 
-                        MainviewModel.openDialog()
+                        mainviewModel.openDialog()
                         } ) {
                         Text("Select Date")
                     }
@@ -90,10 +90,10 @@ fun CounselorPage(
             }
             if(state.value.openDialog){
                 DatePickerModal(onDateSelected = {
-                    selectedDate=it.toString()
+                    mainviewModel.savedate(it.toString())
 
                 }){
-                    MainviewModel.closeDialog()
+                    mainviewModel.closeDialog()
                 }
 
 

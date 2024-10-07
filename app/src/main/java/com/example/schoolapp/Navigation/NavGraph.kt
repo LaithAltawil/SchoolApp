@@ -23,29 +23,26 @@ fun Navigation() {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "Start") {
+
         navigation(
             startDestination = Screen.StartPage.route,
             route = "Start"
         ) {
             composable(Screen.StartPage.route) {
-                StartPage(MoveToSignIn = {
+                StartPage(){
                     navController.navigate(Screen.SignInPage.route)
-                })
+                }
+
+
             }
             composable(Screen.SignInPage.route) {
                     entry ->
                 val ViewModel = entry.AppViewModel<AppViewModel>(navController,)
-                SignIn(ViewModel)
+                SignIn(ViewModel){
+
+                }
             }
         }
-        navigation(
-            startDestination = "MainMenu"
-             ,
-            route = "Start"
-        ) {
-
-        }
-
 
     }
 }

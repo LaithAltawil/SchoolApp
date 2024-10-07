@@ -42,7 +42,7 @@ import com.example.schoolapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignIn(ViewModel: AppViewModel = AppViewModel()) {
+fun SignIn(ViewModel: AppViewModel = AppViewModel(),onClick: () -> Unit) {
     val state = ViewModel.signInState.collectAsState()
 
     AppTheme {
@@ -141,9 +141,5 @@ fun SignIn(ViewModel: AppViewModel = AppViewModel()) {
 
 }
 
-@Composable
-@Preview
-fun SignInPreview() {
-    SignIn()
-}
+
 

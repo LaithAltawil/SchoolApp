@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 
 class MainViewModel : ViewModel() {
+
     // Homework Page
     private val _state = MutableStateFlow(MainDataClass.HomeworkPageState1())
     val state: StateFlow<MainDataClass.HomeworkPageState1> = _state.asStateFlow()
@@ -65,6 +66,9 @@ class MainViewModel : ViewModel() {
     }
     fun closeDialog(){
         _Counselorstate.value= MainDataClass.CounselorsPageState1(openDialog = false)
+    }
+    fun savedate(s:String){
+        _Counselorstate.value= MainDataClass.CounselorsPageState1(selectedDate = s)
     }
 
 
