@@ -117,7 +117,9 @@ fun SignIn(ViewModel: AppViewModel = AppViewModel(),onClick: () -> Unit) {
                         }
                     )
                     Spacer(modifier = Modifier.size(20.dp))
-                    Button(onClick = { /*TODO*/ }) {
+                    Button(onClick = {
+                        onClick()
+                    }) {
                         Text(
                             text = "Sign In",
                             style = MaterialTheme.typography.bodyLarge,

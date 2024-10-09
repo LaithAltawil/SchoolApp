@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import com.example.schoolapp.Presentation.Screens.MainMenu
 import com.example.schoolapp.Presentation.Screens.SignIn
 import com.example.schoolapp.Presentation.Screens.StartPage
 import com.example.schoolapp.Presentation.VM.AppViewModel
@@ -32,17 +33,27 @@ fun Navigation() {
                 StartPage(){
                     navController.navigate(Screen.SignInPage.route)
                 }
-
-
             }
+
             composable(Screen.SignInPage.route) {
                     entry ->
                 val ViewModel = entry.AppViewModel<AppViewModel>(navController,)
                 SignIn(ViewModel){
+                    navController.navigate("Home")
 
                 }
             }
         }
+        navigation(
+            startDestination = Screen.MainMenu.route,
+            route = "Home"
+        ){
+            composable(Screen.MainMenu.route){
+                MainMenu()
+            }
+
+        }
+
 
     }
 }
