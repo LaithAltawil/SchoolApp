@@ -79,6 +79,7 @@ fun SignIn(ViewModel: AppViewModel = AppViewModel(),onClick: () -> Unit) {
                     Spacer(modifier = Modifier.size(30.dp))
                     //TextFields = 2 and a button
                     TextField(
+                        label ={Text(text = "Username")},
                         maxLines = 1,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                         value = state.value.UserName,
@@ -88,6 +89,7 @@ fun SignIn(ViewModel: AppViewModel = AppViewModel(),onClick: () -> Unit) {
                         })
                     Spacer(modifier = Modifier.size(15.dp))
                     TextField(
+                        label ={Text(text = "Password")},
                         maxLines = 1,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                         value = state.value.password,

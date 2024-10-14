@@ -14,9 +14,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.example.schoolapp.Presentation.Screens.MainMenu
+import com.example.schoolapp.Presentation.Screens.ProfilePage
 import com.example.schoolapp.Presentation.Screens.SignIn
 import com.example.schoolapp.Presentation.Screens.StartPage
 import com.example.schoolapp.Presentation.VM.AppViewModel
+import com.example.schoolapp.Presentation.VM.MainViewModel
 
 
 @Composable
@@ -40,7 +42,6 @@ fun Navigation() {
                 val ViewModel = entry.AppViewModel<AppViewModel>(navController,)
                 SignIn(ViewModel){
                     navController.navigate("Home")
-
                 }
             }
         }
@@ -49,8 +50,17 @@ fun Navigation() {
             route = "Home"
         ){
             composable(Screen.MainMenu.route){
-                MainMenu()
+                MainMenu(navController)
             }
+            composable(Screen.ProfilePage.route){
+                    entry ->
+                val ViewModel = entry.MainViewModel<MainViewModel>(navController)
+
+               ProfilePage(
+                   MainViewModel = ViewModel
+               )
+            }
+
 
         }
 
@@ -60,6 +70,16 @@ fun Navigation() {
 
 @Composable
 inline fun <reified T : ViewModel> NavBackStackEntry.AppViewModel(
+    navController: NavHostController,
+): T {
+    val navGraphRoute = destination.parent?.route ?: return viewModel()
+    val parentEntry = remember(this) {
+        navController.getBackStackEntry(navGraphRoute)
+    }
+    return viewModel(parentEntry)
+}
+@Composable
+inline fun <reified T : ViewModel> NavBackStackEntry.MainViewModel(
     navController: NavHostController,
 ): T {
     val navGraphRoute = destination.parent?.route ?: return viewModel()

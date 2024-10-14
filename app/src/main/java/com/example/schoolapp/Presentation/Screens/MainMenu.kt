@@ -17,9 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerValue
@@ -42,27 +40,70 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.compose.AppTheme
+import com.example.schoolapp.Data.MainMenuItem
+import com.example.schoolapp.Navigation.Screen
+import com.example.schoolapp.R
 import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainMenu(){
+fun MainMenu(navController: NavController){
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    val items = listOf(
-        "Item 1",
-        "Item 2",
-        "Item 3",
-        "Item 4",
-        "Item 5",
-        "Item 6",
-        "Item 7",
-        "Item 8",
+
+    val menuItems = listOf(
+
+        MainMenuItem(
+            title = "Calender",
+            icon = painterResource(id = R.drawable.calendar),
+            onClick = { /*TODO*/ }
+        ),
+        MainMenuItem(
+            title = "Classes",
+            icon = painterResource(id = R.drawable.training),
+            onClick = { /*TODO*/ }
+        ),
+        MainMenuItem(
+            title = "Exams",
+            icon = painterResource(id = R.drawable.exam__1_),
+            onClick = { /*TODO*/ }
+        ),
+        MainMenuItem(
+            title = "Marks",
+            icon = painterResource(id = R.drawable.grade),
+            onClick = { /*TODO*/ }
+        ),
+        MainMenuItem(
+            title = "Resources",
+            icon = painterResource(id = R.drawable.baseline_class_24),
+            onClick = { /*TODO*/ }
+        ),
+        MainMenuItem(
+            title = "Settings",
+            icon = painterResource(id = R.drawable.baseline_settings_24),
+            onClick = { /*TODO*/ }
+        ),
+        MainMenuItem(
+            title = "Logout",
+            icon = painterResource(id = R.drawable.ic_logout),
+            onClick = { /*TODO*/ }
+        )
     )
+    val item = listOf(
+        "item1",
+        "item2",
+        "item3",
+        "item4",
+        "item5",
+        "item6",
+    )
+
     AppTheme {
         ModalNavigationDrawer(
             drawerState = drawerState,
@@ -72,14 +113,17 @@ fun MainMenu(){
                     topStart = 25.dp,
                     bottomEnd = 25.dp,
                     bottomStart = 25.dp
-                )),color = MaterialTheme.colorScheme.primary
+                )
+                ).height(860.dp).width(430.dp),color = MaterialTheme.colorScheme.primary
                     ){
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(top = 90.dp)
                     ) {
-                        Button(onClick = { /*TODO*/ }, modifier = Modifier
+                        Button(onClick = {
+                            navController.navigate(Screen.ProfilePage.route)
+                        }, modifier = Modifier
                             .padding(5.dp)
                             .width(800.dp)){
                             Row (modifier = Modifier
@@ -97,16 +141,27 @@ fun MainMenu(){
                             }
                         }
                         LazyColumn {
-                            items(items.size) {
+                            items(menuItems.size) {
+                                item->
                                 Card(modifier = Modifier
-                                    .padding(10.dp)
+                                    .padding(12.dp)
                                     .width(600.dp)
-                                    .height(60.dp)
-                                    .clickable { }
+                                    .height(70.dp)
+                                    .clickable {
+                                        menuItems[item].onClick()
+                                    }
                                     ,colors = CardDefaults.cardColors(
                                         containerColor = MaterialTheme.colorScheme.primaryContainer
                                     )) {
-                                    Column(modifier = Modifier.fillMaxSize()) {
+                                    Column(modifier = Modifier.fillMaxSize().padding(10.dp)) {
+                                        Row(modifier = Modifier.fillMaxSize(),
+                                            verticalAlignment = Alignment.CenterVertically
+                                            ,horizontalArrangement = Arrangement.SpaceBetween) {
+                                        Text(text = menuItems[item].title,
+                                            style = MaterialTheme.typography.headlineLarge)
+                                            Icon(painter = menuItems[item].icon, contentDescription = null,
+                                                modifier = Modifier.size(50.dp))
+                                        }
 
                                     }
 
@@ -126,9 +181,18 @@ fun MainMenu(){
                 Scaffold(modifier = Modifier.fillMaxSize(),
                     containerColor = MaterialTheme.colorScheme.primaryContainer
                 , topBar = {
-                    LargeTopAppBar(title = { Text(text = "Menu",
-                        style = MaterialTheme.typography.displayLarge,
-                        modifier = Modifier.padding(start = 100.dp))},
+                    LargeTopAppBar(title = {Column(modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            text = "Welcome,",
+                            style = MaterialTheme.typography.headlineMedium,
+                            modifier = Modifier.padding(start = 60.dp),
+                        )
+                        Text(
+                            text = "Laith",
+                            style = MaterialTheme.typography.headlineMedium,
+                            modifier = Modifier.padding(start = 70.dp)
+                        )
+                    }},
                         colors = TopAppBarDefaults.topAppBarColors(
                             containerColor = MaterialTheme.colorScheme.primary,
                             titleContentColor = MaterialTheme.colorScheme.onPrimary
@@ -140,7 +204,6 @@ fun MainMenu(){
                             }
 
                         }){
-                            Icon(imageVector = Icons.Default.List, contentDescription = null)
                         }
                     },modifier = Modifier.clip(
                             RoundedCornerShape(
@@ -156,7 +219,7 @@ fun MainMenu(){
                         .fillMaxSize()) {
                         Column(modifier = Modifier
                             .fillMaxSize()
-                            .padding(start = 100.dp),
+                            .padding(start = 70.dp,top = 10.dp),
                             horizontalAlignment = Alignment.CenterHorizontally) {
                             Spacer(modifier = Modifier)
                             Card(
@@ -164,14 +227,16 @@ fun MainMenu(){
                                     .padding(10.dp)
                                     .width(600.dp)
                                     .height(200.dp)
-                                    .clickable { },colors = CardDefaults.cardColors(
+                                    .clickable {
+
+                                    },colors = CardDefaults.cardColors(
                                         containerColor = MaterialTheme.colorScheme.primary
                                     )
                             ) {
 
                             }
                             Spacer(modifier = Modifier.height(10.dp))
-                            Text(text = "Un finished Homeworks",
+                            Text(text = "Un-finished Homeworks",
                                 textAlign = TextAlign.Center,
                                 style = MaterialTheme.typography.displayLarge,
                                 color = MaterialTheme.colorScheme.secondary
@@ -179,14 +244,17 @@ fun MainMenu(){
                             )
                             Spacer(modifier = Modifier.height(10.dp))
                             LazyColumn {
-                                items(items.size) {
-                                    Card(modifier = Modifier.clip(
-                                        RoundedCornerShape(
-                                            topEnd = 25.dp,
-                                            topStart = 25.dp,
-                                            bottomEnd = 25.dp,
-                                            bottomStart = 25.dp
-                                        )).padding(15.dp)
+                                items(item.size) {
+                                    Card(modifier = Modifier
+                                        .clip(
+                                            RoundedCornerShape(
+                                                topEnd = 25.dp,
+                                                topStart = 25.dp,
+                                                bottomEnd = 25.dp,
+                                                bottomStart = 25.dp
+                                            )
+                                        )
+                                        .padding(15.dp)
                                         .width(600.dp)
                                         .height(100.dp)
                                         .clickable { }

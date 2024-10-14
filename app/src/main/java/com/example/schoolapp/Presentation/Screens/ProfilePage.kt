@@ -32,9 +32,7 @@ import com.example.schoolapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfilePage(MainViewModel: MainViewModel= MainViewModel()) {
-
-
+fun ProfilePage(MainViewModel: MainViewModel) {
 
     AppTheme {
         Surface(
@@ -88,8 +86,3 @@ fun ProfilePage(MainViewModel: MainViewModel= MainViewModel()) {
 
 }
 
-@Composable
-@Preview
-fun ProfilePagePreview() {
-    ProfilePage()
-}

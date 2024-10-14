@@ -19,3 +19,8 @@ data class CalenderDays(
     val event: String,
     val onClick: () -> Unit
 )
+data class MainMenuItem(
+    val title: String,
+    val icon: Painter,
+    val onClick: () -> Unit
+)
