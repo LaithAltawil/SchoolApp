@@ -21,7 +21,7 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 
 
 @Composable
-fun HomeworkPage(HomeworkPageState: MainViewModel = MainViewModel()) {
+fun HomeworkPage(HomeworkPageState: MainViewModel ) {
     val state = HomeworkPageState.state.collectAsStateWithLifecycle()
 
 
@@ -66,10 +66,6 @@ fun HomeworkPage(HomeworkPageState: MainViewModel = MainViewModel()) {
     }
 }
 
-@Preview
-@Composable
-fun HomeworkPagePreview() {
-    HomeworkPage()
-}
+
 
 

@@ -1,5 +1,7 @@
 package com.example.schoolapp.Navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,17 +15,27 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import com.example.schoolapp.Presentation.Screens.CalenderPage
+import com.example.schoolapp.Presentation.Screens.CounselorPage
+import com.example.schoolapp.Presentation.Screens.ExamsPage
+import com.example.schoolapp.Presentation.Screens.HomeworkPage
 import com.example.schoolapp.Presentation.Screens.MainMenu
+import com.example.schoolapp.Presentation.Screens.MarksPage
 import com.example.schoolapp.Presentation.Screens.ProfilePage
+import com.example.schoolapp.Presentation.Screens.ResourcesPage
+import com.example.schoolapp.Presentation.Screens.SettingPage
 import com.example.schoolapp.Presentation.Screens.SignIn
 import com.example.schoolapp.Presentation.Screens.StartPage
+import com.example.schoolapp.Presentation.Screens.StudentClass
 import com.example.schoolapp.Presentation.VM.AppViewModel
 import com.example.schoolapp.Presentation.VM.MainViewModel
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
+    val viewModel = viewModel<MainViewModel>()
 
     NavHost(navController = navController, startDestination = "Start") {
 
@@ -45,6 +57,7 @@ fun Navigation() {
                 }
             }
         }
+
         navigation(
             startDestination = Screen.MainMenu.route,
             route = "Home"
@@ -53,13 +66,57 @@ fun Navigation() {
                 MainMenu(navController)
             }
             composable(Screen.ProfilePage.route){
-                    entry ->
-                val ViewModel = entry.MainViewModel<MainViewModel>(navController)
-
                ProfilePage(
-                   MainViewModel = ViewModel
+                   MainViewModel = viewModel
                )
             }
+            composable(Screen.CalenderPage.route){
+                CalenderPage(
+                    MainViewModel = viewModel
+                )
+            }
+            composable(Screen.CounselorPage.route){
+                CounselorPage(
+                    mainviewModel = viewModel
+                )
+            }
+            composable(Screen.HomeworkPage.route){
+                HomeworkPage(
+                    HomeworkPageState = viewModel
+                )
+            }
+            composable(Screen.SettingsPage.route){
+                SettingPage(
+                    MainViewModel = viewModel
+                )
+
+            }
+            composable(Screen.MarksPage.route){
+                MarksPage(
+                    MainViewModel = viewModel
+                )
+
+            }
+            composable(Screen.ResourcesPage.route){
+                ResourcesPage(
+                    MainViewModel = viewModel
+                )
+
+            }
+            composable(Screen.ExamsPage.route){
+                ExamsPage(
+                    MainViewModel = viewModel
+                )
+
+            }
+            composable(Screen.ClassesPage.route){
+                StudentClass(
+                    MainViewModel = viewModel
+                )
+
+            }
+
+
 
 
         }

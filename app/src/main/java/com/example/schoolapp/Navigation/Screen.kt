@@ -9,6 +9,10 @@ sealed class Screen(val route: String){
     object HomeworkPage: Screen("homework_page")
     object ProfilePage: Screen("profile_page")
     object SettingsPage: Screen("settings_page")
+    object ResourcesPage: Screen("resources_page")
+    object MarksPage: Screen("marks_page")
+    object ExamsPage: Screen("exams_page")
+    object ClassesPage: Screen("classes_page")
 
 
 }

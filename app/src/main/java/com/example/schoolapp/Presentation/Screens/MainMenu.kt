@@ -62,32 +62,44 @@ fun MainMenu(navController: NavController){
         MainMenuItem(
             title = "Calender",
             icon = painterResource(id = R.drawable.calendar),
-            onClick = { /*TODO*/ }
+            onClick = {
+                navController.navigate(Screen.CalenderPage.route)
+            }
         ),
         MainMenuItem(
             title = "Classes",
             icon = painterResource(id = R.drawable.training),
-            onClick = { /*TODO*/ }
+            onClick = {
+                navController.navigate(Screen.ClassesPage.route)
+            }
         ),
         MainMenuItem(
             title = "Exams",
             icon = painterResource(id = R.drawable.exam__1_),
-            onClick = { /*TODO*/ }
+            onClick = {
+                navController.navigate(Screen.ExamsPage.route)
+            }
         ),
         MainMenuItem(
             title = "Marks",
             icon = painterResource(id = R.drawable.grade),
-            onClick = { /*TODO*/ }
+            onClick = {
+                navController.navigate(Screen.MarksPage.route)
+            }
         ),
         MainMenuItem(
             title = "Resources",
             icon = painterResource(id = R.drawable.baseline_class_24),
-            onClick = { /*TODO*/ }
+            onClick = {
+                navController.navigate(Screen.ResourcesPage.route)
+            }
         ),
         MainMenuItem(
             title = "Settings",
             icon = painterResource(id = R.drawable.baseline_settings_24),
-            onClick = { /*TODO*/ }
+            onClick = {
+                navController.navigate(Screen.SettingsPage.route)
+            }
         ),
         MainMenuItem(
             title = "Logout",
@@ -114,7 +126,7 @@ fun MainMenu(navController: NavController){
                     bottomEnd = 25.dp,
                     bottomStart = 25.dp
                 )
-                ).height(860.dp).width(430.dp),color = MaterialTheme.colorScheme.primary
+                ).height(860.dp).width(435.dp),color = MaterialTheme.colorScheme.primary
                     ){
                     Column(
                         modifier = Modifier
@@ -205,12 +217,8 @@ fun MainMenu(navController: NavController){
 
                         }){
                         }
-                    },modifier = Modifier.clip(
-                            RoundedCornerShape(
-                                bottomEnd = 25.dp,
-                                bottomStart = 25.dp
-                            )
-                        ))
+                    },modifier = Modifier
+                        )
 
                     }
                 ) {
@@ -236,7 +244,7 @@ fun MainMenu(navController: NavController){
 
                             }
                             Spacer(modifier = Modifier.height(10.dp))
-                            Text(text = "Un-finished Homeworks",
+                            Text(text = "To Do",
                                 textAlign = TextAlign.Center,
                                 style = MaterialTheme.typography.displayLarge,
                                 color = MaterialTheme.colorScheme.secondary
@@ -254,7 +262,7 @@ fun MainMenu(navController: NavController){
                                                 bottomStart = 25.dp
                                             )
                                         )
-                                        .padding(15.dp)
+                                        .padding(11.dp)
                                         .width(600.dp)
                                         .height(100.dp)
                                         .clickable { }

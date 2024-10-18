@@ -42,7 +42,7 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CounselorPage(
-    mainviewModel: MainViewModel=MainViewModel()
+    mainviewModel: MainViewModel
 ){
     LaunchedEffect(Unit) {
         mainviewModel.isTopappbarVisible3()
