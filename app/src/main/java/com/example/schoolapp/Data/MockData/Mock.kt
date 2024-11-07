@@ -1,12 +1,13 @@
 package com.example.schoolapp.Data.MockData
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.painterResource
-import com.example.schoolapp.Data.Subjects
 import com.example.schoolapp.Data.homework
 
-
+//=======================================================
+//Object class for mock data                            =
+//=======================================================
 object Mock {
+
+    //todo @MAS #medium || insert the complete homework mock data after the related task is finished
     val HomeworkMock = listOf<homework>(
 
         homework(
@@ -52,6 +53,8 @@ object Mock {
         )
     )
 
+    //todo @LS #qustion || what is this :D
+    //todo @LT #simple || fix the name issue... recommended solution: "profilePageTable"
     val profilepagetable = listOf(
         listOf("name :- ", "Laith"),
         listOf("email :- ", "john.tyler@examplepetstore.com"),
@@ -64,19 +67,25 @@ object Mock {
         listOf("religion :- ", "Christian"),
     )
 
-    val daysOfWeek =
-        listOf("Sunday",
+    val daysOfWeek = listOf(
+            "Sunday",
             "Monday",
             "Tuesday",
             "Wednesday",
-            "Thursday")
+            "Thursday"
+        )
 
+
+    //todo @MAS #meduim || recreate data class to match the database
+    /*todo @LT #simple || please put the data class in
+        the data classes file(named currently homework.kt)*/
     data class Class(
         val subjectName: String,
         val teacher: String,
         val time: String
     )
 
+    //todo @MAS #medium || insert the complete classList mock data after the related task is finished
     val classList = listOf(
         Class("Math", "Mr.Smith", "9:00 AM"),
         Class("Science", "Ms.Johnson", "10:30 AM"),
@@ -84,6 +93,5 @@ object Mock {
         Class("History", "Mr.Brown", "2:30 PM")
         // Add more classes as needed
     )
-
 
 }
