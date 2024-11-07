@@ -53,7 +53,7 @@ object Mock {
         )
     )
 
-    //todo @LS #qustion || what is this :D
+    //todo @LS #qustion[not answered] || what is this 😀?
     //todo @LT #simple || fix the name issue... recommended solution: "profilePageTable"
     val profilepagetable = listOf(
         listOf("name :- ", "Laith"),
@@ -68,17 +68,16 @@ object Mock {
     )
 
     val daysOfWeek = listOf(
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday"
-        )
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+    )
 
 
     //todo @MAS #meduim || recreate data class to match the database
-    /*todo @LT #simple || please put the data class in
-        the data classes file(named currently homework.kt)*/
+    //todo @LT #simple || please put the data class in the data classes file(named currently homework.kt)
     data class Class(
         val subjectName: String,
         val teacher: String,

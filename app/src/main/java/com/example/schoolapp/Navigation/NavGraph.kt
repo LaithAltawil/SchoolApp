@@ -3,11 +3,8 @@ package com.example.schoolapp.Navigation
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
@@ -30,13 +27,26 @@ import com.example.schoolapp.Presentation.Screens.StudentClass
 import com.example.schoolapp.Presentation.VM.AppViewModel
 import com.example.schoolapp.Presentation.VM.MainViewModel
 
-
+//=======================================================
+//navigation logic                                      =
+//=======================================================
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Navigation() {
-    val navController = rememberNavController()
+
+    //=======================================================
+    //viewModel                                             =
+    //=======================================================
     val viewModel = viewModel<MainViewModel>()
 
+    //=======================================================
+    //navigation                                            =
+    //=======================================================
+    //todo @LT #qustion[not answered] || did you create this rememberNavController
+    // or its imported from other library?
+    val navController = rememberNavController()
+
+    //todo @LT [#IMPOSSIBLE] || explain this to me @MAS 😃
     NavHost(navController = navController, startDestination = "Start") {
 
         navigation(
@@ -44,15 +54,15 @@ fun Navigation() {
             route = "Start"
         ) {
             composable(Screen.StartPage.route) {
-                StartPage(){
+                StartPage() {
                     navController.navigate(Screen.SignInPage.route)
                 }
             }
 
-            composable(Screen.SignInPage.route) {
-                    entry ->
-                val ViewModel = entry.AppViewModel<AppViewModel>(navController,)
-                SignIn(ViewModel){
+            //todo @LT #simple || variable name must start with small capital latter
+            composable(Screen.SignInPage.route) { entry ->
+                val ViewModel = entry.AppViewModel<AppViewModel>(navController)
+                SignIn(ViewModel) {
                     navController.navigate("Home")
                 }
             }
@@ -61,62 +71,60 @@ fun Navigation() {
         navigation(
             startDestination = Screen.MainMenu.route,
             route = "Home"
-        ){
-            composable(Screen.MainMenu.route){
+        ) {
+            composable(Screen.MainMenu.route) {
                 MainMenu(navController)
             }
-            composable(Screen.ProfilePage.route){
-               ProfilePage(
-                   MainViewModel = viewModel
-               )
+            composable(Screen.ProfilePage.route) {
+                ProfilePage(
+                    MainViewModel = viewModel
+                )
             }
-            composable(Screen.CalenderPage.route){
+            composable(Screen.CalenderPage.route) {
                 CalenderPage(
                     MainViewModel = viewModel
                 )
             }
-            composable(Screen.CounselorPage.route){
+            composable(Screen.CounselorPage.route) {
                 CounselorPage(
                     mainviewModel = viewModel
                 )
             }
-            composable(Screen.HomeworkPage.route){
+            composable(Screen.HomeworkPage.route) {
                 HomeworkPage(
                     HomeworkPageState = viewModel
                 )
             }
-            composable(Screen.SettingsPage.route){
+            composable(Screen.SettingsPage.route) {
                 SettingPage(
                     MainViewModel = viewModel
                 )
 
             }
-            composable(Screen.MarksPage.route){
+            composable(Screen.MarksPage.route) {
                 MarksPage(
                     MainViewModel = viewModel
                 )
 
             }
-            composable(Screen.ResourcesPage.route){
+            composable(Screen.ResourcesPage.route) {
                 ResourcesPage(
                     MainViewModel = viewModel
                 )
 
             }
-            composable(Screen.ExamsPage.route){
+            composable(Screen.ExamsPage.route) {
                 ExamsPage(
                     MainViewModel = viewModel
                 )
 
             }
-            composable(Screen.ClassesPage.route){
+            composable(Screen.ClassesPage.route) {
                 StudentClass(
                     MainViewModel = viewModel
                 )
 
             }
-
-
 
 
         }
@@ -125,20 +133,29 @@ fun Navigation() {
     }
 }
 
+//=======================================================
+//todo @LT #simple || explain this fun logic here       =
+//=======================================================
 @Composable
 inline fun <reified T : ViewModel> NavBackStackEntry.AppViewModel(
     navController: NavHostController,
 ): T {
+    //todo @LT [#IMPOSSIBLE] || explain this to me @MAS 😃
     val navGraphRoute = destination.parent?.route ?: return viewModel()
     val parentEntry = remember(this) {
         navController.getBackStackEntry(navGraphRoute)
     }
     return viewModel(parentEntry)
 }
+
+//=======================================================
+//todo @LT #simple || explain this fun logic here       =
+//=======================================================
 @Composable
 inline fun <reified T : ViewModel> NavBackStackEntry.MainViewModel(
     navController: NavHostController,
 ): T {
+    //todo @LT [#IMPOSSIBLE] || explain this to me @MAS 😃
     val navGraphRoute = destination.parent?.route ?: return viewModel()
     val parentEntry = remember(this) {
         navController.getBackStackEntry(navGraphRoute)
