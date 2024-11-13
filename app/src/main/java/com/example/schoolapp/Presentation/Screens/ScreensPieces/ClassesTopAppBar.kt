@@ -28,6 +28,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.schoolapp.Presentation.VM.MainViewModel
 
+//=======================================================
+//todo @LT #simple || explain this fun logic here       =
+//=======================================================
+//todo @LT #simple || @(37:69)=="Title" variable name must start with small litter
+//todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ClassesTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: String) {
@@ -38,9 +43,11 @@ fun ClassesTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: String
         LargeTopAppBar(
             title = {
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(Title,  fontSize = 60.sp,
+                    Text(
+                        Title, fontSize = 60.sp,
                         fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
-                        modifier = Modifier.padding(start= 40.dp) )
+                        modifier = Modifier.padding(start = 40.dp)
+                    )
                 }
             },
             modifier = modifier.clip(
@@ -58,10 +65,12 @@ fun ClassesTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: String
                 IconButton(onClick = {
                     /*TODO*/
                 }) {
-                    Icon(modifier = Modifier.size(50.dp),
+                    Icon(
+                        modifier = Modifier.size(50.dp),
                         imageVector = Icons.AutoMirrored.Default.ArrowBack,
                         contentDescription = "Localized description",
-                        tint = MaterialTheme.colorScheme.background)
+                        tint = MaterialTheme.colorScheme.background
+                    )
 
                 }
 

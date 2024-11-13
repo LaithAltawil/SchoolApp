@@ -24,43 +24,51 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.schoolapp.Presentation.VM.MainViewModel
 
+//=======================================================
+//todo @LT #simple || explain this fun logic here       =
+//=======================================================
+//todo @LT #simple || @(37:69)=="Title" variable name must start with small litter
+//todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: String) {
 
     val state by viewModel.Settingstate.collectAsState()
 
-
-        LargeTopAppBar(
-            title = {
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(Title,  fontSize = 60.sp,
-                        fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
-                        modifier = Modifier.padding(start= 40.dp) )
-                }
-            },
-            modifier = modifier.clip(
-                RoundedCornerShape(
-                    bottomEnd = 25.dp,
-                    bottomStart = 25.dp
+    LargeTopAppBar(
+        title = {
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    Title, fontSize = 60.sp,
+                    fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+                    modifier = Modifier.padding(start = 40.dp)
                 )
-            ),
-            colors =
-            TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                titleContentColor = MaterialTheme.colorScheme.onPrimary,
-            ),
-            navigationIcon = {
-                IconButton(onClick = {
-                    /*TODO*/
-                }) {
-                    Icon(modifier = Modifier.size(50.dp),
-                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                        contentDescription = "Localized description",
-                        tint = MaterialTheme.colorScheme.background)
-
-                }
+            }
+        },
+        modifier = modifier.clip(
+            RoundedCornerShape(
+                bottomEnd = 25.dp,
+                bottomStart = 25.dp
+            )
+        ),
+        colors =
+        TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+        ),
+        navigationIcon = {
+            IconButton(onClick = {
+                /*TODO*/
+            }) {
+                Icon(
+                    modifier = Modifier.size(50.dp),
+                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                    contentDescription = "Localized description",
+                    tint = MaterialTheme.colorScheme.background
+                )
 
             }
-        )
-    }
+
+        }
+    )
+}
