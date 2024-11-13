@@ -34,17 +34,7 @@ fun ExamsMyTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: String
 
     val state by viewModel.Examstate.collectAsState()
 
-    AnimatedVisibility(
-        visible = state.isTopBarVisible,
-        enter = slideInVertically(
-            animationSpec = tween(durationMillis = 300),
-            initialOffsetY = { it }
-        ),
-        exit = slideOutVertically(
-            animationSpec = tween(durationMillis = 900, easing = LinearEasing),
-            targetOffsetY = { it }
-        )
-    ) {
+
         LargeTopAppBar(
             title = {
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -78,4 +68,3 @@ fun ExamsMyTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: String
             }
         )
     }
-}

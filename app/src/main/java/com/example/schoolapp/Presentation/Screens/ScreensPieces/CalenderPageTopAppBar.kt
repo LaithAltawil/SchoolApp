@@ -24,32 +24,26 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.schoolapp.Presentation.VM.MainViewModel
 
 //=======================================================
 //todo @LT #simple || explain this fun logic here       =
+//I will Be removing the animation parts(@44:54) these files(________TOPAPPBAR.KT) since such animations are really not needed
+// this is the designs of top app bars where each file contain almost the
+// same design except the title and some changes
 //=======================================================
 //todo @LT #simple || @(37:69)=="Title" variable name must start with small litter
+
 //todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
+//Done
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalenderTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: String) {
 
-    val state by viewModel.Calenderstate.collectAsState()
 
-    AnimatedVisibility(
-        visible = state.isTopAppBarVisible,
-        enter = slideInVertically(
-            animationSpec = tween(durationMillis = 300),
-            initialOffsetY = { it }
-        ),
-        exit = slideOutVertically(
-            animationSpec = tween(durationMillis = 900, easing = LinearEasing),
-            targetOffsetY = { it }
-        )
-    ) {
         LargeTopAppBar(
             title = {
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -86,5 +80,11 @@ fun CalenderTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: Strin
 
             }
         )
-    }
+
+}
+
+@Composable
+@Preview
+fun CalenderTopAppBarPreview() {
+    CalenderTopAppBar(viewModel = MainViewModel(), modifier = Modifier, Title = "Title")
 }

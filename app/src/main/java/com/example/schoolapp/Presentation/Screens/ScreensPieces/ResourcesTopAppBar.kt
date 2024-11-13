@@ -34,17 +34,6 @@ fun ResourcesTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: Stri
 
     val state by viewModel.state.collectAsState()
 
-    AnimatedVisibility(
-        visible = state.isTopBarVisible,
-        enter = slideInVertically(
-            animationSpec = tween(durationMillis = 300),
-            initialOffsetY = { it }
-        ),
-        exit = slideOutVertically(
-            animationSpec = tween(durationMillis = 900, easing = LinearEasing),
-            targetOffsetY = { it }
-        )
-    ) {
         LargeTopAppBar(
             title = {
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -78,4 +67,3 @@ fun ResourcesTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: Stri
             }
         )
     }
-}

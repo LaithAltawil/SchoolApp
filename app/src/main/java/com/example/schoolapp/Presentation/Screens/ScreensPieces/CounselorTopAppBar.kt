@@ -34,13 +34,7 @@ fun CounselorTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: Stri
 
     val state = viewModel.Counselorstate.collectAsState()
 
-    AnimatedVisibility(
-        visible = state.value.isTopAppBarVisible,
-        enter = slideInVertically(
-            animationSpec = tween(durationMillis = 300),
-            initialOffsetY = { it }
-        )
-    ) {
+
         LargeTopAppBar(
             title = {
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -74,4 +68,3 @@ fun CounselorTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: Stri
             }
         )
     }
-}

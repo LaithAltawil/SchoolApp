@@ -1,10 +1,6 @@
 package com.example.schoolapp.Presentation.Screens.ScreensPieces
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -34,17 +30,7 @@ fun SettingsTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: Strin
 
     val state by viewModel.Settingstate.collectAsState()
 
-    AnimatedVisibility(
-        visible = state.isTopBarVisible,
-        enter = slideInVertically(
-            animationSpec = tween(durationMillis = 300),
-            initialOffsetY = { it }
-        ),
-        exit = slideOutVertically(
-            animationSpec = tween(durationMillis = 900, easing = LinearEasing),
-            targetOffsetY = { it }
-        )
-    ) {
+
         LargeTopAppBar(
             title = {
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -78,4 +64,3 @@ fun SettingsTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: Strin
             }
         )
     }
-}
