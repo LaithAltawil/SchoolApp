@@ -26,7 +26,7 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 //=======================================================
 //todo @LT #simple || explain this fun logic here       =
 //=======================================================
-//todo @LT #simple || @(37:69)=="Title" variable name must start with small litter
+//todo @LT #simple || @(33:68)=="Title" variable name must start with small litter
 //todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -33,7 +33,7 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 //=======================================================
 //sessions table: Logic & UI                            =
 //=======================================================
-//todo @LT #simple || @(37:69)=="MainViewModel" variable name must start with small litter
+//todo @LT #simple || @(40:18)=="MainViewModel" variable name must start with small litter
 //todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
