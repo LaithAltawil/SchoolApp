@@ -5,13 +5,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.MockData.Mock.HomeworkMock
@@ -19,28 +17,43 @@ import com.example.schoolapp.Presentation.Screens.ScreensPieces.HomeworksTopAppB
 import com.example.schoolapp.Presentation.Util.ExpandableCard
 import com.example.schoolapp.Presentation.VM.MainViewModel
 
-
+//=======================================================
+//home work page: UI & logic                            =
+//=======================================================
+//todo @LT #simple || @(26:18)=="HomeworkPageState" variable name must start with small litter
+//todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @Composable
-fun HomeworkPage(HomeworkPageState: MainViewModel ) {
+fun HomeworkPage(HomeworkPageState: MainViewModel) {
+
+    //=======================================================
+    //variables: local & states                             =
+    //=======================================================
     val state = HomeworkPageState.state.collectAsStateWithLifecycle()
 
-
-    AppTheme {
+    //=======================================================
+    //UI & Logic                                            =
+    //=======================================================
+    AppTheme{
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxSize(), color = MaterialTheme.colorScheme.primaryContainer
+                .fillMaxSize(),
+            color = MaterialTheme.colorScheme.primaryContainer
         ) {
+            //main page UI:scaffold
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
+                //todo @MAS #simple || please add the usage after answering the referred todo task
                 topBar = {
-
-                    HomeworksTopAppBar(viewModel = HomeworkPageState,
+                    HomeworksTopAppBar(
+                        viewModel = HomeworkPageState,
                         modifier = Modifier,
-                        Title ="HomeWork")
+                        Title = "HomeWork"
+                    )
                 },
                 // Add content padding
             ) { innerPadding ->
+                //todo @MAS #simple || please add the usage after answering the referred todo task
                 Column(
                     modifier = Modifier.padding(innerPadding),
                     horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
@@ -52,20 +65,9 @@ fun HomeworkPage(HomeworkPageState: MainViewModel ) {
                                 viewmodel = HomeworkPageState
                             )
                         }
-
-
                     }
-
-
                 }
             }
-
-
         }
-
     }
 }
-
-
-
-

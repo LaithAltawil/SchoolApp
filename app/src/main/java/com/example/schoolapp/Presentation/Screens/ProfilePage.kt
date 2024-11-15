@@ -31,17 +31,26 @@ import com.example.schoolapp.Presentation.Util.SimpleTable
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 
+//=======================================================
+//todo @LT #simple || explain this fun logic here       =
+//=======================================================
+//todo @LT #simple || @(33:17)=="MainViewModel" variable name must start with small litter
+//todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfilePage(MainViewModel: MainViewModel) {
 
+    //=======================================================
+    //variables: local & states                             =
+    //=======================================================
     AppTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.primary
         ) {
             Scaffold(
-                //Needs Completetion TODO
+                //Needs Completion TODO
+                //@MAS I agree \(￣︶￣*\))
                 topBar = {
                     LargeTopAppBar(title = { Text(text = "Profile") })
 

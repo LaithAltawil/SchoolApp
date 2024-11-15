@@ -18,30 +18,48 @@ import com.example.schoolapp.Presentation.Screens.ScreensPieces.CalenderTopAppBa
 import com.example.schoolapp.Presentation.Util.ExpandableButton
 import com.example.schoolapp.Presentation.VM.MainViewModel
 
+//=======================================================
+//Calender page: Logic & UI                             =
+//=======================================================
+//todo @LT #simple || @(27:18)=="MainViewModel" variable name must start with small litter
+//todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @Composable
-fun CalenderPage(MainViewModel: MainViewModel=MainViewModel()){
+fun CalenderPage(MainViewModel: MainViewModel = MainViewModel()) {
 
+    //todo @LT #qustion[not answered] || is this block used to call any suspend functions?
     LaunchedEffect(Unit) {
         MainViewModel.isTopappbarVisible6()
     }
+
+    //=======================================================
+    //variables:local & states                              =
+    //=======================================================
     val calendarItems = listOf(
-        CalenderDays("13/9","A huge Open Day for jobs in tech for the future",{}),
-        CalenderDays("14/9","A huge Open Day for jobs in medicine for the future",{}),
-        CalenderDays("15/9","A huge Open Day for jobs in finance for the future",{}),
-        CalenderDays("16/9","A huge Open Day for jobs in teaching for the future",{}),
+        CalenderDays("13/9", "A huge Open Day for jobs in tech for the future", {}),
+        CalenderDays("14/9", "A huge Open Day for jobs in medicine for the future", {}),
+        CalenderDays("15/9", "A huge Open Day for jobs in finance for the future", {}),
+        CalenderDays("16/9", "A huge Open Day for jobs in teaching for the future", {}),
     )
 
-
+    //=======================================================
+    // logic & UI                                           =
+    //=======================================================
     AppTheme {
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxSize(), color = MaterialTheme.colorScheme.primaryContainer
+                .fillMaxSize(),
+            color = MaterialTheme.colorScheme.primaryContainer
         ) {
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
                 topBar = {
-                    CalenderTopAppBar(viewModel = MainViewModel, modifier = Modifier, Title = "Calender")
+                    //todo @LT #qustion[not answered] || linking the topBar with CalenderTopAppBar.kt ?
+                    CalenderTopAppBar(
+                        viewModel = MainViewModel,
+                        modifier = Modifier,
+                        Title = "Calender"
+                    )
                 },
                 // Add content padding
             ) { innerPadding ->
@@ -50,26 +68,17 @@ fun CalenderPage(MainViewModel: MainViewModel=MainViewModel()){
                     horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
                 ) {
                     LazyColumn {
-
                         items(calendarItems) { item ->
                             // ExpandableButton composable
                             ExpandableButton(name = item.day, Text = item.event) {
 
-                            }
+                                //todo @LT #qustion[not answered] || what to do here?
 
+                            }
                         }
                     }
-
-
                 }
             }
-
-
         }
-
-
     }
-
-
-
 }

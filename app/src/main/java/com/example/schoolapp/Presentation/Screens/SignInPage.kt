@@ -26,12 +26,24 @@ import androidx.compose.ui.unit.sp
 import com.example.compose.AppTheme
 import com.example.schoolapp.Presentation.Util.openWebsite
 
+//=======================================================
+//todo @LT #simple || explain this fun logic here and   =
+// make the name more clear than SignIn.kt              =
+//=======================================================
+//todo @LT #simple || @(35:70)=="Title" variable name must start with small litter
+//todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @Composable
 fun StartPage(onSignInClick: () -> Unit) {
 
+    //=======================================================
+    //variables: local & states                             =
+    //=======================================================
     val context = LocalContext.current
     val url = "https://www.ammanhighschool.org/"
 
+    //=======================================================
+    // Logic & UI                                           =
+    //=======================================================
     AppTheme {
         Column(
             modifier = Modifier
@@ -49,7 +61,6 @@ fun StartPage(onSignInClick: () -> Unit) {
                     )
                     .background(color = MaterialTheme.colorScheme.primary),
                 contentAlignment = Alignment.Center
-
             ) {
                 Column(
                     Modifier.fillMaxSize(),
@@ -78,7 +89,6 @@ fun StartPage(onSignInClick: () -> Unit) {
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp
                         )
-
                     }
                     Spacer(modifier = Modifier.size(15.dp))
                     Button(
@@ -95,21 +105,10 @@ fun StartPage(onSignInClick: () -> Unit) {
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
                             textAlign = TextAlign.Center
-
                         )
-
-
                     }
-
                 }
-
             }
-
-
         }
-
-
     }
-
-
 }

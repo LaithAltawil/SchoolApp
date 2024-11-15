@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -21,7 +20,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,23 +30,34 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.SavedStateHandle
 import com.example.compose.AppTheme
 import com.example.schoolapp.Presentation.VM.AppViewModel
 import com.example.schoolapp.R
 
+//=======================================================
+//Sign in page: Logic & UI                              =
+//=======================================================
+//todo @LT #simple || @(46:12)=="ViewModel" variable name must start with small litter
+//todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignIn(ViewModel: AppViewModel = AppViewModel(),onClick: () -> Unit) {
+fun SignIn(ViewModel: AppViewModel = AppViewModel(), onClick: () -> Unit) {
+
+    //=======================================================
+    //variables: local & states                             =
+    //=======================================================
     val state = ViewModel.signInState.collectAsState()
 
+    //=======================================================
+    //Logic & UI                                            =
+    //=======================================================
     AppTheme {
         Column(
             modifier = Modifier
-                .fillMaxSize().imePadding()
+                .fillMaxSize()
+                .imePadding()
                 .background(color = MaterialTheme.colorScheme.primaryContainer),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
@@ -62,7 +71,6 @@ fun SignIn(ViewModel: AppViewModel = AppViewModel(),onClick: () -> Unit) {
                     )
                     .background(color = MaterialTheme.colorScheme.primary),
                 contentAlignment = Alignment.Center
-
             ) {
                 Column(
                     Modifier.fillMaxSize(),
@@ -79,7 +87,7 @@ fun SignIn(ViewModel: AppViewModel = AppViewModel(),onClick: () -> Unit) {
                     Spacer(modifier = Modifier.size(30.dp))
                     //TextFields = 2 and a button
                     TextField(
-                        label ={Text(text = "Username")},
+                        label = { Text(text = "Username") },
                         maxLines = 1,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                         value = state.value.UserName,
@@ -89,7 +97,7 @@ fun SignIn(ViewModel: AppViewModel = AppViewModel(),onClick: () -> Unit) {
                         })
                     Spacer(modifier = Modifier.size(15.dp))
                     TextField(
-                        label ={Text(text = "Password")},
+                        label = { Text(text = "Password") },
                         maxLines = 1,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                         value = state.value.password,
@@ -111,11 +119,7 @@ fun SignIn(ViewModel: AppViewModel = AppViewModel(),onClick: () -> Unit) {
                                 ViewModel.onPasswordVisibilityChange()
                             }) {
                                 Icon(painter = image, contentDescription = description)
-
-
                             }
-
-
                         }
                     )
                     Spacer(modifier = Modifier.size(20.dp))
@@ -128,22 +132,9 @@ fun SignIn(ViewModel: AppViewModel = AppViewModel(),onClick: () -> Unit) {
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Bold
                         )
-
                     }
-
-
                 }
-
             }
-
-
         }
-
-
     }
-
-
 }
-
-
-

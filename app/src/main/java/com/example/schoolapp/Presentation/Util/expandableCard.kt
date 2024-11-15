@@ -33,11 +33,18 @@ import com.example.schoolapp.Data.Homework
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 
+//=======================================================
+//todo @LT #simple || explain this fun logic here       =
+//=======================================================
+//todo @LT #simple || @(43:20)=="Data" variable name must start with small litter
+//todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ExpandableCard(Data: Homework, viewmodel: MainViewModel) {
 
-
+    //=======================================================
+    //variables: local & states                             =
+    //=======================================================
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -48,7 +55,9 @@ fun ExpandableCard(Data: Homework, viewmodel: MainViewModel) {
     }
     var isExpanded by remember { mutableStateOf(false) }
 
-
+    //=======================================================
+    //Logic & UI                                            =
+    //=======================================================
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -102,10 +111,7 @@ fun ExpandableCard(Data: Homework, viewmodel: MainViewModel) {
                             painterResource(id = R.drawable.baseline_radio_button_unchecked_24)
                         }, contentDescription = null
                     )
-
                 }
-
-
             }
         }
     }

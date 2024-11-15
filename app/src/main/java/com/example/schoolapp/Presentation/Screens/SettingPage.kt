@@ -35,7 +35,7 @@ import com.example.schoolapp.Presentation.Screens.ScreensPieces.SettingsTopAppBa
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 
-
+//todo @LT #please|| we are not doing this 😥
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingPage(
@@ -47,7 +47,6 @@ fun SettingPage(
         MainViewModel.isTopappbarVisible2()
     }
 
-
     val settings = listOf(
         Subjects("Profile", painterResource(id = R.drawable.baseline_account_box_24)) {},
         Subjects("Notifications", painterResource(id = R.drawable.baseline_notifications_24)) {},
@@ -55,7 +54,6 @@ fun SettingPage(
         Subjects("Accessibility", painterResource(id = R.drawable.contact_us)) {},
         Subjects("Help & FAQ", painterResource(id = R.drawable.help)) {},
         Subjects("Contact us", painterResource(id = R.drawable.contact_us)) {}
-
     )
 
     AppTheme {
@@ -99,8 +97,6 @@ fun SettingPage(
                                     .clip(RoundedCornerShape(20.dp))
                                     .height(50.dp)
                                     .width(350.dp)
-
-
                             ) {
                                 Column(
                                     modifier = Modifier
@@ -128,33 +124,14 @@ fun SettingPage(
                                                 imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
                                                 contentDescription = null
                                             )
-
-
                                         }
-
                                     }
-
-
                                 }
-
-
                             }
-
-
                         }
-
-
                     }
-
                 }
-
-
             }
-
-
         }
-
-
     }
 }
-

@@ -20,14 +20,21 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import java.util.Calendar
 
+//=======================================================
+//used to pick dates                                    =
+//=======================================================
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerModal(
     onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit
 ) {
+    //=======================================================
+    //variables: local & states                             =
+    //=======================================================
     val datePickerState = rememberDatePickerState()
 
+    //todo @LT #simple || please add usage for this, I need full details plz
     DatePickerDialog(
         onDismissRequest = onDismiss,
         confirmButton = {

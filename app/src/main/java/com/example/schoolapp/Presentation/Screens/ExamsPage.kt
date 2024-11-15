@@ -49,10 +49,18 @@ import com.example.schoolapp.Presentation.Screens.ScreensPieces.ExamsMyTopAppBar
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 
+//=======================================================
+//Exam Page: UI & logic                                 =
+//=======================================================
+//todo @LT #simple || @(37:69)=="MainViewModel" variable name must start with small litter
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExamsPage(MainViewModel: MainViewModel = MainViewModel()) {
 
+    //=======================================================
+    //variables: local & states                             =
+    //=======================================================
+    //todo @LT #simple || @(54:9)=="mainmenuitem" every second word must start with capital litter
     val state = MainViewModel.Examstate.collectAsStateWithLifecycle()
 
 
@@ -66,36 +74,46 @@ fun ExamsPage(MainViewModel: MainViewModel = MainViewModel()) {
         Subjects("Geography", painterResource(id = R.drawable.geography)) {}
     )
 
-
+    //=======================================================
+    //UI & logic                                            =
+    //=======================================================
     AppTheme {
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxSize(), color = MaterialTheme.colorScheme.primaryContainer
+                .fillMaxSize(),
+            color = MaterialTheme.colorScheme.primaryContainer
         ) {
+            //Main page UI: Scaffold
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
+                //todo @MAS #simple || please add the usage after answering the referred todo task
                 topBar = {
                     ExamsMyTopAppBar(
                         viewModel = MainViewModel,
-                        modifier =Modifier,
-                        Title = "Exams")
-
+                        modifier = Modifier,
+                        Title = "Exams"
+                    )
                 },
                 // Add content padding
             ) { innerPadding ->
+                //subjects
                 Column(
                     modifier = Modifier.padding(innerPadding),
                     horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
                 ) {
+                    //lazy grid to hold the data logic & UI design
                     LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 128.dp)) {
-                        //here we will enter cards which will be the exams coming set in order from left to right depending of its date
-
+                        /*here we will enter cards which will be the exams coming set in order from
+                        left to right depending of its date
+                        todo @LT #qustion[not answered] || if we can extend the size so we can
+                         represent the data more clearly. Maybe you can set the row size in the grid to hold 2 cards*/
+                        //todo @MAS #simple || please add the usage after answering the referred todo task
                         items(mainmenuitem.size) { item ->
+                            //hold the subject details
                             Card(colors = CardDefaults.cardColors(
                                 containerColor = MaterialTheme.colorScheme.primary
                             ),
-
                                 modifier = Modifier
                                     .padding(16.dp)
                                     .wrapContentHeight()
@@ -106,6 +124,9 @@ fun ExamsPage(MainViewModel: MainViewModel = MainViewModel()) {
 
                                     }
                             ) {
+                                /*card UI: column todo @LT #medium ||
+                                                    I think the column size is too small if you can
+                                                    edit it so it can be wrapped with the whole card*/
                                 Column(
                                     modifier = Modifier
                                         .padding(16.dp)
@@ -113,6 +134,7 @@ fun ExamsPage(MainViewModel: MainViewModel = MainViewModel()) {
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     verticalArrangement = Arrangement.Center
                                 ) {
+                                    //subject name
                                     Text(
                                         modifier = Modifier.padding(10.dp, top = 40.dp),
                                         text = mainmenuitem[item].name,
@@ -126,6 +148,7 @@ fun ExamsPage(MainViewModel: MainViewModel = MainViewModel()) {
                                 }
 
                             }
+                            //todo @LT #simple || plz add this part logic
                             if (state.value.showBottomSheet) {
                                 ModalBottomSheet(containerColor = MaterialTheme.colorScheme.primary,
                                     onDismissRequest = { MainViewModel.changeBottomSheetState() }
@@ -136,6 +159,7 @@ fun ExamsPage(MainViewModel: MainViewModel = MainViewModel()) {
                                             .fillMaxWidth()
                                             .padding(16.dp)
                                     ) {
+                                        //todo @LT #qustion[not answered] || what to do here?
                                         LazyColumn {
                                             items(mockExamList.size) { i ->
                                                 ExamDetailsColumn(subject = mockExamList[i].subject,
@@ -187,6 +211,7 @@ fun ExamDetailsColumn( subject: String, date: String, time: String, location: St
 
 
 
+//todo @LT #simple || put this in the relative file
 @Composable
 @Preview
 fun ExamsPagePreview() {

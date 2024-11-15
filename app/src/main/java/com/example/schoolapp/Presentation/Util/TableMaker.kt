@@ -9,10 +9,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+//todo @LT #simple || please usage for those
 @Composable
 fun RowScope.TableCell(
     text: String,
@@ -22,7 +22,9 @@ fun RowScope.TableCell(
         text = text,
         modifier = Modifier
             .weight(weight)
-            .padding(top = 12.dp), fontSize = 20.sp, color = MaterialTheme.colorScheme.secondary
+            .padding(top = 12.dp),
+        fontSize = 20.sp,
+        color = MaterialTheme.colorScheme.secondary
     )
 }
 
@@ -32,7 +34,10 @@ fun SimpleTable(tableData: List<List<Any>>) {
         items(tableData.size) { rowIndex ->
             Row(modifier = Modifier.fillMaxWidth()) {
                 tableData[rowIndex].forEach { cellText ->
-                    TableCell(text = cellText.toString(), weight = 1f)
+                    TableCell(
+                        text = cellText.toString(),
+                        weight = 1f
+                    )
                 }
             }
         }

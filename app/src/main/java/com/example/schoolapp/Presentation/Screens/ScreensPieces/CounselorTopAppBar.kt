@@ -1,10 +1,8 @@
 package com.example.schoolapp.Presentation.Screens.ScreensPieces
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,13 +19,17 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.schoolapp.Presentation.VM.MainViewModel
 
+//=======================================================
+//todo @LT #simple || explain this fun logic here       =
+//=======================================================
+//todo @LT #simple || @(35:70)=="Title" variable name must start with small litter
+//todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CounselorTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: String) {
@@ -38,9 +40,11 @@ fun CounselorTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: Stri
         LargeTopAppBar(
             title = {
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(Title,  fontSize = 60.sp,
+                    Text(
+                        Title, fontSize = 60.sp,
                         fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
-                        modifier = Modifier.padding(start= 40.dp) )
+                        modifier = Modifier.padding(start = 40.dp)
+                    )
                 }
             },
             modifier = modifier.clip(
@@ -58,10 +62,12 @@ fun CounselorTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: Stri
                 IconButton(onClick = {
                     /*TODO*/
                 }) {
-                    Icon(modifier = Modifier.size(50.dp),
+                    Icon(
+                        modifier = Modifier.size(50.dp),
                         imageVector = Icons.AutoMirrored.Default.ArrowBack,
                         contentDescription = "Localized description",
-                        tint = MaterialTheme.colorScheme.background)
+                        tint = MaterialTheme.colorScheme.background
+                    )
 
                 }
 
