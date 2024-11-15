@@ -1,6 +1,8 @@
 package com.example.compose
 import androidx.compose.ui.graphics.Color
 
+//todo @LT #chatting|| You did all this? ,😂 do you want to format it 🌚
+
 val primaryLight = Color(0xFF1E6586)
 val onPrimaryLight = Color(0xFFFFFFFF)
 val primaryContainerLight = Color(0xFFC5E7FF)
@@ -216,10 +218,3 @@ val surfaceContainerLowDarkHighContrast = Color(0xFF171C1F)
 val surfaceContainerDarkHighContrast = Color(0xFF1B2023)
 val surfaceContainerHighDarkHighContrast = Color(0xFF252B2D)
 val surfaceContainerHighestDarkHighContrast = Color(0xFF303638)
-
-
-
-
-
-
-
