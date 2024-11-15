@@ -56,8 +56,7 @@ object Mock {
     )
 
     //todo @LS #qustion[not answered] || what is this 😀?
-    //todo @LT #simple || fix the name issue... recommended solution: "profilePageTable"
-    //done
+    //solved @LT #simple || fix the name issue... recommended solution: "profilePageTable"
     val profilePageTable = listOf(
         listOf("name :- ", "Laith"),
         listOf("email :- ", "john.tyler@examplepetstore.com"),
@@ -78,12 +77,6 @@ object Mock {
         "Thursday"
     )
 
-
-    //todo @MAS #meduim || recreate data class to match the database
-    //todo @LT #simple || please put the data class in the data classes file(named currently homework.kt)
-    //done
-
-
     //todo @MAS #medium || insert the complete classList mock data after the related task is finished
     val classList = listOf(
         Class("Math", "Mr.Smith", "9:00 AM"),
@@ -100,6 +93,4 @@ object Mock {
         Exam("Biology", "2023-12-18", "11:00 AM", "Hall D404"),
         Exam("Computer Science", "2023-12-19", "03:00 PM", "Room E505")
     )
-
-
 }

@@ -76,7 +76,6 @@ dependencies {
     // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx) // Or latest version
 
-
     // Lifecycle
     implementation(libs.androidx.lifecycle.runtime.ktx.v262) // Or latest version
     implementation(libs.androidx.navigation.compose)
@@ -91,4 +90,3 @@ dependencies {
     implementation (libs.androidx.runtime)
 
 }
-

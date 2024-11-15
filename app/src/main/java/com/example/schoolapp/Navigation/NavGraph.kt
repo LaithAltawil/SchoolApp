@@ -42,13 +42,13 @@ fun Navigation() {
     //=======================================================
     //navigation                                            =
     //=======================================================
-    //todo @LT #qustion[not answered] || did you create this rememberNavController
-    // or its imported from other library?
-    //function created from navcontroller library
+    /*solved @LT #qustion[answered] || did you create this rememberNavController
+     or its imported from other library?
+    function created from navController library*/
     val navController = rememberNavController()
 
-    //todo @LT [#IMPOSSIBLE] || explain this to me @MAS 😃
-    //when you see it call me or send me a message to explain it
+    /*todo @LT [#IMPOSSIBLE] || explain this to me @MAS 😃
+    LT: when you see it call me or send me a message to explain it*/
     NavHost(navController = navController, startDestination = "Start") {
 
         navigation(
@@ -125,19 +125,14 @@ fun Navigation() {
                 StudentClass(
                     MainViewModel = viewModel
                 )
-
             }
-
-
         }
-
-
     }
 }
 
 //=======================================================
-//todo @LT #simple || explain this fun logic here       =
-//not sure :) but saw it from someone on youtube:))
+//not solved @LT #simple || explain this fun logic here =
+//LT: not sure :) but saw it from someone on youtube:)) =
 //=======================================================
 @Composable
 inline fun <reified T : ViewModel> NavBackStackEntry.AppViewModel(
@@ -153,8 +148,8 @@ inline fun <reified T : ViewModel> NavBackStackEntry.AppViewModel(
 }
 
 //=======================================================
-//todo @LT #simple || explain this fun logic here       =
-//saw on youtube not sure 100%
+//not solved @LT #simple || explain this fun logic here =
+//LT: saw on youtube not sure 100%                      =
 //=======================================================
 @Composable
 inline fun <reified T : ViewModel> NavBackStackEntry.MainViewModel(

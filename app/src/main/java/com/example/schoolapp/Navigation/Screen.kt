@@ -7,8 +7,9 @@ package com.example.schoolapp.Navigation
 //
 
 //=======================================================
-//todo @LT #qustion[not answered] || why not convert to data class
-// used to doing like this ever since i started android development
+/*solved @LT #qustion[answered] || why not convert to data class
+LT: used to doing like this ever since i started android development
+MAS: Sealed class is some way is data class*/
 sealed class Screen(val route: String) {
     object StartPage : Screen("start_page")
     object SignInPage : Screen("sign_in_page")
