@@ -117,7 +117,7 @@ fun SettingPage(
                                     verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center
                                 ) {
                                     Row {
-                                        item.ImagePath?.let { it1 ->
+                                        item.imagePath?.let { it1 ->
                                             Icon(
                                                 painter = it1,
                                                 contentDescription = null,

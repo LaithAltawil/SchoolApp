@@ -44,9 +44,11 @@ fun Navigation() {
     //=======================================================
     //todo @LT #qustion[not answered] || did you create this rememberNavController
     // or its imported from other library?
+    //function created from navcontroller library
     val navController = rememberNavController()
 
     //todo @LT [#IMPOSSIBLE] || explain this to me @MAS 😃
+    //when you see it call me or send me a message to explain it
     NavHost(navController = navController, startDestination = "Start") {
 
         navigation(
@@ -61,8 +63,8 @@ fun Navigation() {
 
             //todo @LT #simple || variable name must start with small capital latter
             composable(Screen.SignInPage.route) { entry ->
-                val ViewModel = entry.AppViewModel<AppViewModel>(navController)
-                SignIn(ViewModel) {
+                val viewModel = entry.AppViewModel<AppViewModel>(navController)
+                SignIn(viewModel) {
                     navController.navigate("Home")
                 }
             }
@@ -135,12 +137,14 @@ fun Navigation() {
 
 //=======================================================
 //todo @LT #simple || explain this fun logic here       =
+//not sure :) but saw it from someone on youtube:))
 //=======================================================
 @Composable
 inline fun <reified T : ViewModel> NavBackStackEntry.AppViewModel(
     navController: NavHostController,
 ): T {
     //todo @LT [#IMPOSSIBLE] || explain this to me @MAS 😃
+
     val navGraphRoute = destination.parent?.route ?: return viewModel()
     val parentEntry = remember(this) {
         navController.getBackStackEntry(navGraphRoute)
@@ -150,12 +154,14 @@ inline fun <reified T : ViewModel> NavBackStackEntry.AppViewModel(
 
 //=======================================================
 //todo @LT #simple || explain this fun logic here       =
+//saw on youtube not sure 100%
 //=======================================================
 @Composable
 inline fun <reified T : ViewModel> NavBackStackEntry.MainViewModel(
     navController: NavHostController,
 ): T {
     //todo @LT [#IMPOSSIBLE] || explain this to me @MAS 😃
+    //inform me to explain to you
     val navGraphRoute = destination.parent?.route ?: return viewModel()
     val parentEntry = remember(this) {
         navController.getBackStackEntry(navGraphRoute)

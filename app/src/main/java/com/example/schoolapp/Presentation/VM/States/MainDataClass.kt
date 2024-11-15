@@ -1,7 +1,7 @@
 package com.example.schoolapp.Presentation.VM.States
 
 import com.example.schoolapp.Data.Subjects
-import com.example.schoolapp.Data.homework
+import com.example.schoolapp.Data.Homework
 
 sealed class MainDataClass{
 
@@ -29,7 +29,7 @@ sealed class MainDataClass{
     ):MainDataClass()
 
     data class HomeworkPageState1(
-        val homework: List<homework> = emptyList(),
+        val homework: List<Homework> = emptyList(),
         val isTopBarVisible: Boolean = false,
     ):MainDataClass()
 

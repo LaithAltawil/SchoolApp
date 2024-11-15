@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,6 +42,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose.AppTheme
+import com.example.schoolapp.Data.Exam
+import com.example.schoolapp.Data.MockData.Mock.mockExamList
 import com.example.schoolapp.Data.Subjects
 import com.example.schoolapp.Presentation.Screens.ScreensPieces.ExamsMyTopAppBar
 import com.example.schoolapp.Presentation.VM.MainViewModel
@@ -51,6 +54,8 @@ import com.example.schoolapp.R
 fun ExamsPage(MainViewModel: MainViewModel = MainViewModel()) {
 
     val state = MainViewModel.Examstate.collectAsStateWithLifecycle()
+
+
     val mainmenuitem = listOf(
         Subjects("Maths", painterResource(id = R.drawable.math)) { },
         Subjects("Science", painterResource(id = R.drawable.science)) { },
@@ -131,6 +136,19 @@ fun ExamsPage(MainViewModel: MainViewModel = MainViewModel()) {
                                             .fillMaxWidth()
                                             .padding(16.dp)
                                     ) {
+                                        LazyColumn {
+                                            items(mockExamList.size) { i ->
+                                                ExamDetailsColumn(subject = mockExamList[i].subject,
+                                                    date = mockExamList[i].date,
+                                                    time = mockExamList[i].time,
+                                                    location = mockExamList[i].location)
+
+
+
+
+                                            }
+
+                                        }
 
 
                                     }
@@ -152,6 +170,21 @@ fun ExamsPage(MainViewModel: MainViewModel = MainViewModel()) {
     }
 
 }
+//Trial and error work to display
+@Composable
+fun ExamDetailsColumn( subject: String, date: String, time: String, location: String) {
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+    ) {
+        Text("Subject: ${subject}", style = MaterialTheme.typography.displayMedium)
+        Text("Date: ${date}", style = MaterialTheme.typography.displayMedium)
+        Text("Time: ${time}", style = MaterialTheme.typography.displayMedium)
+        Text("Location: ${location}", style = MaterialTheme.typography.displayMedium)
+    }
+}
+
 
 
 @Composable

@@ -29,13 +29,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.schoolapp.Data.homework
+import com.example.schoolapp.Data.Homework
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ExpandableCard(Data: homework, viewmodel: MainViewModel) {
+fun ExpandableCard(Data: Homework, viewmodel: MainViewModel) {
 
 
     val launcher = rememberLauncherForActivityResult(

@@ -1,6 +1,8 @@
 package com.example.schoolapp.Data.MockData
 
-import com.example.schoolapp.Data.homework
+import com.example.schoolapp.Data.Class
+import com.example.schoolapp.Data.Exam
+import com.example.schoolapp.Data.Homework
 
 //=======================================================
 //Object class for mock data                            =
@@ -8,44 +10,44 @@ import com.example.schoolapp.Data.homework
 object Mock {
 
     //todo @MAS #medium || insert the complete homework mock data after the related task is finished
-    val HomeworkMock = listOf<homework>(
+    val HomeworkMock = listOf<Homework>(
 
-        homework(
+        Homework(
             "Math",
             "Solve equations 1-20",
             "2023-12-24",
             false
         ),
 
-        homework(
+        Homework(
             "Math",
             "Complete worksheet on fractions",
             "2023-12-28",
             true
         ),
-        homework(
+        Homework(
             "Science",
             "Chapter 5 review questions",
             "2024-01-05",
             false
         ),
-        homework(
+        Homework(
             "Science",
             "Prepare for science fair project",
             "2024-01-15", false
         ),
-        homework(
+        Homework(
             "History",
             "Read chapter 3 and write a summary", "2023-12-22",
             true
         ),
-        homework(
+        Homework(
             "English",
             "Essay on Shakespeare's Hamlet",
             "2024-01-10",
             false
         ),
-        homework(
+        Homework(
             "English",
             "Poetry analysis worksheet",
             "2023-12-29",
@@ -55,7 +57,8 @@ object Mock {
 
     //todo @LS #qustion[not answered] || what is this 😀?
     //todo @LT #simple || fix the name issue... recommended solution: "profilePageTable"
-    val profilepagetable = listOf(
+    //done
+    val profilePageTable = listOf(
         listOf("name :- ", "Laith"),
         listOf("email :- ", "john.tyler@examplepetstore.com"),
         listOf("phone :- ", "0123456789"),
@@ -78,11 +81,8 @@ object Mock {
 
     //todo @MAS #meduim || recreate data class to match the database
     //todo @LT #simple || please put the data class in the data classes file(named currently homework.kt)
-    data class Class(
-        val subjectName: String,
-        val teacher: String,
-        val time: String
-    )
+    //done
+
 
     //todo @MAS #medium || insert the complete classList mock data after the related task is finished
     val classList = listOf(
@@ -92,5 +92,14 @@ object Mock {
         Class("History", "Mr.Brown", "2:30 PM")
         // Add more classes as needed
     )
+
+    val mockExamList = listOf(
+        Exam("Mathematics", "2023-12-15", "10:00 AM", "Room A101"),
+        Exam("Physics", "2023-12-16", "02:00 PM", "Room B202"),
+        Exam("Chemistry", "2023-12-17", "09:00 AM", "Lab C303"),
+        Exam("Biology", "2023-12-18", "11:00 AM", "Hall D404"),
+        Exam("Computer Science", "2023-12-19", "03:00 PM", "Room E505")
+    )
+
 
 }

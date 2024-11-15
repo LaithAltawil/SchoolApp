@@ -25,7 +25,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.compose.AppTheme
-import com.example.schoolapp.Data.MockData.Mock.profilepagetable
+import com.example.schoolapp.Data.MockData.Mock.profilePageTable
+
 import com.example.schoolapp.Presentation.Util.SimpleTable
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
@@ -69,7 +70,7 @@ fun ProfilePage(MainViewModel: MainViewModel) {
 
                        }
                        //this must be changed because it doesnt look so good
-                       SimpleTable(tableData = profilepagetable)
+                       SimpleTable(tableData = profilePageTable)
 
                    }
 

@@ -36,7 +36,7 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 // same design except the title and some changes
 //=======================================================
 //todo @LT #simple || @(37:69)=="Title" variable name must start with small litter
-
+//done
 //todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 //Done
 @OptIn(ExperimentalMaterial3Api::class)

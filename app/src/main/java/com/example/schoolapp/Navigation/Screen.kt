@@ -2,8 +2,13 @@ package com.example.schoolapp.Navigation
 
 //=======================================================
 //todo @LT #simple || explain this fun logic here       =
+//on a meeting will explain to you
+//
+//
+
 //=======================================================
 //todo @LT #qustion[not answered] || why not convert to data class
+// used to doing like this ever since i started android development
 sealed class Screen(val route: String) {
     object StartPage : Screen("start_page")
     object SignInPage : Screen("sign_in_page")

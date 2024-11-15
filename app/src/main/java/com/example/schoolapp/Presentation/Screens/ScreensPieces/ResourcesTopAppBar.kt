@@ -32,7 +32,7 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 @Composable
 fun ResourcesTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: String) {
 
-    val state by viewModel.state.collectAsState()
+
 
         LargeTopAppBar(
             title = {
