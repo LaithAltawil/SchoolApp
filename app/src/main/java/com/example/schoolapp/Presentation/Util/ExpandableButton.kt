@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 //todo @LT #simple || @(36:36)=="Text" variable name must start with small litter
 //todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @Composable
-fun ExpandableButton(name: String, Text: String, onClick: () -> Unit) {
+fun ExpandableButton(name: String, Text: String) {
 
     //=======================================================
     //variables: local & states                             =

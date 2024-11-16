@@ -1,6 +1,5 @@
 package com.example.schoolapp.Presentation.Screens
 
-import android.icu.text.CaseMap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -35,13 +33,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.compose.AppTheme
+import com.example.schoolapp.Data.MockData.Mock.ParentsDetails
+import com.example.schoolapp.Presentation.Screens.ScreensPieces.ProfilePageBox
 import com.example.schoolapp.R
 
 //todo @LT #qustion[not answered] || do you want me to organize this for you or leave it as is XD?
-
+//LT: please do :))
+//THE New Profile page design
 
 @Composable
-fun page() {
+fun Profile_page() {
     AppTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -130,90 +131,8 @@ fun page() {
                                             .background(MaterialTheme.colorScheme.primary),
                                         contentAlignment = Alignment.Center
                                     ) {
-                                        Box(modifier = Modifier
+                                        ProfilePageBox("Personal INformation",ParentsDetails)
 
-                                            .clip(RoundedCornerShape(26.dp))
-                                            .border(3.dp, Color.White,
-                                                shape = RoundedCornerShape(26.dp))
-                                            .size(337.dp)
-
-                                            .background(MaterialTheme.colorScheme.primary)){
-                                            Column(
-                                                modifier = Modifier
-                                                    .fillMaxSize()
-                                                    .padding(top = 20.dp),
-                                                horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
-                                            ) {
-                                                Text(text = "Personal Information",
-                                                    style = MaterialTheme.typography.headlineLarge,
-                                                    fontWeight = FontWeight.Bold,
-                                                    color = Color.White)
-                                                Spacer(modifier = Modifier.height(20.dp))
-                                                Row(horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween
-                                                    , modifier = Modifier) {
-                                                    Text(
-                                                        text = "Name : ",
-                                                        style = MaterialTheme.typography.headlineSmall,
-                                                        color = Color.White
-                                                    )
-                                                    Text(
-                                                        text = "Laith Altawil",
-                                                        style = MaterialTheme.typography.headlineSmall,
-                                                        color = Color.White
-                                                    )
-                                                }
-                                                Spacer(modifier = Modifier.height(10.dp))
-                                                Row {
-                                                    Text(
-                                                        text = "Age : ",
-                                                        style = MaterialTheme.typography.headlineSmall
-                                                        ,
-                                                        color = Color.White
-                                                    )
-                                                    Text(
-                                                        text = "20",
-                                                        style = MaterialTheme.typography.headlineSmall
-                                                        ,
-                                                        color = Color.White
-                                                    )
-
-                                                }
-                                                Spacer(modifier = Modifier.height(10.dp))
-                                                Row {
-                                                    Text(
-                                                        text = "Gender : ",
-                                                        style = MaterialTheme.typography.headlineSmall
-                                                        ,
-                                                        color = Color.White
-                                                    )
-                                                    Text(
-                                                        text = "Male",
-                                                        style = MaterialTheme.typography.headlineSmall
-                                                        ,
-                                                        color = Color.White
-                                                    )
-
-                                                }
-                                                Spacer(modifier = Modifier.height(10.dp))
-                                                Row {
-                                                    Text(
-                                                        text = "Email : ",
-                                                        style = MaterialTheme.typography.headlineSmall
-                                                        ,
-                                                        color = Color.White
-                                                    )
-                                                    Text(
-                                                        text = "",
-                                                        style = MaterialTheme.typography.headlineSmall
-                                                        ,
-                                                        color = Color.White
-                                                    )
-                                                }
-
-
-
-                                            }
-                                        }
 
 
                                     }
@@ -242,5 +161,92 @@ fun page() {
 @Composable
 @Preview
 fun preview(){
-    page()
+    Profile_page()
 }
+
+
+//Keep incase of errors
+//Box(modifier = Modifier
+//
+//.clip(RoundedCornerShape(26.dp))
+//.border(3.dp, Color.White,
+//shape = RoundedCornerShape(26.dp))
+//.size(337.dp)
+//
+//.background(MaterialTheme.colorScheme.primary)){
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(top = 20.dp),
+//        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+//    ) {
+//        Text(text = "Personal Information",
+//            style = MaterialTheme.typography.headlineLarge,
+//            fontWeight = FontWeight.Bold,
+//            color = Color.White)
+//        Spacer(modifier = Modifier.height(20.dp))
+//        Row(horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween
+//            , modifier = Modifier) {
+//            Text(
+//                text = "Name : ",
+//                style = MaterialTheme.typography.headlineSmall,
+//                color = Color.White
+//            )
+//            Text(
+//                text = "Laith Altawil",
+//                style = MaterialTheme.typography.headlineSmall,
+//                color = Color.White
+//            )
+//        }
+//        Spacer(modifier = Modifier.height(10.dp))
+//        Row {
+//            Text(
+//                text = "Age : ",
+//                style = MaterialTheme.typography.headlineSmall
+//                ,
+//                color = Color.White
+//            )
+//            Text(
+//                text = "20",
+//                style = MaterialTheme.typography.headlineSmall
+//                ,
+//                color = Color.White
+//            )
+//
+//        }
+//        Spacer(modifier = Modifier.height(10.dp))
+//        Row {
+//            Text(
+//                text = "Gender : ",
+//                style = MaterialTheme.typography.headlineSmall
+//                ,
+//                color = Color.White
+//            )
+//            Text(
+//                text = "Male",
+//                style = MaterialTheme.typography.headlineSmall
+//                ,
+//                color = Color.White
+//            )
+//
+//        }
+//        Spacer(modifier = Modifier.height(10.dp))
+//        Row {
+//            Text(
+//                text = "Email : ",
+//                style = MaterialTheme.typography.headlineSmall
+//                ,
+//                color = Color.White
+//            )
+//            Text(
+//                text = "",
+//                style = MaterialTheme.typography.headlineSmall
+//                ,
+//                color = Color.White
+//            )
+//        }
+//
+//
+//
+//    }
+//}

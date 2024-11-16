@@ -1,8 +1,8 @@
 package com.example.schoolapp.Navigation
 
 //=======================================================
-//todo @LT #simple || explain this fun logic here       =
-//on a meeting will explain to you
+//solved @LT #simple || explain this fun logic here       =
+//done on 15/11/2024
 //
 //
 

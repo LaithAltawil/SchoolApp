@@ -32,13 +32,17 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 
 //=======================================================
-//todo @LT #simple || explain this fun logic here       =
+//solved @LT #simple || explain this fun logic here       =
+//LT: this is the old profile page as it is getting replaced with the file
+// Somethingiamtrying.kt
+
 //=======================================================
 //todo @LT #simple || @(33:17)=="MainViewModel" variable name must start with small litter
 //todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
+//IMPORTANT: OUTDATED DESIGN
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfilePage(MainViewModel: MainViewModel) {
+fun ProfilePage(mainViewModel: MainViewModel) {
 
     //=======================================================
     //variables: local & states                             =
@@ -51,6 +55,8 @@ fun ProfilePage(MainViewModel: MainViewModel) {
             Scaffold(
                 //Needs Completion TODO
                 //@MAS I agree \(￣︶￣*\))
+                //@LT no longer needed to complete this
+                //check @(36:37)
                 topBar = {
                     LargeTopAppBar(title = { Text(text = "Profile") })
 

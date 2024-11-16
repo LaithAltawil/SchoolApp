@@ -24,7 +24,7 @@ data class Subjects(
     val onClick: () -> Unit
 )
 
-/*todo @LT #qustion[on Hold] || why this class exist?
+/*solved @LT #qustion[on Hold] || why this class exist?
 LT: to add dates and events from the database to the Calender page
 MAS: I think we won't need it but I'll leave it until its time 👍*/
 //*todo @MAS #meduim || recreate data class to match the database

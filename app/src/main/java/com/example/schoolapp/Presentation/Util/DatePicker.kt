@@ -34,7 +34,10 @@ fun DatePickerModal(
     //=======================================================
     val datePickerState = rememberDatePickerState()
 
-    //todo @LT #simple || please add usage for this, I need full details plz
+    //solved @LT #simple || please add usage for this, I need full details plz
+    //LT:a date picker for counselor page where the student will click on a button
+    // for the date picker to appear to sealect a date
+    //Not sure if it is important or not
     DatePickerDialog(
         onDismissRequest = onDismiss,
         confirmButton = {

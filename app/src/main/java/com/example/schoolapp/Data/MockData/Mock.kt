@@ -55,7 +55,8 @@ object Mock {
         )
     )
 
-    //todo @LS #qustion[not answered] || what is this 😀?
+    //solved @LS #qustion|| what is this 😀?
+    //made for profile page will be deleted in the next days to be replaced with a better one
     //solved @LT #simple || fix the name issue... recommended solution: "profilePageTable"
     val profilePageTable = listOf(
         listOf("name :- ", "Laith"),
@@ -93,4 +94,23 @@ object Mock {
         Exam("Biology", "2023-12-18", "11:00 AM", "Hall D404"),
         Exam("Computer Science", "2023-12-19", "03:00 PM", "Room E505")
     )
+
+    val PersonalInfo: MutableList<MutableList<String>> = mutableListOf(
+        mutableListOf("Name", "Laith Altawil"),
+        mutableListOf("Class", "12th"),
+        mutableListOf("DOB", "11/01/2002"),
+        mutableListOf("Student Number", "23120"),
+        mutableListOf("Age", "19")
+    )
+    val ParentsDetails: MutableList<MutableList<String>> = mutableListOf(
+        mutableListOf("Name", "Ahmad"),
+        mutableListOf("Phone Number", "58380430"),
+        mutableListOf("E-mail", "laithaltawil@gmail.com"),
+        mutableListOf("Age", "50"),
+        mutableListOf("relation", "Father")
+    )
+
 }
+
+
+

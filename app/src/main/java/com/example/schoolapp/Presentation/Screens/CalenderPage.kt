@@ -12,6 +12,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.CalenderDays
 import com.example.schoolapp.Presentation.Screens.ScreensPieces.CalenderTopAppBar
@@ -21,15 +22,18 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 //=======================================================
 //Calender page: Logic & UI                             =
 //=======================================================
-//todo @LT #simple || @(27:18)=="MainViewModel" variable name must start with small litter
-//todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
-@Composable
-fun CalenderPage(MainViewModel: MainViewModel = MainViewModel()) {
+//solved @LT #simple || @(27:18)=="MainViewModel" variable name must start with small litter
+//@LT: Done
+//todo @MAS #qustion[not answered] || do you have any idea to fill this page?
 
-    //todo @LT #qustion[not answered] || is this block used to call any suspend functions?
-    LaunchedEffect(Unit) {
-        MainViewModel.isTopappbarVisible6()
-    }
+//solved @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
+//@LT: Done
+@Composable
+fun CalenderPage(mainViewModel: MainViewModel = MainViewModel()) {
+
+    //solved @LT #qustion[not answered] || is this block used to call any suspend functions?
+    //@LT:removed to to it being unnecessary
+
 
     //=======================================================
     //variables:local & states                              =
@@ -54,9 +58,10 @@ fun CalenderPage(MainViewModel: MainViewModel = MainViewModel()) {
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
                 topBar = {
-                    //todo @LT #qustion[not answered] || linking the topBar with CalenderTopAppBar.kt ?
+                    //solved @LT #qustion[not answered] || linking the topBar with CalenderTopAppBar.kt ?
+                    //LT: Yes this is a function which contains the topappbar for this page
                     CalenderTopAppBar(
-                        viewModel = MainViewModel,
+                        viewModel = mainViewModel,
                         modifier = Modifier,
                         Title = "Calender"
                     )
@@ -70,15 +75,18 @@ fun CalenderPage(MainViewModel: MainViewModel = MainViewModel()) {
                     LazyColumn {
                         items(calendarItems) { item ->
                             // ExpandableButton composable
-                            ExpandableButton(name = item.day, Text = item.event) {
-
-                                //todo @LT #qustion[not answered] || what to do here?
-
-                            }
+                            ExpandableButton(name = item.day, Text = item.event)
+                                //solved @LT #qustion || what to do here?
+                                //@LT:Removed to to it being unnecessary
                         }
                     }
                 }
             }
         }
     }
+}
+@Composable
+@Preview
+fun CalenderPagePreview() {
+    CalenderPage()
 }

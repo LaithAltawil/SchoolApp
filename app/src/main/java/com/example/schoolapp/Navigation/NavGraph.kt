@@ -47,7 +47,7 @@ fun Navigation() {
     function created from navController library*/
     val navController = rememberNavController()
 
-    /*todo @LT [#IMPOSSIBLE] || explain this to me @MAS 😃
+    /*solved @LT [#IMPOSSIBLE] || explain this to me @MAS 😃
     LT: when you see it call me or send me a message to explain it*/
     NavHost(navController = navController, startDestination = "Start") {
 
@@ -79,12 +79,12 @@ fun Navigation() {
             }
             composable(Screen.ProfilePage.route) {
                 ProfilePage(
-                    MainViewModel = viewModel
+                    mainViewModel = viewModel
                 )
             }
             composable(Screen.CalenderPage.route) {
                 CalenderPage(
-                    MainViewModel = viewModel
+                    mainViewModel = viewModel
                 )
             }
             composable(Screen.CounselorPage.route) {
@@ -138,7 +138,7 @@ fun Navigation() {
 inline fun <reified T : ViewModel> NavBackStackEntry.AppViewModel(
     navController: NavHostController,
 ): T {
-    //todo @LT [#IMPOSSIBLE] || explain this to me @MAS 😃
+    //not solved @LT [#IMPOSSIBLE] || explain this to me @MAS 😃
 
     val navGraphRoute = destination.parent?.route ?: return viewModel()
     val parentEntry = remember(this) {
