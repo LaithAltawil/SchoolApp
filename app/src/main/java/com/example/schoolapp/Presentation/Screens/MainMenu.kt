@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.compose.AppTheme
@@ -46,9 +47,12 @@ import com.example.schoolapp.R
 import kotlinx.coroutines.launch
 
 //=======================================================
-//todo @LT #simple || explain this fun logic here       =
+//solved @LT #simple || explain this fun logic here       =
+//main menu containing a drawer, scafold and a top app bar
+//any edits is highly thought after
 //=======================================================
-//todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
+//solved @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainMenu(navController: NavController) {
@@ -116,7 +120,8 @@ fun MainMenu(navController: NavController) {
         "item6",
     )
     //=======================================================
-    //Logic & UI,todo @LT @MAS #simple || explain the code  =
+    //Logic & UI,solved @LT @MAS #simple || explain the code  =
+    //this is the main page of the app which the student enters after signing in
     //=======================================================
     AppTheme {
         ModalNavigationDrawer(
@@ -295,4 +300,12 @@ fun MainMenu(navController: NavController) {
             }
         )
     }
+}
+
+@Composable
+@Preview
+fun MainMenuPreview() {
+    //cant add preview due to the page needing context
+
+
 }

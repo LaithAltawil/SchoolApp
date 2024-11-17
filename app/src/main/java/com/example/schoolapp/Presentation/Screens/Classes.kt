@@ -33,21 +33,21 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 //=======================================================
 //sessions table: Logic & UI                            =
 //=======================================================
-//todo @LT #simple || @(40:18)=="MainViewModel" variable name must start with small litter
-//todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
+//solved @LT #simple || @(40:18)=="mainviewmodel" variable name must start with small litter
+
+//solved @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StudentClass(MainViewModel: MainViewModel = MainViewModel()) {
+fun StudentClass(mainviewmodel: MainViewModel = MainViewModel()) {
 
     //todo @MAS #simple || please add the usage after answering the referred todo task
-    LaunchedEffect(Unit) {
-        MainViewModel.isTopappbarVisible5()
-    }
+    //Removed due to it being unneeded
+
 
     //=======================================================
     //variables: local & stats                              =
     //=======================================================
-    val state by MainViewModel.Classesstate.collectAsState()
+    val state by mainviewmodel.Classesstate.collectAsState()
 
     //=======================================================
     // Logic & UI                                           =
@@ -63,7 +63,7 @@ fun StudentClass(MainViewModel: MainViewModel = MainViewModel()) {
                 //todo @MAS #simple || please add the usage after answering the referred todo task
                 topBar = {
                     ClassesTopAppBar(
-                        viewModel = MainViewModel,
+                        viewModel = mainviewmodel,
                         modifier = Modifier,
                         Title = "Classes"
                     )
@@ -89,7 +89,8 @@ fun StudentClass(MainViewModel: MainViewModel = MainViewModel()) {
                                 .fillMaxSize()
                                 .padding(10.dp)
                         ) {
-                            //todo @LT #qustion[not answered] || is it working on sequence 0,1,2,,,,,n?
+                            //solved @LT #qustion[not answered] || is it working on sequence 0,1,2,,,,,n?
+                            //yes 0,1,2 because it is using an array
                             items(daysOfWeek.size) {
                                 //child column of the lazyColumn
                                 Column {
@@ -113,6 +114,7 @@ fun StudentClass(MainViewModel: MainViewModel = MainViewModel()) {
                                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
                                             ) {
                                                 //todo @LT #meduim || please consider changing the design here with @MAS
+                                                //please if you have any idea please provide because i am out of them :(
                                                 Column(
                                                     modifier = Modifier
                                                         .fillMaxSize()
@@ -151,7 +153,8 @@ fun StudentClass(MainViewModel: MainViewModel = MainViewModel()) {
     }
 }
 
-//todo @LT #simple || put this in the relative file
+//solved @LT #simple || put this in the relative file
+//THis is perview
 @Composable
 @Preview
 fun StudentClassPreview() {

@@ -52,16 +52,16 @@ import com.example.schoolapp.R
 //=======================================================
 //Exam Page: UI & logic                                 =
 //=======================================================
-//todo @LT #simple || @(37:69)=="MainViewModel" variable name must start with small litter
+//solved @LT #simple || @(37:69)=="MainViewModel" variable name must start with small litter
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExamsPage(MainViewModel: MainViewModel = MainViewModel()) {
+fun ExamsPage(mainviewmodel: MainViewModel = MainViewModel()) {
 
     //=======================================================
     //variables: local & states                             =
     //=======================================================
     //todo @LT #simple || @(54:9)=="mainmenuitem" every second word must start with capital litter
-    val state = MainViewModel.Examstate.collectAsStateWithLifecycle()
+    val state = mainviewmodel.Examstate.collectAsStateWithLifecycle()
 
 
     val mainmenuitem = listOf(
@@ -90,7 +90,7 @@ fun ExamsPage(MainViewModel: MainViewModel = MainViewModel()) {
                 //todo @MAS #simple || please add the usage after answering the referred todo task
                 topBar = {
                     ExamsMyTopAppBar(
-                        viewModel = MainViewModel,
+                        viewModel = mainviewmodel,
                         modifier = Modifier,
                         Title = "Exams"
                     )
@@ -103,12 +103,15 @@ fun ExamsPage(MainViewModel: MainViewModel = MainViewModel()) {
                     horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
                 ) {
                     //lazy grid to hold the data logic & UI design
-                    LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 128.dp)) {
+                    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
                         /*here we will enter cards which will be the exams coming set in order from
                         left to right depending of its date
-                        todo @LT #qustion[not answered] || if we can extend the size so we can
+                        solved @LT #qustion[not answered] || if we can extend the size so we can
                          represent the data more clearly. Maybe you can set the row size in the grid to hold 2 cards*/
+                        //done but please recommend a good text size for the subject names
+
                         //todo @MAS #simple || please add the usage after answering the referred todo task
+
                         items(mainmenuitem.size) { item ->
                             //hold the subject details
                             Card(colors = CardDefaults.cardColors(
@@ -120,38 +123,47 @@ fun ExamsPage(MainViewModel: MainViewModel = MainViewModel()) {
                                     .size(200.dp)
                                     .width(100.dp)
                                     .clickable {
-                                        MainViewModel.changeBottomSheetState()
-
+                                        mainviewmodel.changeBottomSheetState()
                                     }
+                                ,
                             ) {
                                 /*card UI: column todo @LT #medium ||
                                                     I think the column size is too small if you can
                                                     edit it so it can be wrapped with the whole card*/
                                 Column(
                                     modifier = Modifier
+                                        .fillMaxSize()
                                         .padding(16.dp)
                                         .wrapContentSize(Alignment.Center),
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     verticalArrangement = Arrangement.Center
                                 ) {
+                                    //todo @LT:Icon will be changed when we find all the required icons
+                                    //they will be in a list with the subject names
+                                    Icon(painter =
+                                    painterResource(id = R.drawable.history),
+                                        contentDescription =null )
                                     //subject name
                                     Text(
-                                        modifier = Modifier.padding(10.dp, top = 40.dp),
+                                        modifier = Modifier.padding(10.dp),
                                         text = mainmenuitem[item].name,
-                                        fontSize = 16.sp,
+                                        fontSize = 26.sp,
                                         color = Color.White,
                                         textAlign = TextAlign.Center,
                                         overflow = TextOverflow.Ellipsis
                                     )
 
 
+
                                 }
 
                             }
-                            //todo @LT #simple || plz add this part logic
+                            //solved @LT #simple || plz add this part logic
+                            //this is an if statement which by using the state showbottomsheet
+                            //it will either show or hide the bottom sheet
                             if (state.value.showBottomSheet) {
                                 ModalBottomSheet(containerColor = MaterialTheme.colorScheme.primary,
-                                    onDismissRequest = { MainViewModel.changeBottomSheetState() }
+                                    onDismissRequest = { mainviewmodel.changeBottomSheetState() }
                                 ) {
                                     // Bottom sheet content
                                     Column(
@@ -195,6 +207,7 @@ fun ExamsPage(MainViewModel: MainViewModel = MainViewModel()) {
 
 }
 //Trial and error work to display
+//working will be moving it to relative file in the next days
 @Composable
 fun ExamDetailsColumn( subject: String, date: String, time: String, location: String) {
     Column(
@@ -211,7 +224,8 @@ fun ExamDetailsColumn( subject: String, date: String, time: String, location: St
 
 
 
-//todo @LT #simple || put this in the relative file
+//solved @LT #simple || put this in the relative file
+//this is preview
 @Composable
 @Preview
 fun ExamsPagePreview() {

@@ -117,13 +117,13 @@ fun Navigation() {
             }
             composable(Screen.ExamsPage.route) {
                 ExamsPage(
-                    MainViewModel = viewModel
+                    mainviewmodel = viewModel
                 )
 
             }
             composable(Screen.ClassesPage.route) {
                 StudentClass(
-                    MainViewModel = viewModel
+                    mainviewmodel = viewModel
                 )
             }
         }
