@@ -165,7 +165,7 @@ fun preview(){
 }
 
 
-//Keep incase of errors
+//Keep in case of errors
 //Box(modifier = Modifier
 //
 //.clip(RoundedCornerShape(26.dp))

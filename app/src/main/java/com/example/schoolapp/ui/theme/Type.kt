@@ -6,7 +6,7 @@ import androidx.compose.ui.text.googlefonts.Font
 import androidx.compose.ui.text.googlefonts.GoogleFont
 import com.example.schoolapp.R
 
-//todo @LT #chatting|| You did all this? ,😂 do you want to format it 🌚
+
 
 val provider = GoogleFont.Provider(
     providerAuthority = "com.google.android.gms.fonts",

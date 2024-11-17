@@ -1,7 +1,7 @@
 package com.example.compose
 import androidx.compose.ui.graphics.Color
 
-//todo @LT #chatting|| You did all this? ,😂 do you want to format it 🌚
+
 
 val primaryLight = Color(0xFF1E6586)
 val onPrimaryLight = Color(0xFFFFFFFF)

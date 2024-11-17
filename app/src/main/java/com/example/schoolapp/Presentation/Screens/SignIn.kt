@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +30,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.compose.AppTheme
@@ -39,21 +40,18 @@ import com.example.schoolapp.R
 //=======================================================
 //Sign in page: Logic & UI                              =
 //=======================================================
-//todo @LT #simple || @(46:12)=="ViewModel" variable name must start with small litter
-//todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignIn(ViewModel: AppViewModel = AppViewModel(), onClick: () -> Unit) {
-
+fun SignIn(viewModel: AppViewModel = AppViewModel(), onClick: () -> Unit = {}) {
     //=======================================================
     //variables: local & states                             =
     //=======================================================
-    val state = ViewModel.signInState.collectAsState()
+    val state = viewModel.signInState.collectAsState()
 
     //=======================================================
     //Logic & UI                                            =
     //=======================================================
     AppTheme {
+        //Main page UI: Column
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -62,6 +60,7 @@ fun SignIn(ViewModel: AppViewModel = AppViewModel(), onClick: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            //main UI: Box
             Box(
                 modifier = Modifier
                     .width(400.dp)
@@ -72,13 +71,14 @@ fun SignIn(ViewModel: AppViewModel = AppViewModel(), onClick: () -> Unit) {
                     .background(color = MaterialTheme.colorScheme.primary),
                 contentAlignment = Alignment.Center
             ) {
+                //Main Box UI:Column
                 Column(
                     Modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "Welcome Back Dear Student",
+                        text = "Welcome Back",
                         color = MaterialTheme.colorScheme.onPrimary,
                         style = MaterialTheme.typography.displayMedium,
                         overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
@@ -90,23 +90,26 @@ fun SignIn(ViewModel: AppViewModel = AppViewModel(), onClick: () -> Unit) {
                         label = { Text(text = "Username") },
                         maxLines = 1,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        //save value to the ViewModel
                         value = state.value.UserName,
                         modifier = Modifier.clip(RoundedCornerShape(20.dp)),
                         onValueChange = {
-                            ViewModel.onUserNameChange(it)
+                            viewModel.onUserNameChange(it)
                         })
                     Spacer(modifier = Modifier.size(15.dp))
                     TextField(
                         label = { Text(text = "Password") },
                         maxLines = 1,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        //store value to the viewModel
                         value = state.value.password,
                         modifier = Modifier.clip(RoundedCornerShape(20.dp)),
                         onValueChange = {
-                            ViewModel.onPasswordChange(it)
+                            viewModel.onPasswordChange(it)
                         },
                         visualTransformation = if (state.value.isPasswordVisible)
                             VisualTransformation.None else PasswordVisualTransformation(),
+                        //password eye logic
                         trailingIcon = {
                             val image = if (state.value.isPasswordVisible) {
                                 painterResource(id = R.drawable.visibility)
@@ -116,16 +119,20 @@ fun SignIn(ViewModel: AppViewModel = AppViewModel(), onClick: () -> Unit) {
                             val description =
                                 if (state.value.isPasswordVisible) "Hide password" else "Show password"
                             IconButton(onClick = {
-                                ViewModel.onPasswordVisibilityChange()
+                                viewModel.onPasswordVisibilityChange()
                             }) {
                                 Icon(painter = image, contentDescription = description)
                             }
                         }
                     )
                     Spacer(modifier = Modifier.size(20.dp))
-                    Button(onClick = {
-                        onClick()
-                    }) {
+                    Button(modifier = Modifier.clip(RoundedCornerShape(1.dp)),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            //todo @LT #simple-medium|| fix this...
+                        ), onClick = {
+                            onClick()
+                        }) {
                         Text(
                             text = "Sign In",
                             style = MaterialTheme.typography.bodyLarge,
@@ -137,4 +144,10 @@ fun SignIn(ViewModel: AppViewModel = AppViewModel(), onClick: () -> Unit) {
             }
         }
     }
+}
+
+@Composable
+@Preview
+fun SignInPage() {
+    SignIn()
 }

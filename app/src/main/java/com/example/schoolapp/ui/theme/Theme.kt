@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.example.ui.theme.AppTypography
 
-//todo @LT #chatting|| You did all this? ,😂 do you want to format it 🌚
+
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,

@@ -6,7 +6,6 @@ import androidx.compose.ui.graphics.painter.Painter
 //Declaring data classes                               =
 //=======================================================
 
-//*solved @LT #simple || class name should start with upper case latter
 //*todo @MAS #meduim || recreate data class to match the database
 data class Homework(
     val title: String,
@@ -15,8 +14,6 @@ data class Homework(
     val isCompleted: Boolean
 )
 
-//solved @LT #simple || variable name should start with small case latter
-//done anything left please tell me or leave a todo
 //*todo @MAS #meduim || recreate data class to match the database
 data class Subjects(
     val name: String,
@@ -35,7 +32,8 @@ data class CalenderDays(
 )
 
 /*solved @LT #qustion[answered] || is this for the app's main activity or for another thing?
-this is the main menu item data class, where you use it to give a name and an icon to each item in the main menu*/
+LT:this is the main menu item data class, where you use it to give a name and an icon to each item in the main menu
+LT: for the main memory*/
 data class MainMenuItem(
     val title: String,
     val icon: Painter,

@@ -34,26 +34,29 @@ fun DatePickerModal(
     //=======================================================
     val datePickerState = rememberDatePickerState()
 
-    //solved @LT #simple || please add usage for this, I need full details plz
     //LT:a date picker for counselor page where the student will click on a button
-    // for the date picker to appear to sealect a date
+    // for the date picker to appear to select a date
     //Not sure if it is important or not
     DatePickerDialog(
         onDismissRequest = onDismiss,
+        //onConfirm
         confirmButton = {
             TextButton(onClick = {
+                //choose data format
                 onDateSelected(datePickerState.selectedDateMillis)
                 onDismiss()
             }) {
                 Text("OK")
             }
         },
+        //onCancel
         dismissButton = {
             TextButton(onClick = onDismiss) {
                 Text("Cancel")
             }
         }
     ) {
+        //store the result in the parameter state
         DatePicker(state = datePickerState)
     }
 }

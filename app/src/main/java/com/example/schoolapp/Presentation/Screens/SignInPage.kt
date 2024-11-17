@@ -21,19 +21,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.compose.AppTheme
 import com.example.schoolapp.Presentation.Util.openWebsite
 
 //=======================================================
-//todo @LT #simple || explain this fun logic here and   =
-// make the name more clear than SignIn.kt              =
+//Start Page: UI & logic                                =
 //=======================================================
-//todo @LT #simple || @(35:70)=="Title" variable name must start with small litter
-//todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @Composable
-fun StartPage(onSignInClick: () -> Unit) {
+fun StartPage(onSignInClick: () -> Unit={}) {
 
     //=======================================================
     //variables: local & states                             =
@@ -45,6 +43,7 @@ fun StartPage(onSignInClick: () -> Unit) {
     // Logic & UI                                           =
     //=======================================================
     AppTheme {
+        //main page UI: Column
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -52,6 +51,7 @@ fun StartPage(onSignInClick: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            //the main UI: Box
             Box(
                 modifier = Modifier
                     .width(400.dp)
@@ -62,11 +62,13 @@ fun StartPage(onSignInClick: () -> Unit) {
                     .background(color = MaterialTheme.colorScheme.primary),
                 contentAlignment = Alignment.Center
             ) {
+                //main box UI: Column
                 Column(
                     Modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
+                    //todo @LT #simple|| replace with logo
                     Text(
                         text = "Amman High School",
                         color = MaterialTheme.colorScheme.onPrimary,
@@ -75,7 +77,9 @@ fun StartPage(onSignInClick: () -> Unit) {
                         textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.size(30.dp))
+                    //sign in button
                     Button(
+                        modifier = Modifier.size(275.dp, 43.dp),
                         onClick = {onSignInClick() },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.onPrimary,
@@ -83,7 +87,7 @@ fun StartPage(onSignInClick: () -> Unit) {
                         )
                     ) {
                         Text(
-                            text = "A student? Click Here to Sign in",
+                            text = "Sign in",
                             color = MaterialTheme.colorScheme.primary,
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Bold,
@@ -91,6 +95,7 @@ fun StartPage(onSignInClick: () -> Unit) {
                         )
                     }
                     Spacer(modifier = Modifier.size(15.dp))
+                    //not a student button
                     Button(
                         onClick = { openWebsite(context, url) },
                         colors = ButtonDefaults.buttonColors(
@@ -111,4 +116,10 @@ fun StartPage(onSignInClick: () -> Unit) {
             }
         }
     }
+}
+
+@Composable
+@Preview
+fun EnterPage(){
+    StartPage()
 }
