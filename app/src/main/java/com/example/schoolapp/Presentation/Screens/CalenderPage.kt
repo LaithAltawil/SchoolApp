@@ -75,7 +75,7 @@ fun CalenderPage(mainViewModel: MainViewModel = MainViewModel()) {
                     LazyColumn {
                         items(calendarItems) { item ->
                             // ExpandableButton composable
-                            ExpandableButton(name = item.day, Text = item.event)
+                            ExpandableButton(name = item.day, text = item.event)
                                 //solved @LT #qustion || what to do here?
                                 //@LT:Removed to to it being unnecessary
                         }

@@ -94,7 +94,7 @@ fun Navigation() {
             }
             composable(Screen.HomeworkPage.route) {
                 HomeworkPage(
-                    HomeworkPageState = viewModel
+                    homeworkpagestate = viewModel
                 )
             }
             composable(Screen.SettingsPage.route) {
@@ -117,13 +117,13 @@ fun Navigation() {
             }
             composable(Screen.ExamsPage.route) {
                 ExamsPage(
-                    MainViewModel = viewModel
+                    mainviewmodel = viewModel
                 )
 
             }
             composable(Screen.ClassesPage.route) {
                 StudentClass(
-                    MainViewModel = viewModel
+                    mainviewmodel = viewModel
                 )
             }
         }

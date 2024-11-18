@@ -28,12 +28,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 //=======================================================
-//todo @LT #simple || explain this fun logic here       =
+//solved @LT #simple || explain this fun logic here       =
+//THis is expandable button
+//WHEN Clicked it expands and when clicked again it collapses
+//by using expanded variable to know when to do so and
+// if statement to know when to do so
 //=======================================================
-//todo @LT #simple || @(36:36)=="Text" variable name must start with small litter
+//solved @LT #simple || @(36:36)=="Text" variable name must start with small litter
+
 //todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
+//LT:not needed
 @Composable
-fun ExpandableButton(name: String, Text: String) {
+fun ExpandableButton(name: String, text: String) {
 
     //=======================================================
     //variables: local & states                             =
@@ -73,7 +79,7 @@ fun ExpandableButton(name: String, Text: String) {
                 )
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text(Text)
+                    Text(text)
                     // Add more content to the box here
                 }
             }

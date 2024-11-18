@@ -10,6 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.MockData.Mock.HomeworkMock
@@ -20,15 +21,17 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 //=======================================================
 //home work page: UI & logic                            =
 //=======================================================
-//todo @LT #simple || @(26:18)=="HomeworkPageState" variable name must start with small litter
-//todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
+//solved @LT #simple || @(26:18)=="HomeworkPageState" variable name must start with small litter
+
+//solved @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
+
 @Composable
-fun HomeworkPage(HomeworkPageState: MainViewModel) {
+fun HomeworkPage(homeworkpagestate: MainViewModel= MainViewModel()) {
 
     //=======================================================
     //variables: local & states                             =
     //=======================================================
-    val state = HomeworkPageState.state.collectAsStateWithLifecycle()
+    val state = homeworkpagestate.state.collectAsStateWithLifecycle()
 
     //=======================================================
     //UI & Logic                                            =
@@ -46,7 +49,7 @@ fun HomeworkPage(HomeworkPageState: MainViewModel) {
                 //todo @MAS #simple || please add the usage after answering the referred todo task
                 topBar = {
                     HomeworksTopAppBar(
-                        viewModel = HomeworkPageState,
+                        viewModel = homeworkpagestate,
                         modifier = Modifier,
                         Title = "HomeWork"
                     )
@@ -62,7 +65,7 @@ fun HomeworkPage(HomeworkPageState: MainViewModel) {
                         items(HomeworkMock.size) { index ->
                             ExpandableCard(
                                 Data = HomeworkMock[index],
-                                viewmodel = HomeworkPageState
+                                viewmodel = homeworkpagestate
                             )
                         }
                     }
@@ -70,4 +73,11 @@ fun HomeworkPage(HomeworkPageState: MainViewModel) {
             }
         }
     }
+}
+
+@Composable
+@Preview
+fun HomeworkPagePreview() {
+    HomeworkPage()
+
 }
