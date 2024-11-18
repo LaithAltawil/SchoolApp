@@ -33,7 +33,6 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Navigation() {
-
     //=======================================================
     //viewModel                                             =
     //=======================================================
@@ -42,87 +41,105 @@ fun Navigation() {
     //=======================================================
     //navigation                                            =
     //=======================================================
-    /*solved @LT #qustion[answered] || did you create this rememberNavController
-     or its imported from other library?
-    function created from navController library*/
+    //function created from navController library*/
     val navController = rememberNavController()
 
-    /*solved @LT [#IMPOSSIBLE] || explain this to me @MAS 😃
-    LT: when you see it call me or send me a message to explain it*/
+    //navigation logic
     NavHost(navController = navController, startDestination = "Start") {
 
+        //starter navigation map
         navigation(
             startDestination = Screen.StartPage.route,
             route = "Start"
         ) {
+
+            //start page navigation
             composable(Screen.StartPage.route) {
                 StartPage() {
+                    //todo @LT #qustion|| here are you parsing the navigation as function?
                     navController.navigate(Screen.SignInPage.route)
                 }
             }
 
-            //todo @LT #simple || variable name must start with small capital latter
+            //sign in page navigation & Home map navigation
             composable(Screen.SignInPage.route) { entry ->
                 val viewModel = entry.AppViewModel<AppViewModel>(navController)
                 SignIn(viewModel) {
+                    //todo @LT #qustion|| here are you parsing the navigation map as function?
                     navController.navigate("Home")
                 }
             }
         }
 
+        //home map navigation
         navigation(
             startDestination = Screen.MainMenu.route,
             route = "Home"
         ) {
+            //main menu navigation
             composable(Screen.MainMenu.route) {
+                //todo @LT #qustion|| here are you parsing the navigation as function?
                 MainMenu(navController)
             }
+
+            //profile page navigation
             composable(Screen.ProfilePage.route) {
+                //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                 ProfilePage(
                     mainViewModel = viewModel
                 )
             }
+
+
             composable(Screen.CalenderPage.route) {
                 CalenderPage(
+                    //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     mainViewModel = viewModel
                 )
             }
             composable(Screen.CounselorPage.route) {
                 CounselorPage(
+                    //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     mainviewModel = viewModel
                 )
             }
             composable(Screen.HomeworkPage.route) {
                 HomeworkPage(
+                    //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     homeworkpagestate = viewModel
                 )
             }
             composable(Screen.SettingsPage.route) {
                 SettingPage(
+                    //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     MainViewModel = viewModel
                 )
 
             }
             composable(Screen.MarksPage.route) {
                 MarksPage(
+                    //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     MainViewModel = viewModel
                 )
 
             }
             composable(Screen.ResourcesPage.route) {
                 ResourcesPage(
+                    //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     MainViewModel = viewModel
                 )
 
             }
             composable(Screen.ExamsPage.route) {
                 ExamsPage(
+                    //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     mainviewmodel = viewModel
                 )
 
             }
             composable(Screen.ClassesPage.route) {
                 StudentClass(
+                    //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     mainviewmodel = viewModel
                 )
             }
@@ -130,36 +147,39 @@ fun Navigation() {
     }
 }
 
+//todo @LT #meduim || explain this comments :)
 //=======================================================
-//not solved @LT #simple || explain this fun logic here =
-//LT: not sure :) but saw it from someone on youtube:)) =
+//obtain a ViewModel scoped to a navigation graph       =
 //=======================================================
 @Composable
 inline fun <reified T : ViewModel> NavBackStackEntry.AppViewModel(
     navController: NavHostController,
 ): T {
-    //not solved @LT [#IMPOSSIBLE] || explain this to me @MAS 😃
-
+    // Get the route of the parent navigation graph
     val navGraphRoute = destination.parent?.route ?: return viewModel()
+
+    // Get the NavBackStackEntry for the parent navigation graph
     val parentEntry = remember(this) {
         navController.getBackStackEntry(navGraphRoute)
     }
+    // Return the ViewModel scoped to the parent entry
     return viewModel(parentEntry)
 }
 
 //=======================================================
-//not solved @LT #simple || explain this fun logic here =
-//LT: saw on youtube not sure 100%                      =
+//obtain a ViewModel scoped to a navigation graph       =                                                     =
 //=======================================================
 @Composable
 inline fun <reified T : ViewModel> NavBackStackEntry.MainViewModel(
     navController: NavHostController,
 ): T {
-    //todo @LT [#IMPOSSIBLE] || explain this to me @MAS 😃
-    //inform me to explain to you
+    // Get the route of the parent navigation graph
     val navGraphRoute = destination.parent?.route ?: return viewModel()
+
+    // Get the NavBackStackEntry for the parent navigation graph
     val parentEntry = remember(this) {
         navController.getBackStackEntry(navGraphRoute)
     }
+    // Return the ViewModel scoped to the parent entry
     return viewModel(parentEntry)
 }

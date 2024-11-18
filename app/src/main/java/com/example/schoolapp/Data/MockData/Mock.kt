@@ -11,14 +11,12 @@ object Mock {
 
     //todo @MAS #medium || insert the complete homework mock data after the related task is finished
     val HomeworkMock = listOf<Homework>(
-
         Homework(
             "Math",
             "Solve equations 1-20",
             "2023-12-24",
             false
         ),
-
         Homework(
             "Math",
             "Complete worksheet on fractions",
@@ -54,10 +52,7 @@ object Mock {
             false
         )
     )
-
-    //solved @LS #qustion|| what is this 😀?
     //made for profile page will be deleted in the next days to be replaced with a better one
-    //solved @LT #simple || fix the name issue... recommended solution: "profilePageTable"
     val profilePageTable = listOf(
         listOf("name :- ", "Laith"),
         listOf("email :- ", "john.tyler@examplepetstore.com"),
@@ -69,7 +64,6 @@ object Mock {
         listOf("language :- ", "English"),
         listOf("religion :- ", "Christian"),
     )
-
     val daysOfWeek = listOf(
         "Sunday",
         "Monday",
@@ -77,7 +71,6 @@ object Mock {
         "Wednesday",
         "Thursday"
     )
-
     //todo @MAS #medium || insert the complete classList mock data after the related task is finished
     val classList = listOf(
         Class("Math", "Mr.Smith", "9:00 AM"),
@@ -86,7 +79,6 @@ object Mock {
         Class("History", "Mr.Brown", "2:30 PM")
         // Add more classes as needed
     )
-
     val mockExamList = listOf(
         Exam("Mathematics", "2023-12-15", "10:00 AM", "Room A101"),
         Exam("Physics", "2023-12-16", "02:00 PM", "Room B202"),
@@ -94,7 +86,6 @@ object Mock {
         Exam("Biology", "2023-12-18", "11:00 AM", "Hall D404"),
         Exam("Computer Science", "2023-12-19", "03:00 PM", "Room E505")
     )
-
     val PersonalInfo: MutableList<MutableList<String>> = mutableListOf(
         mutableListOf("Name", "Laith Altawil"),
         mutableListOf("Class", "12th"),
@@ -109,8 +100,4 @@ object Mock {
         mutableListOf("Age", "50"),
         mutableListOf("relation", "Father")
     )
-
 }
-
-
-
