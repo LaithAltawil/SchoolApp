@@ -19,6 +19,7 @@ import com.example.schoolapp.Presentation.Screens.HomeworkPage
 import com.example.schoolapp.Presentation.Screens.MainMenu
 import com.example.schoolapp.Presentation.Screens.MarksPage
 import com.example.schoolapp.Presentation.Screens.ProfilePage
+import com.example.schoolapp.Presentation.Screens.Profile_page
 import com.example.schoolapp.Presentation.Screens.ResourcesPage
 import com.example.schoolapp.Presentation.Screens.SettingPage
 import com.example.schoolapp.Presentation.Screens.SignIn
@@ -78,9 +79,7 @@ fun Navigation() {
                 MainMenu(navController)
             }
             composable(Screen.ProfilePage.route) {
-                ProfilePage(
-                    mainViewModel = viewModel
-                )
+                Profile_page()
             }
             composable(Screen.CalenderPage.route) {
                 CalenderPage(
@@ -105,13 +104,13 @@ fun Navigation() {
             }
             composable(Screen.MarksPage.route) {
                 MarksPage(
-                    MainViewModel = viewModel
+                    mainviewmodel = viewModel
                 )
 
             }
             composable(Screen.ResourcesPage.route) {
                 ResourcesPage(
-                    MainViewModel = viewModel
+                    mainviewmodel = viewModel
                 )
 
             }

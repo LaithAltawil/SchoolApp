@@ -1,5 +1,6 @@
 package com.example.schoolapp.Presentation.Screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.compose.AppTheme
 import com.example.schoolapp.Presentation.Util.openWebsite
+import com.example.schoolapp.R
 
 //=======================================================
 //Start Page: UI & logic                                =
@@ -54,8 +57,8 @@ fun StartPage(onSignInClick: () -> Unit={}) {
             //the main UI: Box
             Box(
                 modifier = Modifier
-                    .width(400.dp)
-                    .height(500.dp)
+                    .width(370.dp)
+                    .height(400.dp)
                     .clip(
                         RoundedCornerShape(20.dp)
                     )
@@ -68,13 +71,21 @@ fun StartPage(onSignInClick: () -> Unit={}) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    //todo @LT #simple|| replace with logo
-                    Text(
-                        text = "Amman High School",
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        style = MaterialTheme.typography.displayMedium,
-                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
-                        textAlign = TextAlign.Center
+                    //solved @LT #simple|| replace with logo
+
+//                    Text(
+//                        text = "Amman High School",
+//                        color = MaterialTheme.colorScheme.onPrimary,
+//                        style = MaterialTheme.typography.displayMedium,
+//                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+//                        textAlign = TextAlign.Center
+//                    )
+                    //logo for a bit until
+                    Image(
+                        painter = painterResource(id = R.drawable.math),
+                        contentDescription = "logo",
+                        modifier = Modifier.size(150.dp)
+
                     )
                     Spacer(modifier = Modifier.size(30.dp))
                     //sign in button

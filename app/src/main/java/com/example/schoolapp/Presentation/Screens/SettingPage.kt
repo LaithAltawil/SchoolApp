@@ -35,7 +35,8 @@ import com.example.schoolapp.Presentation.Screens.ScreensPieces.SettingsTopAppBa
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 
-//todo @LT #please|| we are not doing this 😥
+//solved @LT #please|| we are not doing this 😥
+//@LT:we wont be doing theme and any hard thing
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingPage(
@@ -43,9 +44,7 @@ fun SettingPage(
 ) {
     val state = MainViewModel.Settingstate.collectAsStateWithLifecycle()
     //create A state for the settings page and add it to the main view model
-    LaunchedEffect(Unit) {
-        MainViewModel.isTopappbarVisible2()
-    }
+
 
     val settings = listOf(
         Subjects("Profile", painterResource(id = R.drawable.baseline_account_box_24)) {},
@@ -135,3 +134,5 @@ fun SettingPage(
         }
     }
 }
+
+
