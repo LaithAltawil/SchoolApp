@@ -86,6 +86,7 @@ fun Navigation() {
 
             //profile page navigation
             composable(Screen.ProfilePage.route) {
+                //todo @LT #qustion|| what is this?
                 Profile_page()
             }
 
@@ -118,7 +119,8 @@ fun Navigation() {
             composable(Screen.MarksPage.route) {
                 MarksPage(
                     //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
-                    MainViewModel = viewModel
+                    //MAS: note it was MainViewModel then I fixed it to mainviewmodel
+                    mainviewmodel = viewModel
                 )
 
             }

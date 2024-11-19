@@ -18,9 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-//todo @LT Under Going changes to make every box have different data
+//todo @LT #simple~medium ||Under Going changes to make every box have different data
+//todo @LT #simple ||[27,05]
 @Composable
 fun ProfilePageBox(
     Title: String,
@@ -28,14 +30,12 @@ fun ProfilePageBox(
 ) {
     Box(
         modifier = Modifier
-
             .clip(RoundedCornerShape(26.dp))
             .border(
                 3.dp, Color.White,
                 shape = RoundedCornerShape(26.dp)
             )
             .size(337.dp)
-
             .background(MaterialTheme.colorScheme.primary)
     ) {
         Column(
@@ -55,7 +55,6 @@ fun ProfilePageBox(
                 horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween,
                 modifier = Modifier
             ) {
-
                 Text(
                     text = " ",
                     style = MaterialTheme.typography.headlineSmall,
@@ -67,8 +66,6 @@ fun ProfilePageBox(
                     color = Color.White
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-
-
             }
             Spacer(modifier = Modifier.height(10.dp))
             Row {
@@ -82,7 +79,6 @@ fun ProfilePageBox(
                     style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
-
             }
             Spacer(modifier = Modifier.height(10.dp))
             Row {
@@ -96,7 +92,6 @@ fun ProfilePageBox(
                     style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
-
             }
             Spacer(modifier = Modifier.height(10.dp))
             Row {
@@ -111,10 +106,11 @@ fun ProfilePageBox(
                     color = Color.White
                 )
             }
-
-
         }
     }
-
-
+}
+@Composable
+@Preview
+fun ProfilePageBoxPreview(){
+    ProfilePageBox(Title = "Title", listOfLists = listOf(listOf("1","2")))
 }
