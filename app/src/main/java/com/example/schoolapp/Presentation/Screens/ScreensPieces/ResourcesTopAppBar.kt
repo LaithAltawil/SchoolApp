@@ -15,30 +15,27 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.schoolapp.Presentation.VM.MainViewModel
 
 //=======================================================
-//todo @LT #simple || explain this fun logic here       =
+//Designs of top app bar                                =
 //=======================================================
-//todo @LT #simple || @(33:70)=="Title" variable name must start with small litter
-//todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ResourcesTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: String) {
-
-
-
+fun ResourcesTopAppBar(viewModel: MainViewModel, modifier: Modifier, title: String) {
+    //TAB main UI & Logic
     LargeTopAppBar(
         title = {
+            //TAB Main UI: Row
             Row(modifier = Modifier.fillMaxWidth()) {
+                //TAB title
                 Text(
-                    Title, fontSize = 60.sp,
+                    title, fontSize = 60.sp,
                     fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
                     modifier = Modifier.padding(start = 40.dp)
                 )
@@ -65,9 +62,12 @@ fun ResourcesTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: Stri
                     contentDescription = "Localized description",
                     tint = MaterialTheme.colorScheme.background
                 )
-
             }
-
         }
     )
+}
+@Composable
+@Preview
+fun ResourcesTopAppBarPreview() {
+    ResourcesTopAppBar(viewModel = MainViewModel(), modifier = Modifier, title = "Title")
 }

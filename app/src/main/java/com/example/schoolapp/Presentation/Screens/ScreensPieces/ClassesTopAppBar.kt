@@ -1,10 +1,5 @@
 package com.example.schoolapp.Presentation.Screens.ScreensPieces
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,27 +19,30 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.schoolapp.Presentation.VM.MainViewModel
 
 //=======================================================
-//todo @LT #simple || explain this fun logic here       =
+// this is the designs of top app bars                  =
 //=======================================================
-//todo @LT #simple || @(38:68)=="Title" variable name must start with small litter
-//todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ClassesTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: String) {
+fun ClassesTopAppBar(viewModel: MainViewModel, modifier: Modifier, title: String) {
 
+    //=======================================================
+    //variables: local & states                             =
+    //=======================================================
     val state by viewModel.state.collectAsState()
-
-
+        //TAB UI
         LargeTopAppBar(
             title = {
+                //TAB main :Row
                 Row(modifier = Modifier.fillMaxWidth()) {
+                    //TAB title
                     Text(
-                        Title, fontSize = 60.sp,
+                        title, fontSize = 60.sp,
                         fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
                         modifier = Modifier.padding(start = 40.dp)
                     )
@@ -71,9 +69,12 @@ fun ClassesTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: String
                         contentDescription = "Localized description",
                         tint = MaterialTheme.colorScheme.background
                     )
-
                 }
-
             }
         )
     }
+@Composable
+@Preview
+fun ClassesTopAppBarPreview() {
+    ClassesTopAppBar(viewModel = MainViewModel(), modifier = Modifier, title = "Title")
+}

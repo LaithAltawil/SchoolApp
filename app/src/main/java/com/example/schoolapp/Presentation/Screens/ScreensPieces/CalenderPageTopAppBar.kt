@@ -23,61 +23,51 @@ import androidx.compose.ui.unit.sp
 import com.example.schoolapp.Presentation.VM.MainViewModel
 
 //=======================================================
-//solved @LT #simple || explain this fun logic here       =
-//I will Be removing the animation parts(@44:54) these files(________TOPAPPBAR.KT) since such animations are really not needed
-// this is the designs of top app bars where each file contain almost the
-// same design except the title and some changes
+// this is the designs of top app bars                  =
 //=======================================================
-//solved @LT #simple || @(37:69)=="Title" variable name must start with small litter
-//done
-//solved @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
-//Done
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CalenderTopAppBar(viewModel: MainViewModel, modifier: Modifier, Title: String) {
-
-
-        LargeTopAppBar(
-            title = {
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        Title, fontSize = 60.sp,
-                        fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
-                        modifier = Modifier.padding(start = 40.dp)
-                    )
-                }
-            },
-            modifier = modifier.clip(
-                RoundedCornerShape(
-                    bottomEnd = 25.dp,
-                    bottomStart = 25.dp
+fun CalenderTopAppBar(viewModel: MainViewModel, modifier: Modifier, title: String) {
+    //top app bar UI
+    LargeTopAppBar(
+        title = {
+            //main TAB UI: Row //BTW TAB == "top app bar"
+            Row(modifier = Modifier.fillMaxWidth()) {
+                //TAB title
+                Text(
+                    title, fontSize = 60.sp,
+                    fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+                    modifier = Modifier.padding(start = 40.dp)
                 )
-            ),
-            colors =
-            TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                titleContentColor = MaterialTheme.colorScheme.onPrimary,
-            ),
-            navigationIcon = {
-                IconButton(onClick = {
-                    /*TODO*/
-                }) {
-                    Icon(
-                        modifier = Modifier.size(50.dp),
-                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                        contentDescription = "Localized description",
-                        tint = MaterialTheme.colorScheme.background
-                    )
-
-                }
-
             }
-        )
-
+        },
+        modifier = modifier.clip(
+            RoundedCornerShape(
+                bottomEnd = 25.dp,
+                bottomStart = 25.dp
+            )
+        ),
+        colors =
+        TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+        ),
+        navigationIcon = {
+            IconButton(onClick = {
+                /*TODO*/
+            }) {
+                Icon(
+                    modifier = Modifier.size(50.dp),
+                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                    contentDescription = "Localized description",
+                    tint = MaterialTheme.colorScheme.background
+                )
+            }
+        }
+    )
 }
-
 @Composable
 @Preview
 fun CalenderTopAppBarPreview() {
-    CalenderTopAppBar(viewModel = MainViewModel(), modifier = Modifier, Title = "Title")
+    CalenderTopAppBar(viewModel = MainViewModel(), modifier = Modifier, title = "Title")
 }

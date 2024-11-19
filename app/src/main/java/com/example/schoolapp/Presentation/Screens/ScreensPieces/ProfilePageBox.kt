@@ -23,46 +23,50 @@ import androidx.compose.ui.unit.dp
 //todo @LT Under Going changes to make every box have different data
 @Composable
 fun ProfilePageBox(
-    Title:String,
+    Title: String,
     listOfLists: List<List<String>>
-){
-    Box(modifier = Modifier
+) {
+    Box(
+        modifier = Modifier
 
-        .clip(RoundedCornerShape(26.dp))
-        .border(3.dp, Color.White,
-            shape = RoundedCornerShape(26.dp)
-        )
-        .size(337.dp)
+            .clip(RoundedCornerShape(26.dp))
+            .border(
+                3.dp, Color.White,
+                shape = RoundedCornerShape(26.dp)
+            )
+            .size(337.dp)
 
-        .background(MaterialTheme.colorScheme.primary)){
+            .background(MaterialTheme.colorScheme.primary)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 20.dp),
             horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
         ) {
-            Text(text = Title,
+            Text(
+                text = Title,
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold,
-                color = Color.White)
+                color = Color.White
+            )
             Spacer(modifier = Modifier.height(20.dp))
-            Row(horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween
-                , modifier = Modifier
+            Row(
+                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween,
+                modifier = Modifier
             ) {
 
-                    Text(
-                        text = " " ,
-                        style = MaterialTheme.typography.headlineSmall,
-                        color = Color.White
-                    )
-                    Text(
-                        text = " ",
-                        style = MaterialTheme.typography.headlineSmall,
-                        color = Color.White
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-
-
+                Text(
+                    text = " ",
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = Color.White
+                )
+                Text(
+                    text = " ",
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = Color.White
+                )
+                Spacer(modifier = Modifier.height(10.dp))
 
 
             }
@@ -70,14 +74,12 @@ fun ProfilePageBox(
             Row {
                 Text(
                     text = "Age : ",
-                    style = MaterialTheme.typography.headlineSmall
-                    ,
+                    style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
                 Text(
                     text = "20",
-                    style = MaterialTheme.typography.headlineSmall
-                    ,
+                    style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
 
@@ -86,14 +88,12 @@ fun ProfilePageBox(
             Row {
                 Text(
                     text = "Gender : ",
-                    style = MaterialTheme.typography.headlineSmall
-                    ,
+                    style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
                 Text(
                     text = "Male",
-                    style = MaterialTheme.typography.headlineSmall
-                    ,
+                    style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
 
@@ -102,18 +102,15 @@ fun ProfilePageBox(
             Row {
                 Text(
                     text = "Email : ",
-                    style = MaterialTheme.typography.headlineSmall
-                    ,
+                    style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
                 Text(
                     text = "",
-                    style = MaterialTheme.typography.headlineSmall
-                    ,
+                    style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
             }
-
 
 
         }

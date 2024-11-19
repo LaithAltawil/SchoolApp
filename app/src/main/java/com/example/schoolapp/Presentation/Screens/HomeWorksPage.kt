@@ -51,7 +51,7 @@ fun HomeworkPage(homeworkpagestate: MainViewModel= MainViewModel()) {
                     HomeworksTopAppBar(
                         viewModel = homeworkpagestate,
                         modifier = Modifier,
-                        Title = "HomeWork"
+                        title = "HomeWork"
                     )
                 },
                 // Add content padding

@@ -70,7 +70,7 @@ fun ResourcesPage(mainviewmodel: MainViewModel = MainViewModel()) {
                         viewModel =
                         mainviewmodel,
                         modifier = Modifier,
-                        Title = "Resources"
+                        title = "Resources"
                     )
                 },
                 // Add content padding
