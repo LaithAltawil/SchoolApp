@@ -41,16 +41,16 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 //todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ResourcesPage(MainViewModel: MainViewModel = MainViewModel()) {
+fun ResourcesPage(mainviewmodel: MainViewModel = MainViewModel()) {
 
     //=======================================================
     //variables: local & states                             =
     //=======================================================
-    val state = MainViewModel.Resourcesstate.collectAsStateWithLifecycle()
+    val state = mainviewmodel.Resourcesstate.collectAsStateWithLifecycle()
 
     //create A state for the Resources page and add it to the main view model
     LaunchedEffect(Unit) {
-        MainViewModel.isTopappbarVisible4()
+        mainviewmodel.isTopappbarVisible4()
     }
 
     //=======================================================
@@ -68,7 +68,7 @@ fun ResourcesPage(MainViewModel: MainViewModel = MainViewModel()) {
                 topBar = {
                     ResourcesTopAppBar(
                         viewModel =
-                        MainViewModel,
+                        mainviewmodel,
                         modifier = Modifier,
                         Title = "Resources"
                     )
@@ -85,19 +85,19 @@ fun ResourcesPage(MainViewModel: MainViewModel = MainViewModel()) {
                             .fillMaxSize()
                     )
                     {
-                        LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 128.dp)) {
+                        LazyVerticalGrid(columns = GridCells.Fixed(2)) {
                             //here we will enter cards which will be the exams coming set in order from left to right depending of its date
                             items(state.value.Subjects.size) { item ->
                                 Card(colors = CardDefaults.cardColors(
                                     containerColor = MaterialTheme.colorScheme.primary
                                 ),
-                                    modifier = Modifier
+                                    modifier = Modifier.fillMaxSize()
                                         .padding(16.dp)
                                         .wrapContentHeight()
                                         .size(200.dp)
                                         .width(100.dp)
                                         .clickable {
-                                            MainViewModel.changeBottomSheetState2(item)
+                                            mainviewmodel.changeBottomSheetState2(item)
                                         }
                                 ) {
                                     Column(
@@ -121,7 +121,7 @@ fun ResourcesPage(MainViewModel: MainViewModel = MainViewModel()) {
                                     ModalBottomSheet(
                                         containerColor = MaterialTheme.colorScheme.primary,
                                         onDismissRequest = {
-                                            MainViewModel.changeBottomSheetState(item)
+                                            mainviewmodel.changeBottomSheetState(item)
                                         }
                                     ) {
                                         // Bottom sheet content

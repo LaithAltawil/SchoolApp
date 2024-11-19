@@ -15,6 +15,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -36,9 +38,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.MainMenuItem
@@ -137,8 +141,8 @@ fun MainMenu(navController: NavController) {
                                 bottomStart = 25.dp
                             )
                         )
-                        .height(860.dp)
-                        .width(435.dp),
+
+                        .width(300.dp),
                     color = MaterialTheme.colorScheme.primary
                 ) {
                     Column(
@@ -161,12 +165,12 @@ fun MainMenu(navController: NavController) {
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.AccountBox,
-                                    contentDescription = null, modifier = Modifier.size(60.dp)
+                                    contentDescription = null, modifier = Modifier.size(50.dp)
                                 )
                                 if (drawerState.isOpen) {
                                     Text(
                                         text = "Account",
-                                        style = MaterialTheme.typography.displayMedium
+                                        style = MaterialTheme.typography.headlineLarge
                                     )
                                 } else {
                                     Text(text = "", style = MaterialTheme.typography.displayMedium)
@@ -213,17 +217,17 @@ fun MainMenu(navController: NavController) {
                 Scaffold(modifier = Modifier.fillMaxSize(),
                     containerColor = MaterialTheme.colorScheme.primaryContainer, topBar = {
                         LargeTopAppBar(
+                            modifier = Modifier.clip(
+                                RoundedCornerShape(
+                                    bottomEnd = 16.dp,
+                                    bottomStart = 16.dp
+                                )),
                             title = {
                                 Column(modifier = Modifier.fillMaxWidth()) {
                                     Text(
-                                        text = "Welcome,",
-                                        style = MaterialTheme.typography.headlineMedium,
-                                        modifier = Modifier.padding(start = 60.dp),
-                                    )
-                                    Text(
-                                        text = "Laith",
-                                        style = MaterialTheme.typography.headlineMedium,
-                                        modifier = Modifier.padding(start = 70.dp)
+                                        text = "Welcome, Laith",
+                                        style = TextStyle(fontSize = 48.sp),
+                                        modifier = Modifier.padding(start = 10.dp),
                                     )
                                 }
                             },
@@ -231,13 +235,19 @@ fun MainMenu(navController: NavController) {
                                 containerColor = MaterialTheme.colorScheme.primary,
                                 titleContentColor = MaterialTheme.colorScheme.onPrimary
                             ), navigationIcon = {
+
                                 IconButton(onClick = {
                                     scope.launch {
                                         drawerState.open()
                                     }
                                 }) {
+                                    Icon(
+                                        Icons.Outlined.Menu,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(50.dp)
+                                    )
                                 }
-                            }, modifier = Modifier
+                            }
                         )
                     }
                 ) {
@@ -249,13 +259,18 @@ fun MainMenu(navController: NavController) {
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(start = 70.dp, top = 10.dp),
+                                .padding(start = 10.dp,end=10.dp ,top = 10.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Spacer(modifier = Modifier)
                             Card(
-                                modifier = Modifier
-                                    .padding(10.dp)
+                                modifier = Modifier.clip(
+                                    RoundedCornerShape(
+                                        topEnd = 25.dp,
+                                        topStart = 25.dp,
+                                        bottomEnd = 25.dp,
+                                        bottomStart = 25.dp
+                                )).padding(10.dp)
                                     .width(600.dp)
                                     .height(200.dp)
                                     .clickable {

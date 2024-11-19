@@ -19,6 +19,7 @@ import com.example.schoolapp.Presentation.Screens.HomeworkPage
 import com.example.schoolapp.Presentation.Screens.MainMenu
 import com.example.schoolapp.Presentation.Screens.MarksPage
 import com.example.schoolapp.Presentation.Screens.ProfilePage
+import com.example.schoolapp.Presentation.Screens.Profile_page
 import com.example.schoolapp.Presentation.Screens.ResourcesPage
 import com.example.schoolapp.Presentation.Screens.SettingPage
 import com.example.schoolapp.Presentation.Screens.SignIn
@@ -33,6 +34,7 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Navigation() {
+
     //=======================================================
     //viewModel                                             =
     //=======================================================
@@ -84,10 +86,7 @@ fun Navigation() {
 
             //profile page navigation
             composable(Screen.ProfilePage.route) {
-                //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
-                ProfilePage(
-                    mainViewModel = viewModel
-                )
+                Profile_page()
             }
 
 
@@ -125,8 +124,7 @@ fun Navigation() {
             }
             composable(Screen.ResourcesPage.route) {
                 ResourcesPage(
-                    //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
-                    MainViewModel = viewModel
+                    mainviewmodel = viewModel
                 )
 
             }
@@ -139,7 +137,6 @@ fun Navigation() {
             }
             composable(Screen.ClassesPage.route) {
                 StudentClass(
-                    //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     mainviewmodel = viewModel
                 )
             }

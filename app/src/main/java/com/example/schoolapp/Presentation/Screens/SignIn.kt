@@ -63,10 +63,10 @@ fun SignIn(viewModel: AppViewModel = AppViewModel(), onClick: () -> Unit = {}) {
             //main UI: Box
             Box(
                 modifier = Modifier
-                    .width(400.dp)
-                    .height(500.dp)
+                    .width(360.dp)
+                    .height(430.dp)
                     .clip(
-                        RoundedCornerShape(20.dp)
+                        RoundedCornerShape(16.dp)
                     )
                     .background(color = MaterialTheme.colorScheme.primary),
                 contentAlignment = Alignment.Center
@@ -129,7 +129,8 @@ fun SignIn(viewModel: AppViewModel = AppViewModel(), onClick: () -> Unit = {}) {
                     Button(modifier = Modifier.clip(RoundedCornerShape(1.dp)),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            //todo @LT #simple-medium|| fix this...
+                            contentColor = MaterialTheme.colorScheme.primary
+                            //solved @LT #simple-medium|| fix this...
                         ), onClick = {
                             onClick()
                         }) {

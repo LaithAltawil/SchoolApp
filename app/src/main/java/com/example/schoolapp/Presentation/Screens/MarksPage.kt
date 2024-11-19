@@ -41,17 +41,17 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 //todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MarksPage(MainViewModel: MainViewModel = MainViewModel()) {
+fun MarksPage(mainviewmodel: MainViewModel = MainViewModel()) {
 
     //todo @MAS #simple || please add the usage after answering the referred todo task
     LaunchedEffect(Unit) {
-        MainViewModel.isTopappbarVisible()
+        mainviewmodel.isTopappbarVisible()
     }
 
     //=======================================================
     //variables: local & states                             =
     //=======================================================
-    val state = MainViewModel.Marksstate.collectAsStateWithLifecycle()
+    val state = mainviewmodel.Marksstate.collectAsStateWithLifecycle()
 
     //=======================================================
     //Logic & UI                                            =
@@ -67,7 +67,7 @@ fun MarksPage(MainViewModel: MainViewModel = MainViewModel()) {
                 containerColor = MaterialTheme.colorScheme.onPrimary,
                 topBar = {
                     MarksMyTopAppBar(
-                        viewModel = MainViewModel,
+                        viewModel = mainviewmodel,
                         modifier = Modifier,
                         "Exams"
                     )
@@ -90,7 +90,7 @@ fun MarksPage(MainViewModel: MainViewModel = MainViewModel()) {
                                     .size(200.dp)
                                     .width(100.dp)
                                     .clickable {
-                                        MainViewModel.changeBottomSheetState2(item)
+                                        mainviewmodel.changeBottomSheetState2(item)
                                     }
                             ) {
                                 Column(
@@ -114,7 +114,7 @@ fun MarksPage(MainViewModel: MainViewModel = MainViewModel()) {
                                 ModalBottomSheet(
                                     containerColor = MaterialTheme.colorScheme.primary,
                                     onDismissRequest = {
-                                        MainViewModel.changeBottomSheetState2(item)
+                                        mainviewmodel.changeBottomSheetState2(item)
                                     }
                                 ) {
                                     // Bottom sheet content
