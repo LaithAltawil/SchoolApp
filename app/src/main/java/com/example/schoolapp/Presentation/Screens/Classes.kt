@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -32,21 +31,12 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 //=======================================================
 //sessions table: Logic & UI                            =
 //=======================================================
-//solved @LT #simple || @(40:18)=="mainviewmodel" variable name must start with small litter
-
-//solved @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StudentClass(mainviewmodel: MainViewModel = MainViewModel()) {
-
-    //todo @MAS #simple || please add the usage after answering the referred todo task
-    //Removed due to it being unneeded
-
-
+fun StudentClass(mainViewModel: MainViewModel = MainViewModel()) {
     //=======================================================
     //variables: local & stats                              =
     //=======================================================
-    val state by mainviewmodel.Classesstate.collectAsState()
+    val state by mainViewModel.Classesstate.collectAsState()
 
     //=======================================================
     // Logic & UI                                           =
@@ -59,10 +49,10 @@ fun StudentClass(mainviewmodel: MainViewModel = MainViewModel()) {
         ) {
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
-                //todo @MAS #simple || please add the usage after answering the referred todo task
+                //TAB main UI & Logic
                 topBar = {
                     ClassesTopAppBar(
-                        viewModel = mainviewmodel,
+                        viewModel = mainViewModel,
                         modifier = Modifier,
                         title = "Classes"
                     )
@@ -88,8 +78,8 @@ fun StudentClass(mainviewmodel: MainViewModel = MainViewModel()) {
                                 .fillMaxSize()
                                 .padding(10.dp)
                         ) {
-                            //solved @LT #qustion[not answered] || is it working on sequence 0,1,2,,,,,n?
-                            //yes 0,1,2 because it is using an array
+                            //MAS: is it working on sequence 0,1,2,,,,,n?
+                            //LT: yes 0,1,2 because it is using an array
                             items(daysOfWeek.size) {
                                 //child column of the lazyColumn
                                 Column {
@@ -99,12 +89,10 @@ fun StudentClass(mainviewmodel: MainViewModel = MainViewModel()) {
                                         fontSize = 30.sp,
                                         color = MaterialTheme.colorScheme.secondary
                                     )
-
                                     //child lazy row
                                     LazyRow {
-                                        //todo @MAS #simple || please add the usage after answering the referred todo task
+                                        //decide the lazy row size
                                         items(classList.size) {
-
                                             //Card UI to hold the session data
                                             Card(
                                                 modifier = Modifier
@@ -113,7 +101,10 @@ fun StudentClass(mainviewmodel: MainViewModel = MainViewModel()) {
                                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
                                             ) {
                                                 //todo @LT #meduim || please consider changing the design here with @MAS
-                                                //please if you have any idea please provide because i am out of them :(
+                                                //LT:please if you have any idea please provide because i am out of them :(
+                                                /*MAS: you may do it like the whole day for the whole page
+                                                * with buttons to switch
+                                                * check session.png*/
                                                 Column(
                                                     modifier = Modifier
                                                         .fillMaxSize()
@@ -151,9 +142,6 @@ fun StudentClass(mainviewmodel: MainViewModel = MainViewModel()) {
         }
     }
 }
-
-//solved @LT #simple || put this in the relative file
-//THis is perview
 @Composable
 @Preview
 fun StudentClassPreview() {
