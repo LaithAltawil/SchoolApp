@@ -3,6 +3,8 @@ package com.example.schoolapp.Presentation.Screens
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -35,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose.AppTheme
+import com.example.schoolapp.Data.Exam
 import com.example.schoolapp.Data.MockData.Mock.mockExamList
 import com.example.schoolapp.Data.Subjects
 import com.example.schoolapp.Presentation.Screens.ScreensPieces.ExamsMyTopAppBar
@@ -57,13 +60,40 @@ fun ExamsPage(mainviewmodel: MainViewModel = MainViewModel()) {
 
 
     val mainmenuitem = listOf(
-        Subjects("Maths", painterResource(id = R.drawable.math)) { },
-        Subjects("Science", painterResource(id = R.drawable.science)) { },
-        Subjects("English", painterResource(id = R.drawable.english)) { },
-        Subjects("History", painterResource(id = R.drawable.history)) {},
-        Subjects("Arabic", painterResource(id = R.drawable.arabic)) {},
-        Subjects("Computer Science", painterResource(id = R.drawable.science)) {},
-        Subjects("Geography", painterResource(id = R.drawable.geography)) {}
+        Subjects("Maths", painterResource(id = R.drawable.math),
+            exam = Exam("Mathematics", "2023-12-15", "10:00 AM", "Room A101"),
+            onClick = {}
+        ) ,
+        Subjects("Science", painterResource(id = R.drawable.science),
+            exam = Exam("Mathematics", "2023-12-15", "10:00 AM", "Room A101"),
+            onClick = {}),
+        Subjects("English", painterResource(id = R.drawable.english),
+            exam = Exam("Mathematics", "2023-12-15", "10:00 AM", "Room A101"),
+            onClick = {}) ,
+        Subjects(
+            "History",
+            painterResource(id = R.drawable.history),
+            exam = Exam("History", "2023-12-20", "11:00 AM", "Room F606"),
+            onClick = {}
+        ),
+        Subjects(
+            "Arabic",
+            painterResource(id = R.drawable.arabic),
+            exam = Exam("Arabic", "2023-12-21", "03:00 PM", "Room G707"),
+            onClick = {}
+        ),
+        Subjects(
+            "Computer Science",
+            painterResource(id = R.drawable.science),
+            exam = Exam("Computer Science", "2023-12-22", "09:00 AM", "Lab H808"),
+            onClick = {}
+        ),
+        Subjects(
+            "Geography",
+            painterResource(id = R.drawable.geography),
+            exam = Exam("Geography", "2023-12-23", "02:00 PM", "Hall I909"),
+            onClick = {}
+        )
     )
 
     //=======================================================
@@ -119,9 +149,10 @@ fun ExamsPage(mainviewmodel: MainViewModel = MainViewModel()) {
                                     }
                                 ,
                             ) {
-                                /*card UI: column todo @LT #medium ||
+                                /*card UI: column solved @LT #medium ||
                                                     I think the column size is too small if you can
                                                     edit it so it can be wrapped with the whole card*/
+                                //done check using preview and inform me of any improvements
                                 Column(
                                     modifier = Modifier
                                         .fillMaxSize()
@@ -132,9 +163,11 @@ fun ExamsPage(mainviewmodel: MainViewModel = MainViewModel()) {
                                 ) {
                                     //todo @LT:Icon will be changed when we find all the required icons
                                     //they will be in a list with the subject names
-                                    Icon(painter =
-                                    painterResource(id = R.drawable.history),
-                                        contentDescription =null )
+                                    mainmenuitem[item].imagePath?.let {
+                                        Icon(painter =
+                                        it,
+                                            contentDescription =null )
+                                    }
                                     //subject name
                                     Text(
                                         modifier = Modifier.padding(10.dp),
@@ -142,7 +175,7 @@ fun ExamsPage(mainviewmodel: MainViewModel = MainViewModel()) {
                                         fontSize = 26.sp,
                                         color = Color.White,
                                         textAlign = TextAlign.Center,
-                                        overflow = TextOverflow.Ellipsis
+                                        overflow = TextOverflow.Visible
                                     )
 
 
@@ -164,17 +197,25 @@ fun ExamsPage(mainviewmodel: MainViewModel = MainViewModel()) {
                                             .padding(16.dp)
                                     ) {
                                         //todo @LT #qustion[not answered] || what to do here?
-                                        LazyColumn {
-                                            items(mockExamList.size) { i ->
-                                                ExamDetailsColumn(subject = mockExamList[i].subject,
-                                                    date = mockExamList[i].date,
-                                                    time = mockExamList[i].time,
-                                                    location = mockExamList[i].location)
+                                        Row(modifier = Modifier.fillMaxWidth()) {
+                                            Text(text = "Date:")
+                                            Spacer(modifier = Modifier.width(8.dp))
+                                            Text(text = mainmenuitem[item].exam!!.date)
 
 
+                                        }
+                                        Row(modifier = Modifier.fillMaxWidth()) {
+                                            Text(text = "time:")
+                                            Spacer(modifier = Modifier.width(8.dp))
+                                            Text(text = mainmenuitem[item].exam!!.time)
 
 
-                                            }
+                                        }
+                                        Row(modifier = Modifier.fillMaxWidth()) {
+                                            Text(text = "Location:")
+                                            Spacer(modifier = Modifier.width(8.dp))
+                                            Text(text = mainmenuitem[item].exam!!.location)
+
 
                                         }
 

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
@@ -58,7 +59,7 @@ fun ExpandableButton(name: String, text: String) {
     ) {
         Button(
             onClick = { expanded = !expanded },
-            modifier = Modifier.width(200.dp),
+            modifier = Modifier.width(400.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
@@ -72,13 +73,17 @@ fun ExpandableButton(name: String, text: String) {
             enter = fadeIn() + expandVertically(),
             exit = fadeOut() + shrinkVertically()
         ) {
-            Card(
+            Card(modifier = Modifier.width(500.dp).height(200.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
+                    Text(text)
+                    Text(text)
+                    Text(text)
+                    Text(text)
                     Text(text)
                     // Add more content to the box here
                 }

@@ -47,12 +47,12 @@ fun SettingPage(
 
 
     val settings = listOf(
-        Subjects("Profile", painterResource(id = R.drawable.baseline_account_box_24)) {},
-        Subjects("Notifications", painterResource(id = R.drawable.baseline_notifications_24)) {},
-        Subjects("Theme", painterResource(id = R.drawable.help)) {},
-        Subjects("Accessibility", painterResource(id = R.drawable.contact_us)) {},
-        Subjects("Help & FAQ", painterResource(id = R.drawable.help)) {},
-        Subjects("Contact us", painterResource(id = R.drawable.contact_us)) {}
+        Subjects("Profile", painterResource(id = R.drawable.baseline_account_box_24),{}) ,
+        Subjects("Notifications", painterResource(id = R.drawable.baseline_notifications_24),{}) ,
+        Subjects("Theme", painterResource(id = R.drawable.help),{}) ,
+        Subjects("Accessibility", painterResource(id = R.drawable.contact_us),{}) ,
+        Subjects("Help & FAQ", painterResource(id = R.drawable.help),{}) ,
+        Subjects("Contact us", painterResource(id = R.drawable.contact_us),{})
     )
 
     AppTheme {

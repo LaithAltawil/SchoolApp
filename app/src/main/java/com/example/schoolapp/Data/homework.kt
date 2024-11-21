@@ -16,7 +16,9 @@ data class Homework(
 data class Subjects(
     val name: String,
     val imagePath: Painter? = null,
-    val onClick: () -> Unit
+    val onClick: () -> Unit,
+    val exam: Exam? = null
+
 )
 /*LT: to add dates and events from the database to the Calender page
 MAS: I think we won't need it but I'll leave it until its time 👍*/

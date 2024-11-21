@@ -8,6 +8,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import com.example.compose.AppTheme
 import com.example.schoolapp.Navigation.Navigation
+import com.example.schoolapp.Presentation.Screens.CalenderPage
+import com.example.schoolapp.Presentation.Screens.ExamsPage
 
 import com.example.schoolapp.Presentation.Screens.Profile_page
 
@@ -23,7 +25,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                Navigation()
+                ExamsPage()
             }
         }
     }

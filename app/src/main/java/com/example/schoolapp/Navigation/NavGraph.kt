@@ -99,27 +99,31 @@ fun Navigation() {
             }
             composable(Screen.CounselorPage.route) {
                 CounselorPage(
-                    //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
+                    //solved @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
+                    //LT:Not needed to be parsed, but might parse it later depending on its need
                     mainviewModel = viewModel
                 )
             }
             composable(Screen.HomeworkPage.route) {
                 HomeworkPage(
-                    //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
+                    //solved @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
+                    //LT:Not needed to be parsed, but might parse it later depending on its need
                     homeworkpagestate = viewModel
                 )
             }
             composable(Screen.SettingsPage.route) {
                 SettingPage(
-                    //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
+                    //solved @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
+                    //LT:Not needed to be parsed, but might parse it later depending on its need
                     MainViewModel = viewModel
                 )
 
             }
             composable(Screen.MarksPage.route) {
                 MarksPage(
-                    //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
+                    //solved @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     //MAS: note it was MainViewModel then I fixed it to mainviewmodel
+                    ////LT:Not needed to be parsed, but might parse it later depending on its need
                     mainviewmodel = viewModel
                 )
 
@@ -132,7 +136,8 @@ fun Navigation() {
             }
             composable(Screen.ExamsPage.route) {
                 ExamsPage(
-                    //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
+                    //solved @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
+
                     mainviewmodel = viewModel
                 )
 

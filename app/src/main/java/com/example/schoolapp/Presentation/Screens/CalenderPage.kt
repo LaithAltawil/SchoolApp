@@ -42,6 +42,10 @@ fun CalenderPage(mainViewModel: MainViewModel = MainViewModel()) {
         CalenderDays("14/9", "A huge Open Day for jobs in medicine for the future", {}),
         CalenderDays("15/9", "A huge Open Day for jobs in finance for the future", {}),
         CalenderDays("16/9", "A huge Open Day for jobs in teaching for the future", {}),
+        CalenderDays("13/9", "A huge Open Day for jobs in tech for the future", {}),
+        CalenderDays("14/9", "A huge Open Day for jobs in medicine for the future", {}),
+        CalenderDays("15/9", "A huge Open Day for jobs in finance for the future", {}),
+        CalenderDays("16/9", "A huge Open Day for jobs in teaching for the future", {}),
     )
 
     //=======================================================
@@ -62,7 +66,7 @@ fun CalenderPage(mainViewModel: MainViewModel = MainViewModel()) {
                     CalenderTopAppBar(
                         viewModel = mainViewModel,
                         modifier = Modifier,
-                        title = "Calender"
+                        title = "Upcoming events"
                     )
                 },
                 // Add content padding

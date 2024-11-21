@@ -50,13 +50,13 @@ sealed class MainDataClass{
             "English"
         ),
         val MarksItems: List<Subjects> = listOf(
-            Subjects("Maths") { },
-            Subjects("Science") { },
-            Subjects("English") { },
-            Subjects("History") {},
-            Subjects("Arabic") {},
-            Subjects("Computer Science") {},
-            Subjects("Geography") {}
+            Subjects("Maths",onClick = { }) ,
+            Subjects("Science",onClick = { }) ,
+            Subjects("English",onClick = { }) ,
+            Subjects("History",onClick = { }) ,
+            Subjects("Arabic",onClick = { }) ,
+            Subjects("Computer Science",onClick = { }) ,
+            Subjects("Geography",onClick = { })
         ),
         val isTopBarVisible: Boolean = false,
         val showBottomSheet: List<Boolean> = listOf(
@@ -80,13 +80,13 @@ sealed class MainDataClass{
     data class ResourcesPageState(
         val isTopAppBarVisible: Boolean = false,
         val Subjects: List<Subjects> = listOf(
-            Subjects("Maths") { },
-            Subjects("Science") { },
-            Subjects("English") { },
-            Subjects("History") {},
-            Subjects("Arabic") {},
-            Subjects("Computer Science") {},
-            Subjects("Geography") {}
+            Subjects("Maths",onClick = { }) ,
+            Subjects("Science",onClick = { }) ,
+            Subjects("English",onClick = { }) ,
+            Subjects("History",onClick = { }) ,
+            Subjects("Arabic",onClick = { }) ,
+            Subjects("Computer Science",onClick = { }) ,
+            Subjects("Geography",onClick = { })
         ),
         val showBottomSheet: List<Boolean> = listOf(false, false, false, false, false, false, false)
     ) : MainDataClass()

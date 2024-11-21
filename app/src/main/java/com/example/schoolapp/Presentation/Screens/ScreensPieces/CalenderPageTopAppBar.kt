@@ -35,9 +35,9 @@ fun CalenderTopAppBar(viewModel: MainViewModel, modifier: Modifier, title: Strin
             Row(modifier = Modifier.fillMaxWidth()) {
                 //TAB title
                 Text(
-                    title, fontSize = 60.sp,
+                    title, fontSize = 46.sp,
                     fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
-                    modifier = Modifier.padding(start = 40.dp)
+                    modifier = Modifier.padding(start = 10.dp)
                 )
             }
         },
