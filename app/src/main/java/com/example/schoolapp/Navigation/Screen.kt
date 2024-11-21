@@ -1,14 +1,9 @@
 package com.example.schoolapp.Navigation
 
 //=======================================================
-//solved @LT #simple || explain this fun logic here       =
-//done on 15/11/2024
-//
-//
-
+// Binding every page with specific route               =
 //=======================================================
-/*solved @LT #qustion[answered] || why not convert to data class
-LT: used to doing like this ever since i started android development
+/*LT: used to doing like this ever since i started android development
 MAS: Sealed class is some way is data class*/
 sealed class Screen(val route: String) {
     object StartPage : Screen("start_page")

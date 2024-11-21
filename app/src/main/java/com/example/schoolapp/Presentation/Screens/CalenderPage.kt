@@ -21,19 +21,28 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 //=======================================================
 //Calender page: Logic & UI                             =
 //=======================================================
-//solved @LT #simple || @(27:18)=="MainViewModel" variable name must start with small litter
-//@LT: Done
-//todo @MAS #qustion[not answered] || do you have any idea to fill this page?
+//todo @MAS #qustion[Answered] || do you have any idea to fill this page?
+/*MAS: Check the file calender_1.png for the design of this page
+after click the expandable button
+you can try one of those designs
+Card design:-
++-------------------------+
+| title: event title      |
+| Num: event number       |
+| date: dd/mm/yyyy        |
+| day : day name          |
+| event: event description|
++-------------------------+
+column design:-
++-------------------------+
+|No|date|day|title|event  |
+|-------------------------|
+|1 |13/9|Mon|title|event  |
++-------------------------+
+* */
 
-//solved @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
-//@LT: Done
 @Composable
 fun CalenderPage(mainViewModel: MainViewModel = MainViewModel()) {
-
-    //solved @LT #qustion[not answered] || is this block used to call any suspend functions?
-    //@LT:removed to to it being unnecessary
-
-
     //=======================================================
     //variables:local & states                              =
     //=======================================================
@@ -43,7 +52,6 @@ fun CalenderPage(mainViewModel: MainViewModel = MainViewModel()) {
         CalenderDays("15/9", "A huge Open Day for jobs in finance for the future", {}),
         CalenderDays("16/9", "A huge Open Day for jobs in teaching for the future", {}),
     )
-
     //=======================================================
     // logic & UI                                           =
     //=======================================================
@@ -57,8 +65,7 @@ fun CalenderPage(mainViewModel: MainViewModel = MainViewModel()) {
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
                 topBar = {
-                    //solved @LT #qustion[not answered] || linking the topBar with CalenderTopAppBar.kt ?
-                    //LT: Yes this is a function which contains the topappbar for this page
+                    //LT: Yes this is a function which contains the TAB for this page
                     CalenderTopAppBar(
                         viewModel = mainViewModel,
                         modifier = Modifier,
@@ -75,8 +82,6 @@ fun CalenderPage(mainViewModel: MainViewModel = MainViewModel()) {
                         items(calendarItems) { item ->
                             // ExpandableButton composable
                             ExpandableButton(name = item.day, text = item.event)
-                                //solved @LT #qustion || what to do here?
-                                //@LT:Removed to to it being unnecessary
                         }
                     }
                 }
