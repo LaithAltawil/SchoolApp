@@ -17,9 +17,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose.AppTheme
+import com.example.schoolapp.Navigation.Screen
 import com.example.schoolapp.Presentation.Screens.ScreensPieces.CounselorTopAppBar
 import com.example.schoolapp.Presentation.Util.DatePickerModal
 import com.example.schoolapp.Presentation.VM.MainViewModel
@@ -28,24 +30,21 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 //=======================================================
 //Counselor page: UI & logic                            =
 //=======================================================
-//todo @LT #simple || @(37:69)=="mainviewModel" every world must be start with capital latter except the first
-//todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @SuppressLint("UnrememberedMutableState")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CounselorPage(
-    mainviewModel: MainViewModel
+    mainViewModel: MainViewModel = MainViewModel()
 ) {
-
-    //todo @MAS #simple || please add the usage after answering the referred todo task
+    //allowing for coroutine functions
     LaunchedEffect(Unit) {
-        mainviewModel.isTopappbarVisible3()
+        // launching effect for the UI
+        mainViewModel.isTopappbarVisible3()
     }
-
     //=======================================================
     //variables: local & states                             =
     //=======================================================
-    val state = mainviewModel.Counselorstate.collectAsStateWithLifecycle()
+    val state = mainViewModel.Counselorstate.collectAsStateWithLifecycle()
 
     //=======================================================
     //UI & page logic                                       =
@@ -59,10 +58,10 @@ fun CounselorPage(
         ) {
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
-                //todo @MAS #simple || please add the usage after answering the referred todo task
+                //TAB: UI & Logic
                 topBar = {
                     CounselorTopAppBar(
-                        viewModel = mainviewModel,
+                        viewModel = mainViewModel,
                         modifier = Modifier,
                         "Counselor"
                     )
@@ -76,7 +75,7 @@ fun CounselorPage(
                 ) {
                     //todo @MAS #simple || please add the usage after answering the referred todo task
                     Button(onClick = {
-                        mainviewModel.openDialog()
+                        mainViewModel.openDialog()
                     }) {
                         Text("Select Date")
                     }
@@ -87,14 +86,20 @@ fun CounselorPage(
                     Text(text = state.value.selectedDate)
                 }
             }
-            //todo @LT #simple || please add the usage for this part
+            //data picker logic
             if (state.value.openDialog) {
                 DatePickerModal(onDateSelected = {
-                    mainviewModel.savedate(it.toString())
+                    mainViewModel.savedate(it.toString())
                 }) {
-                    mainviewModel.closeDialog()
+                    mainViewModel.closeDialog()
                 }
             }
         }
     }
+}
+@Composable
+@Preview
+fun CounselorPagePreview(){
+ //todo @LT #simple || please fix this preview
+//CounselorPage()
 }

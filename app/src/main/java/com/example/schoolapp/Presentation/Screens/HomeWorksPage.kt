@@ -17,21 +17,15 @@ import com.example.schoolapp.Data.MockData.Mock.HomeworkMock
 import com.example.schoolapp.Presentation.Screens.ScreensPieces.HomeworksTopAppBar
 import com.example.schoolapp.Presentation.Util.ExpandableCard
 import com.example.schoolapp.Presentation.VM.MainViewModel
-
 //=======================================================
 //home work page: UI & logic                            =
 //=======================================================
-//solved @LT #simple || @(26:18)=="HomeworkPageState" variable name must start with small litter
-
-//solved @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
-
 @Composable
-fun HomeworkPage(homeworkpagestate: MainViewModel= MainViewModel()) {
-
+fun HomeworkPage(homeWorkPageState: MainViewModel= MainViewModel()) {
     //=======================================================
     //variables: local & states                             =
     //=======================================================
-    val state = homeworkpagestate.state.collectAsStateWithLifecycle()
+    val state = homeWorkPageState.state.collectAsStateWithLifecycle()
 
     //=======================================================
     //UI & Logic                                            =
@@ -46,26 +40,35 @@ fun HomeworkPage(homeworkpagestate: MainViewModel= MainViewModel()) {
             //main page UI:scaffold
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
-                //todo @MAS #simple || please add the usage after answering the referred todo task
+                //TAB: UI & Logic
                 topBar = {
                     HomeworksTopAppBar(
-                        viewModel = homeworkpagestate,
+                        viewModel = homeWorkPageState,
                         modifier = Modifier,
                         title = "HomeWork"
                     )
                 },
                 // Add content padding
             ) { innerPadding ->
-                //todo @MAS #simple || please add the usage after answering the referred todo task
+                //main homeWork UI: column
                 Column(
                     modifier = Modifier.padding(innerPadding),
                     horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
                 ) {
+                    //lazy column to hold the data logic & UI design
                     LazyColumn {
+                        //controls the lazy size
                         items(HomeworkMock.size) { index ->
+                            //main homeWork card UI & Logic
+                            //todo @LT #medium|| please add more details like this:-
+                            /*
+                            * +---------------------------+
+                            * |subject name     due date* |
+                            * +---------------------------+
+                            * due date can be the general format or day counter example: 2 day to submit       */
                             ExpandableCard(
                                 Data = HomeworkMock[index],
-                                viewmodel = homeworkpagestate
+                                viewmodel = homeWorkPageState
                             )
                         }
                     }
@@ -74,10 +77,8 @@ fun HomeworkPage(homeworkpagestate: MainViewModel= MainViewModel()) {
         }
     }
 }
-
 @Composable
 @Preview
 fun HomeworkPagePreview() {
     HomeworkPage()
-
 }

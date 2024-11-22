@@ -98,16 +98,18 @@ fun Navigation() {
             }
             composable(Screen.CounselorPage.route) {
                 CounselorPage(
-                    //solved @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
+                    //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     //LT:Not needed to be parsed, but might parse it later depending on its need
-                    mainviewModel = viewModel
+                    //MAS: so I understand the need of injecting the viewModel but what is happening
+                    //MAS: when you inject navigation or ProfilePage like in [89,17]?
+                    mainViewModel = viewModel
                 )
             }
             composable(Screen.HomeworkPage.route) {
                 HomeworkPage(
                     //solved @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     //LT:Not needed to be parsed, but might parse it later depending on its need
-                    homeworkpagestate = viewModel
+                    homeWorkPageState = viewModel
                 )
             }
             composable(Screen.SettingsPage.route) {
@@ -137,7 +139,7 @@ fun Navigation() {
                 ExamsPage(
                     //solved @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
 
-                    mainviewmodel = viewModel
+                    mainViewModel = viewModel
                 )
 
             }
