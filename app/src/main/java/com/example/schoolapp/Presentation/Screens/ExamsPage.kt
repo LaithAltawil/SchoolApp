@@ -122,6 +122,7 @@ fun ExamsPage(mainViewModel: MainViewModel = MainViewModel()) {
                         /*LT: here we will enter cards which will be the exams coming set in order from
                         left to right depending of its date
                         MAS: OK so I think we must put the num of day till the next exam like this
+                        LT: good idea will check out how to and implement it asap
                         +-----------------------+
                         |                       |
                         |          + -          |
@@ -171,7 +172,7 @@ fun ExamsPage(mainViewModel: MainViewModel = MainViewModel()) {
                                     Text(
                                         modifier = Modifier.padding(10.dp),
                                         text = mainMenuItem[item].name,
-                                        fontSize = 26.sp,
+                                        fontSize = 24.sp,
                                         color = Color.White,
                                         textAlign = TextAlign.Center,
                                         overflow = TextOverflow.Visible

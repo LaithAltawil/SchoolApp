@@ -72,10 +72,20 @@ fun ExpandableCard(Data: Homework, viewmodel: MainViewModel) {
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = Data.title,
-                style = MaterialTheme.typography.headlineLarge
-            )
+            Row {
+                Text(
+                    text = Data.title,
+                    style = MaterialTheme.typography.headlineLarge
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                //LT: this date will be replaced with the actual date when database is setup
+                Text(
+                    text = "20/10/2024",
+                    style = MaterialTheme.typography.labelLarge
+                )
+
+            }
+
             if (isExpanded) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
