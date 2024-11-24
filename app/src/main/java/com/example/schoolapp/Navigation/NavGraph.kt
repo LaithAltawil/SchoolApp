@@ -57,7 +57,8 @@ fun Navigation() {
             //start page navigation
             composable(Screen.StartPage.route) {
                 StartPage() {
-                    //todo @LT #qustion|| here are you parsing the navigation as function?
+                    //solved @LT #qustion|| here are you parsing the navigation as function?
+                    //This function will be used to navigate to the sign in page
                     navController.navigate(Screen.SignInPage.route)
                 }
             }
@@ -67,6 +68,7 @@ fun Navigation() {
                 val viewModel = entry.AppViewModel<AppViewModel>(navController)
                 SignIn(viewModel) {
                     //todo @LT #qustion|| here are you parsing the navigation map as function?
+                    //
                     navController.navigate("Home")
                 }
             }
@@ -85,14 +87,17 @@ fun Navigation() {
 
             //profile page navigation
             composable(Screen.ProfilePage.route) {
-                //todo @LT #qustion|| what is this?
+                //solved @LT #qustion|| what is this?
+                //whenever we press a button this composable will be used to navigate to the profile page
                 Profile_page()
             }
 
 
             composable(Screen.CalenderPage.route) {
                 CalenderPage(
-                    //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
+                    //solved @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
+                    //will parse the navigation to be able to return to the main menu after finishing because parsing it rn will prevent us from
+                    //using preview
                     mainViewModel = viewModel
                 )
             }
@@ -102,6 +107,7 @@ fun Navigation() {
                     //LT:Not needed to be parsed, but might parse it later depending on its need
                     //MAS: so I understand the need of injecting the viewModel but what is happening
                     //MAS: when you inject navigation or ProfilePage like in [89,17]?
+                    //after some consideration i decided to parse navigation but after finishing each respective page
                     mainViewModel = viewModel
                 )
             }

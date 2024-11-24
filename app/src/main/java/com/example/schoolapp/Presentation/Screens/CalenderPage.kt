@@ -21,8 +21,10 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 //=======================================================
 //Calender page: Logic & UI                             =
 //=======================================================
-//todo @MAS #qustion[Answered] || do you have any idea to fill this page?
+//underway @MAS #qustion[Answered] || do you have any idea to fill this page?
 /*MAS: Check the file calender_1.png for the design of this page
+Currently working on it will implement the idea you proposed
+Check the current progress on the ExpandableButton.kt file
 after click the expandable button
 you can try one of those designs
 Card design:-
@@ -47,14 +49,9 @@ fun CalenderPage(mainViewModel: MainViewModel = MainViewModel()) {
     //variables:local & states                              =
     //=======================================================
     val calendarItems = listOf(
-        CalenderDays("13/9", "A huge Open Day for jobs in tech for the future", {}),
-        CalenderDays("14/9", "A huge Open Day for jobs in medicine for the future", {}),
-        CalenderDays("15/9", "A huge Open Day for jobs in finance for the future", {}),
-        CalenderDays("16/9", "A huge Open Day for jobs in teaching for the future", {}),
-        CalenderDays("13/9", "A huge Open Day for jobs in tech for the future", {}),
-        CalenderDays("14/9", "A huge Open Day for jobs in medicine for the future", {}),
-        CalenderDays("15/9", "A huge Open Day for jobs in finance for the future", {}),
-        CalenderDays("16/9", "A huge Open Day for jobs in teaching for the future", {}),
+        CalenderDays("Main Events", "A huge Open Day for jobs in tech for the future", {}),
+        CalenderDays("Counselor Schedule", "A huge Open Day for jobs in medicine for the future", {}),
+        CalenderDays("Semester Schedule", "A huge Open Day for jobs in finance for the future", {})
     )
     //=======================================================
     // logic & UI                                           =

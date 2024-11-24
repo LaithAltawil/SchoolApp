@@ -37,7 +37,7 @@ import com.example.schoolapp.Data.MockData.Mock.ParentsDetails
 import com.example.schoolapp.Presentation.Screens.ScreensPieces.ProfilePageBox
 import com.example.schoolapp.R
 
-//todo @LT #qustion[not answered] || do you want me to organize this for you or leave it as is XD?
+//solved @LT #qustion[not answered] || do you want me to organize this for you or leave it as is XD?
 //LT: please do :))
 //THE New Profile page design
 

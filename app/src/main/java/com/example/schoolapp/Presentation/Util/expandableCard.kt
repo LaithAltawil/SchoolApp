@@ -98,6 +98,7 @@ fun ExpandableCard(Data: Homework, viewmodel: MainViewModel) {
                     verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
                 ) {
                     Button(
+
                         enabled = if (Data.isCompleted) false else true,
                         onClick = {
                             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {

@@ -31,13 +31,14 @@ import com.example.schoolapp.Presentation.Util.SimpleTable
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 
+//CANCELEDDDDDDDDDDDDDDD
 //=======================================================
 //solved @LT #simple || explain this fun logic here       =
 //LT: this is the old profile page as it is getting replaced with the file
 // Somethingiamtrying.kt
 
 //=======================================================
-//todo @LT #simple || @(33:17)=="MainViewModel" variable name must start with small litter
+//solved @LT #simple || @(33:17)=="MainViewModel" variable name must start with small litter
 //todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 //IMPORTANT: OUTDATED DESIGN
 @OptIn(ExperimentalMaterial3Api::class)

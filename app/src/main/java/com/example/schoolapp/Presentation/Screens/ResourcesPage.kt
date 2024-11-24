@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -35,10 +36,14 @@ import com.example.schoolapp.Presentation.Screens.ScreensPieces.ResourcesTopAppB
 import com.example.schoolapp.Presentation.VM.MainViewModel
 
 //=======================================================
-//todo @LT #simple || explain this fun logic here       =
+//solved @LT #simple || explain this fun logic here       =
+
+/* this is resoruces page where the user will be able to find resources to help him study
+very similar to the exams page*/
+
 //=======================================================
-//todo @LT #simple || @(44:19)=="MainViewModel" variable name must start with small litter
-//todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
+//solved @LT #simple || @(44:19)=="MainViewModel" variable name must start with small litter
+//solved @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ResourcesPage(mainviewmodel: MainViewModel = MainViewModel()) {
@@ -144,4 +149,11 @@ fun ResourcesPage(mainviewmodel: MainViewModel = MainViewModel()) {
             }
         }
     }
+}
+
+@Composable
+@Preview
+fun ResourcesPagePreview() {
+    ResourcesPage()
+
 }

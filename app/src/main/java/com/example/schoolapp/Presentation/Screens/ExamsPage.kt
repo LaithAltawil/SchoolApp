@@ -159,7 +159,7 @@ fun ExamsPage(mainViewModel: MainViewModel = MainViewModel()) {
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     verticalArrangement = Arrangement.Center
                                 ) {
-                                    //todo @LT:Icon will be changed when we find all the required icons
+                                    //solved @LT:Icon will be changed when we find all the required icons
                                     //they will be in a list with the subject names
                                     mainMenuItem[item].imagePath?.let {
                                         Icon(
