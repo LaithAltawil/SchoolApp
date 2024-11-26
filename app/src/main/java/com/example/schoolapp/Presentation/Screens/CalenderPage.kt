@@ -35,6 +35,7 @@ Card design:-
 | day : day name          |
 | event: event description|
 +-------------------------+
+//todo Check out the latest design and give me feedback
 column design:-
 +-------------------------+
 |No|date|day|title|event  |

@@ -32,6 +32,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.schoolapp.Data.MockData.Mock.mockEvents
+import com.example.schoolapp.Presentation.Screens.ScreensPieces.EventCard
 
 //=======================================================
 //solved @LT #simple || explain this fun logic here       =
@@ -84,19 +86,18 @@ fun ExpandableButton(name: String, text: String) {
         ) {
             Card(modifier = Modifier
                 .width(500.dp)
-                .height(200.dp),
+                ,
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text(text)
-                    Text(text)
-                    Text(text)
-                    Text(text)
-                    Text(text)
-                    // Add more content to the box here
+                    EventCard(event = mockEvents[0])
+                    EventCard(event = mockEvents[1])
+                    EventCard(event = mockEvents[2])
+                    EventCard(event = mockEvents[3])
+                    EventCard(event = mockEvents[4])
                 }
             }
         }

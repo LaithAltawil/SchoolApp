@@ -13,6 +13,7 @@ import com.example.schoolapp.Presentation.Screens.ExamsPage
 import com.example.schoolapp.Presentation.Screens.HomeworkPage
 
 import com.example.schoolapp.Presentation.Screens.Profile_page
+import com.example.schoolapp.Presentation.Screens.ResourcesPage
 import com.example.schoolapp.Presentation.Screens.StudentClass
 
 
@@ -27,7 +28,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                CalenderPage()
+                ResourcesPage()
             }
         }
     }

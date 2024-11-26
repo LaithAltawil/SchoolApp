@@ -21,10 +21,7 @@ class MainViewModel : ViewModel() {
     // Homework Page
     private val _state = MutableStateFlow(MainDataClass.HomeworkPageState1())
     val state: StateFlow<MainDataClass.HomeworkPageState1> = _state.asStateFlow()
-    fun isTopappbarVisible1() {
-        _state.value =
-            MainDataClass.HomeworkPageState1(isTopBarVisible = !_state.value.isTopBarVisible)
-    }
+
 
     //Exam Page
     private val _Examstate = MutableStateFlow(MainDataClass.ExamPageState1())
@@ -59,41 +56,35 @@ class MainViewModel : ViewModel() {
     //setting page
     private val _Settingstate = MutableStateFlow(MainDataClass.SettingsPageState1())
     val Settingstate: StateFlow<MainDataClass.SettingsPageState1> = _Settingstate.asStateFlow()
-    fun isTopappbarVisible2() {
-        _Settingstate.value =
-            MainDataClass.SettingsPageState1(isTopBarVisible = !_Settingstate.value.isTopBarVisible)
-    }
+
 
     //counselor Page
-    private val _Counselorstate = MutableStateFlow(MainDataClass.CounselorsPageState1())
-    val Counselorstate: StateFlow<MainDataClass.CounselorsPageState1> =
-        _Counselorstate.asStateFlow()
-
-    fun isTopappbarVisible3() {
-        _Counselorstate.value =
-            MainDataClass.CounselorsPageState1(isTopAppBarVisible = !_Counselorstate.value.isTopAppBarVisible)
-    }
-
-    fun openDialog() {
-        _Counselorstate.value = MainDataClass.CounselorsPageState1(openDialog = true)
-    }
-
-    fun closeDialog() {
-        _Counselorstate.value = MainDataClass.CounselorsPageState1(openDialog = false)
-    }
-
-    fun savedate(s: String) {
-        _Counselorstate.value = MainDataClass.CounselorsPageState1(selectedDate = s)
-    }
+//    private val _Counselorstate = MutableStateFlow(MainDataClass.CounselorsPageState1())
+//    val Counselorstate: StateFlow<MainDataClass.CounselorsPageState1> =
+//        _Counselorstate.asStateFlow()
+//
+//    fun isTopappbarVisible3() {
+//        _Counselorstate.value =
+//            MainDataClass.CounselorsPageState1(isTopAppBarVisible = !_Counselorstate.value.isTopAppBarVisible)
+//    }
+//
+//    fun openDialog() {
+//        _Counselorstate.value = MainDataClass.CounselorsPageState1(openDialog = true)
+//    }
+//
+//    fun closeDialog() {
+//        _Counselorstate.value = MainDataClass.CounselorsPageState1(openDialog = false)
+//    }
+//
+//    fun savedate(s: String) {
+//        _Counselorstate.value = MainDataClass.CounselorsPageState1(selectedDate = s)
+//    }
 
     //ResourcesPage
     private val _Resourcesstate = MutableStateFlow(MainDataClass.ResourcesPageState())
     val Resourcesstate: StateFlow<MainDataClass.ResourcesPageState> = _Resourcesstate.asStateFlow()
 
-    fun isTopappbarVisible4() {
-        _Resourcesstate.value =
-            MainDataClass.ResourcesPageState(isTopAppBarVisible = !_Resourcesstate.value.isTopAppBarVisible)
-    }
+
 
     fun changeBottomSheetState(item: Int) {
         val updatedShowBottomSheet = _Resourcesstate.value.showBottomSheet.toMutableList()

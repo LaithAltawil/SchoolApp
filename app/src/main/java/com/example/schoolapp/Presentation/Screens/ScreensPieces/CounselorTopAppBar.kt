@@ -32,7 +32,7 @@ fun CounselorTopAppBar(viewModel: MainViewModel, modifier: Modifier, title: Stri
     //=======================================================
     //variables: Local & states                             =
     //=======================================================
-    val state = viewModel.Counselorstate.collectAsState()
+    //val state = viewModel.Counselorstate.collectAsState()
 
     //TAB main UI & Logic
     LargeTopAppBar(

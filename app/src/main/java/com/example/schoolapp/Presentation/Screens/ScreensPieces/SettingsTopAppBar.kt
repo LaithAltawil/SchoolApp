@@ -25,7 +25,8 @@ import androidx.compose.ui.unit.sp
 import com.example.schoolapp.Presentation.VM.MainViewModel
 
 //=======================================================
-//todo @LT #simple || explain this fun logic here       =
+//solved @LT #simple || explain this fun logic here       =
+//refer to other similarly named files
 //=======================================================
 //todo @LT #simple || @(34:69)=="Title" variable name must start with small litter
 //todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab

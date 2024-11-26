@@ -3,8 +3,10 @@ package com.example.schoolapp.Presentation.Screens
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -12,9 +14,12 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.material.Divider
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
@@ -22,9 +27,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,8 +43,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose.AppTheme
+import com.example.schoolapp.Data.Exam
+import com.example.schoolapp.Data.Subjects
 import com.example.schoolapp.Presentation.Screens.ScreensPieces.ResourcesTopAppBar
 import com.example.schoolapp.Presentation.VM.MainViewModel
+import com.example.schoolapp.R
 
 //=======================================================
 //solved @LT #simple || explain this fun logic here       =
@@ -44,6 +58,7 @@ very similar to the exams page*/
 //=======================================================
 //solved @LT #simple || @(44:19)=="MainViewModel" variable name must start with small litter
 //solved @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
+//quite lost here will return once i find the solution
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ResourcesPage(mainviewmodel: MainViewModel = MainViewModel()) {
@@ -52,11 +67,48 @@ fun ResourcesPage(mainviewmodel: MainViewModel = MainViewModel()) {
     //variables: local & states                             =
     //=======================================================
     val state = mainviewmodel.Resourcesstate.collectAsStateWithLifecycle()
+    val mainMenuItem = listOf(
+        Subjects("Maths", painterResource(id = R.drawable.math),
+            exam = Exam("Mathematics", "2023-12-15", "10:00 AM", "Room A101"),
+            onClick = {}
+        ),
+        Subjects("Science", painterResource(id = R.drawable.science),
+            exam = Exam("Mathematics", "2023-12-15", "10:00 AM", "Room A101"),
+            onClick = {}),
+        Subjects("English", painterResource(id = R.drawable.english),
+            exam = Exam("Mathematics", "2023-12-15", "10:00 AM", "Room A101"),
+            onClick = {}),
+        Subjects(
+            "History",
+            painterResource(id = R.drawable.history),
+            exam = Exam("History", "2023-12-20", "11:00 AM", "Room F606"),
+            onClick = {}
+        ),
+        Subjects(
+            "Arabic",
+            painterResource(id = R.drawable.arabic),
+            exam = Exam("Arabic", "2023-12-21", "03:00 PM", "Room G707"),
+            onClick = {}
+        ),
+        Subjects(
+            "Computer Science",
+            painterResource(id = R.drawable.science),
+            exam = Exam("Computer Science", "2023-12-22", "09:00 AM", "Lab H808"),
+            onClick = {}
+        ),
+        Subjects(
+            "Geography",
+            painterResource(id = R.drawable.geography),
+            exam = Exam("Geography", "2023-12-23", "02:00 PM", "Hall I909"),
+            onClick = {}
+        )
+    )
+
+    val bottomSheetStates = remember { mutableStateListOf<Boolean>(false,
+        false, false, false, false, false, false) }
 
     //create A state for the Resources page and add it to the main view model
-    LaunchedEffect(Unit) {
-        mainviewmodel.isTopappbarVisible4()
-    }
+
 
     //=======================================================
     //Logic & UI,todo @MAS @LT #simple || add usage        =
@@ -92,7 +144,7 @@ fun ResourcesPage(mainviewmodel: MainViewModel = MainViewModel()) {
                     {
                         LazyVerticalGrid(columns = GridCells.Fixed(2)) {
                             //here we will enter cards which will be the exams coming set in order from left to right depending of its date
-                            items(state.value.Subjects.size) { item ->
+                            itemsIndexed(mainMenuItem) { index,item ->
                                 Card(colors = CardDefaults.cardColors(
                                     containerColor = MaterialTheme.colorScheme.primary
                                 ),
@@ -102,7 +154,8 @@ fun ResourcesPage(mainviewmodel: MainViewModel = MainViewModel()) {
                                         .size(200.dp)
                                         .width(100.dp)
                                         .clickable {
-                                            mainviewmodel.changeBottomSheetState2(item)
+                                            bottomSheetStates[index] = !bottomSheetStates[index]
+
                                         }
                                 ) {
                                     Column(
@@ -112,21 +165,32 @@ fun ResourcesPage(mainviewmodel: MainViewModel = MainViewModel()) {
                                         horizontalAlignment = Alignment.CenterHorizontally,
                                         verticalArrangement = Arrangement.Center
                                     ) {
+                                        mainMenuItem[index].imagePath?.let {
+                                            Icon(
+                                                painter =
+                                                it,
+                                                contentDescription = null
+                                            )
+                                        }
                                         Text(
-                                            modifier = Modifier.padding(10.dp, top = 40.dp),
-                                            text = state.value.Subjects[item].name,
-                                            fontSize = 16.sp,
+                                            modifier = Modifier.padding(10.dp),
+                                            text = mainMenuItem[index].name,
+                                            fontSize = 24.sp,
                                             color = Color.White,
                                             textAlign = TextAlign.Center,
-                                            overflow = TextOverflow.Ellipsis
+                                            overflow = TextOverflow.Visible
                                         )
                                     }
                                 }
-                                if (state.value.showBottomSheet[item]) {
+                                if (
+                                    bottomSheetStates[index]
+                                ) {
                                     ModalBottomSheet(
                                         containerColor = MaterialTheme.colorScheme.primary,
                                         onDismissRequest = {
-                                            mainviewmodel.changeBottomSheetState(item)
+                                            bottomSheetStates[index] = false
+                                            // Handle dismiss
+
                                         }
                                     ) {
                                         // Bottom sheet content
@@ -136,9 +200,21 @@ fun ResourcesPage(mainviewmodel: MainViewModel = MainViewModel()) {
                                                 .padding(16.dp)
                                         ) {
                                             Text(
-                                                text = state.value.Subjects[item].name,
+                                                text = state.value.Subjects[index].name,
                                                 fontSize = 30.sp
                                             )
+                                            //Mock Data to preview how would they look like
+                                            Text("Event Details", style = MaterialTheme.typography.titleLarge)
+                                            Spacer(modifier = Modifier.height(8.dp))
+                                            Text("Date: 15/12/2023")
+                                            Text("Time: 10:00 AM")
+                                            Text("Location: Main Hall")
+                                            Spacer(modifier = Modifier.height(16.dp))
+                                            Divider()
+                                            Spacer(modifier = Modifier.height(16.dp))
+                                            Text("Description:", style = MaterialTheme.typography.headlineLarge)
+                                            Text("This is a detailed description of the event.")
+
                                         }
                                     }
                                 }

@@ -48,3 +48,9 @@ data class Exam(
     val time: String,
     val location: String
 )
+data class Event(val title: String,
+                 val num: Int,
+                 val date: String,
+                 val day: String,
+                 val event: String
+)

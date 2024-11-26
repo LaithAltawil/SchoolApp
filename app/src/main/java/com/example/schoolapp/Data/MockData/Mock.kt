@@ -1,6 +1,7 @@
 package com.example.schoolapp.Data.MockData
 
 import com.example.schoolapp.Data.Class
+import com.example.schoolapp.Data.Event
 import com.example.schoolapp.Data.Exam
 import com.example.schoolapp.Data.Homework
 
@@ -99,5 +100,12 @@ object Mock {
         mutableListOf("E-mail", "laithaltawil@gmail.com"),
         mutableListOf("Age", "50"),
         mutableListOf("relation", "Father")
+    )
+    val mockEvents = listOf(
+        Event("Opening Ceremony", 1, "15/12/2023", "Friday", "The grand opening of the event."),
+        Event("Workshop A", 2, "16/12/2023", "Saturday", "A hands-on workshop on topic A."),
+        Event("Conference", 3, "17/12/2023", "Sunday", "A conference featuring industry experts."),
+        Event("Networking Session", 4, "18/12/2023", "Monday", "An opportunity to connect with other attendees."),
+        Event("Closing Ceremony", 5, "19/12/2023", "Tuesday", "The closing ceremony of the event.")
     )
 }
