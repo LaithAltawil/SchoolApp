@@ -65,7 +65,7 @@ fun CalenderPage(mainViewModel: MainViewModel = MainViewModel()) {
             color = MaterialTheme.colorScheme.primaryContainer
         ) {
             Scaffold(
-                containerColor = MaterialTheme.colorScheme.onPrimary,
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
                 topBar = {
                     //LT: Yes this is a function which contains the TAB for this page
                     CalenderTopAppBar(

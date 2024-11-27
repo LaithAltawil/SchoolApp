@@ -1,5 +1,6 @@
 package com.example.schoolapp.Presentation.VM.States
 
+import androidx.compose.runtime.mutableStateListOf
 import com.example.schoolapp.Data.Subjects
 import com.example.schoolapp.Data.Homework
 
@@ -15,7 +16,7 @@ sealed class MainDataClass{
         val openDialog: Boolean = false
     ) :MainDataClass()
 
-    //todo @LT #simple|| "Subjects" [22:21] must start with small latter
+    //todo @LT #simple|| "subjects" [22:21] must start with small latter
     //todo @LT #simple|| add usage
     data class ExamPageState1(
         val showBottomSheet: Boolean = false,
@@ -29,7 +30,9 @@ sealed class MainDataClass{
             "Arabic",
             "Computer Science"
         ),
-        val isTopBarVisible: Boolean = false
+
+        var BottomSheet: MutableList<Boolean>
+        = mutableStateListOf(false, false, false, false, false, false, false)
         ) :MainDataClass()
 
     //todo @LT #simple|| add usage
@@ -39,7 +42,7 @@ sealed class MainDataClass{
     ) : MainDataClass()
 
     //todo @LT #simple|| "MarkspageState1" [45:21] must start with capital latter
-    //todo @LT #simple|| "Subjects" [46:13] must start with small latter
+    //todo @LT #simple|| "subjects" [46:13] must start with small latter
     //todo @LT #simple|| "MarksItems" [52:13] must start with small latter
     //todo @LT #simple|| add usage
     data class MarkspageState1(
@@ -59,15 +62,8 @@ sealed class MainDataClass{
             Subjects("Geography",onClick = { })
         ),
         val isTopBarVisible: Boolean = false,
-        val showBottomSheet: List<Boolean> = listOf(
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false
-        )
+        var BottomSheet: MutableList<Boolean>
+        = mutableStateListOf(false, false, false, false, false, false, false)
     ) :MainDataClass()
 
     //todo @LT #simple|| add usage
@@ -75,7 +71,7 @@ sealed class MainDataClass{
         val isTopBarVisible: Boolean = false
     ) :MainDataClass()
 
-    //todo @LT #simple|| "Subjects" [82:13] must start with small latter
+    //todo @LT #simple|| "subjects" [82:13] must start with small latter
     //todo @LT #simple|| add usage
     data class ResourcesPageState(
         val isTopAppBarVisible: Boolean = false,

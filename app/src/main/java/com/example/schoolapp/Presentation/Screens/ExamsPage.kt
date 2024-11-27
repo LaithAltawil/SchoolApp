@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,6 +25,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,6 +54,7 @@ fun ExamsPage(mainViewModel: MainViewModel = MainViewModel()) {
     //variables: local & states                             =
     //=======================================================
     val state = mainViewModel.Examstate.collectAsStateWithLifecycle()
+
     //todo @MAS #medium|| put the right data here form the database
     val mainMenuItem = listOf(
         Subjects("Maths", painterResource(id = R.drawable.math),
@@ -101,7 +105,7 @@ fun ExamsPage(mainViewModel: MainViewModel = MainViewModel()) {
         ) {
             //Main page UI: Scaffold
             Scaffold(
-                containerColor = MaterialTheme.colorScheme.onPrimary,
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
                 //TAB
                 topBar = {
                     ExamsMyTopAppBar(
@@ -119,23 +123,9 @@ fun ExamsPage(mainViewModel: MainViewModel = MainViewModel()) {
                 ) {
                     //lazy grid to hold the data logic & UI design
                     LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-                        /*LT: here we will enter cards which will be the exams coming set in order from
-                        left to right depending of its date
-                        MAS: OK so I think we must put the num of day till the next exam like this
-                        LT: good idea will check out how to and implement it asap
-                        +-----------------------+
-                        |                       |
-                        |          + -          |
-                        |          * \          |
-                        |          Exam name    |
-                        |         n days left   |
-                        |                       |
-                        +-----------------------+
-                        LT: done but please recommend a good text size for the subject names
-                        MAS: 24 is the default, you can use 18 also or 20. So it depends on the text
-                         */
+
                         //controls the lazy size
-                        items(mainMenuItem.size) { item ->
+                        itemsIndexed(mainMenuItem) { index,item ->
                             //hold the subject details
                             Card(
                                 colors = CardDefaults.cardColors(
@@ -147,7 +137,7 @@ fun ExamsPage(mainViewModel: MainViewModel = MainViewModel()) {
                                     .size(200.dp)
                                     .width(100.dp)
                                     .clickable {
-                                        mainViewModel.changeBottomSheetState()
+                                        mainViewModel.updateBottomSheetState(index, true)
                                     },
                             ) {
                                 //main card UI
@@ -161,7 +151,7 @@ fun ExamsPage(mainViewModel: MainViewModel = MainViewModel()) {
                                 ) {
                                     //solved @LT:Icon will be changed when we find all the required icons
                                     //they will be in a list with the subject names
-                                    mainMenuItem[item].imagePath?.let {
+                                    mainMenuItem[index].imagePath?.let {
                                         Icon(
                                             painter =
                                             it,
@@ -171,7 +161,7 @@ fun ExamsPage(mainViewModel: MainViewModel = MainViewModel()) {
                                     //subject name
                                     Text(
                                         modifier = Modifier.padding(10.dp),
-                                        text = mainMenuItem[item].name,
+                                        text = mainMenuItem[index].name,
                                         fontSize = 24.sp,
                                         color = Color.White,
                                         textAlign = TextAlign.Center,
@@ -181,9 +171,11 @@ fun ExamsPage(mainViewModel: MainViewModel = MainViewModel()) {
                             }
                             //this is an if statement which by using the state showBottomSheet
                             //it will either show or hide the bottom sheet
-                            if (state.value.showBottomSheet) {
+                            if (state.value.BottomSheet[index]) {
                                 ModalBottomSheet(containerColor = MaterialTheme.colorScheme.primary,
-                                    onDismissRequest = { mainViewModel.changeBottomSheetState() }
+                                    onDismissRequest = {
+                                        mainViewModel.updateBottomSheetState(index,false)
+                                    }
                                 ) {
                                     // Bottom sheet content
                                     Column(
@@ -195,17 +187,17 @@ fun ExamsPage(mainViewModel: MainViewModel = MainViewModel()) {
                                         Row(modifier = Modifier.fillMaxWidth()) {
                                             Text(text = "Date:")
                                             Spacer(modifier = Modifier.width(8.dp))
-                                            Text(text = mainMenuItem[item].exam!!.date)
+                                            Text(text = mainMenuItem[index].exam!!.date)
                                         }
                                         Row(modifier = Modifier.fillMaxWidth()) {
                                             Text(text = "time:")
                                             Spacer(modifier = Modifier.width(8.dp))
-                                            Text(text = mainMenuItem[item].exam!!.time)
+                                            Text(text = mainMenuItem[index].exam!!.time)
                                         }
                                         Row(modifier = Modifier.fillMaxWidth()) {
                                             Text(text = "Location:")
                                             Spacer(modifier = Modifier.width(8.dp))
-                                            Text(text = mainMenuItem[item].exam!!.location)
+                                            Text(text = mainMenuItem[index].exam!!.location)
                                         }
                                     }
                                 }

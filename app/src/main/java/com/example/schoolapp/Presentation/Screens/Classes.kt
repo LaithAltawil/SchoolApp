@@ -67,7 +67,7 @@ fun StudentClass(mainViewModel: MainViewModel = MainViewModel()) {
             color = MaterialTheme.colorScheme.primaryContainer
         ) {
             Scaffold(
-                containerColor = MaterialTheme.colorScheme.onPrimary,
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
                 //TAB main UI & Logic
                 topBar = {
                     ClassesTopAppBar(

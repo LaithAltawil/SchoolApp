@@ -27,30 +27,24 @@ class MainViewModel : ViewModel() {
     private val _Examstate = MutableStateFlow(MainDataClass.ExamPageState1())
     val Examstate: StateFlow<MainDataClass.ExamPageState1> = _Examstate.asStateFlow()
 
-    fun changeBottomSheetState(): Boolean {
-        _Examstate.value =
-            MainDataClass.ExamPageState1(showBottomSheet = !_Examstate.value.showBottomSheet)
-        return _Examstate.value.showBottomSheet
+
+    fun updateBottomSheetState(index: Int, newState: Boolean) {
+        // Ensure index is within bounds
+        if (index in _Examstate.value.BottomSheet.indices) {
+            _Examstate.value.BottomSheet[index] = newState
+        }
     }
+
 
     //Marks Page
     private val _Marksstate = MutableStateFlow(MainDataClass.MarkspageState1())
     val Marksstate: StateFlow<MainDataClass.MarkspageState1> = _Marksstate.asStateFlow()
 
-    fun changeBottomSheetState2(item: Int) {
-        // Assuming showBottomSheet is a MutableList<Boolean> in your MarkspageState
-
-        val updatedShowBottomSheet =
-            _Marksstate.value.showBottomSheet.toMutableList() // Create a mutable copy
-        updatedShowBottomSheet[item] =
-            !updatedShowBottomSheet[item] // Toggle the value at the specified index
-        _Marksstate.value =
-            _Marksstate.value.copy(showBottomSheet = updatedShowBottomSheet) // Update the state
-    }
-
-    fun isTopappbarVisible() {
-        _Marksstate.value =
-            MainDataClass.MarkspageState1(isTopBarVisible = !_Marksstate.value.isTopBarVisible)
+    fun updateBottomSheetState1(index: Int, newState: Boolean) {
+        // Ensure index is within bounds
+        if (index in _Marksstate.value.BottomSheet.indices) {
+            _Marksstate.value.BottomSheet[index] = newState
+        }
     }
 
     //setting page
@@ -83,7 +77,6 @@ class MainViewModel : ViewModel() {
     //ResourcesPage
     private val _Resourcesstate = MutableStateFlow(MainDataClass.ResourcesPageState())
     val Resourcesstate: StateFlow<MainDataClass.ResourcesPageState> = _Resourcesstate.asStateFlow()
-
 
 
     fun changeBottomSheetState(item: Int) {

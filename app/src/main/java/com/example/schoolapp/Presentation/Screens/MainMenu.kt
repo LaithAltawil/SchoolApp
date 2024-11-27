@@ -46,7 +46,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.MainMenuItem
+import com.example.schoolapp.Data.MockData.Mock
+import com.example.schoolapp.Data.MockData.Mock.HomeworkMock
 import com.example.schoolapp.Navigation.Screen
+import com.example.schoolapp.Presentation.Util.ExpandableCard
 import com.example.schoolapp.R
 import kotlinx.coroutines.launch
 
@@ -96,10 +99,10 @@ fun MainMenu(navController: NavController) {
             }
         ),
         MainMenuItem(
-            title = "Resources",
+            title = "Homeworks",
             icon = painterResource(id = R.drawable.baseline_class_24),
             onClick = {
-                navController.navigate(Screen.ResourcesPage.route)
+                navController.navigate(Screen.HomeworkPage.route)
             }
         ),
         MainMenuItem(
@@ -244,7 +247,8 @@ fun MainMenu(navController: NavController) {
                                     Icon(
                                         Icons.Outlined.Menu,
                                         contentDescription = null,
-                                        modifier = Modifier.size(50.dp)
+                                        modifier = Modifier.size(50.dp),
+                                        tint = MaterialTheme.colorScheme.onPrimary
                                     )
                                 }
                             }
@@ -259,18 +263,21 @@ fun MainMenu(navController: NavController) {
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(start = 10.dp,end=10.dp ,top = 10.dp),
+                                .padding(start = 10.dp, end = 10.dp, top = 10.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Spacer(modifier = Modifier)
                             Card(
-                                modifier = Modifier.clip(
-                                    RoundedCornerShape(
-                                        topEnd = 25.dp,
-                                        topStart = 25.dp,
-                                        bottomEnd = 25.dp,
-                                        bottomStart = 25.dp
-                                )).padding(10.dp)
+                                modifier = Modifier
+                                    .clip(
+                                        RoundedCornerShape(
+                                            topEnd = 25.dp,
+                                            topStart = 25.dp,
+                                            bottomEnd = 25.dp,
+                                            bottomStart = 25.dp
+                                        )
+                                    )
+                                    .padding(10.dp)
                                     .width(600.dp)
                                     .height(200.dp)
                                     .clickable {
@@ -278,6 +285,16 @@ fun MainMenu(navController: NavController) {
                                     containerColor = MaterialTheme.colorScheme.primary
                                 )
                             ) {
+                                Column(
+                                    modifier = Modifier.fillMaxSize(),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Icon(painter = painterResource(id = R.drawable.training), contentDescription =null )
+
+                                }
+
+                                
                             }
                             Spacer(modifier = Modifier.height(10.dp))
                             Text(
@@ -288,25 +305,32 @@ fun MainMenu(navController: NavController) {
                             )
                             Spacer(modifier = Modifier.height(10.dp))
                             LazyColumn {
-                                items(item.size) {
-                                    Card(modifier = Modifier
-                                        .clip(
-                                            RoundedCornerShape(
-                                                topEnd = 25.dp,
-                                                topStart = 25.dp,
-                                                bottomEnd = 25.dp,
-                                                bottomStart = 25.dp
-                                            )
-                                        )
-                                        .padding(11.dp)
-                                        .width(600.dp)
-                                        .height(100.dp)
-                                        .clickable { }, colors = CardDefaults.cardColors(
-                                        containerColor = MaterialTheme.colorScheme.primary
-                                    )) {
-                                        Column(modifier = Modifier.fillMaxSize()) {
-                                        }
-                                    }
+//                                items(item.size) {
+//                                    Card(modifier = Modifier
+//                                        .clip(
+//                                            RoundedCornerShape(
+//                                                topEnd = 25.dp,
+//                                                topStart = 25.dp,
+//                                                bottomEnd = 25.dp,
+//                                                bottomStart = 25.dp
+//                                            )
+//                                        )
+//                                        .padding(11.dp)
+//                                        .width(600.dp)
+//                                        .height(100.dp)
+//                                        .clickable { }, colors = CardDefaults.cardColors(
+//                                        containerColor = MaterialTheme.colorScheme.primary
+//                                    )) {
+//                                        Column(modifier = Modifier.fillMaxSize()) {
+//                                        }
+//                                    }
+//                                }
+                                items(HomeworkMock.size) { index ->
+
+                                         if (!HomeworkMock[index].isCompleted){
+                                    ExpandableCard(
+                                        Data = HomeworkMock[index]
+                                    )}
                                 }
                             }
                         }

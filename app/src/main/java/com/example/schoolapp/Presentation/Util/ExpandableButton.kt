@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -66,14 +67,14 @@ fun ExpandableButton(name: String, text: String) {
     ) {
         Button(
             onClick = { expanded = !expanded },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().width(500.dp).height(70.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
             )
         ) {
             Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                Text(text = name, fontSize = 24.sp)
+                Text(text = name, fontSize = 28.sp)
                 Icon(imageVector =Icons.Default.KeyboardArrowDown , contentDescription =null )
             }
 

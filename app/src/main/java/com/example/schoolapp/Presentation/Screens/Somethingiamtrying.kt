@@ -46,9 +46,9 @@ fun Profile_page() {
     AppTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.inversePrimary
+            color = MaterialTheme.colorScheme.primaryContainer
         ) {
-            Scaffold(containerColor = MaterialTheme.colorScheme.background,
+            Scaffold(containerColor = MaterialTheme.colorScheme.primaryContainer,
                 modifier = Modifier.fillMaxSize(),
                 topBar = {
                     Column(

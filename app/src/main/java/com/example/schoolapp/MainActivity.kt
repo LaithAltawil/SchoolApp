@@ -11,6 +11,8 @@ import com.example.schoolapp.Navigation.Navigation
 import com.example.schoolapp.Presentation.Screens.CalenderPage
 import com.example.schoolapp.Presentation.Screens.ExamsPage
 import com.example.schoolapp.Presentation.Screens.HomeworkPage
+import com.example.schoolapp.Presentation.Screens.MainMenu
+import com.example.schoolapp.Presentation.Screens.MarksPage
 
 import com.example.schoolapp.Presentation.Screens.Profile_page
 import com.example.schoolapp.Presentation.Screens.ResourcesPage
@@ -28,7 +30,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                ResourcesPage()
+                Navigation()
             }
         }
     }

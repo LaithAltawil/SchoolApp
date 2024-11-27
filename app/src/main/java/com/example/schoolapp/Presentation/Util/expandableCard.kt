@@ -40,7 +40,7 @@ import com.example.schoolapp.R
 //todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ExpandableCard(Data: Homework, viewmodel: MainViewModel) {
+fun ExpandableCard(Data: Homework) {
 
     //=======================================================
     //variables: local & states                             =

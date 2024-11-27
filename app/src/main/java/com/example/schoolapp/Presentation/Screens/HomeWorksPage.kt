@@ -39,7 +39,7 @@ fun HomeworkPage(homeWorkPageState: MainViewModel= MainViewModel()) {
         ) {
             //main page UI:scaffold
             Scaffold(
-                containerColor = MaterialTheme.colorScheme.onPrimary,
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
                 //TAB: UI & Logic
                 topBar = {
                     HomeworksTopAppBar(
@@ -68,7 +68,7 @@ fun HomeworkPage(homeWorkPageState: MainViewModel= MainViewModel()) {
                             * due date can be the general format or day counter example: 2 day to submit       */
                             ExpandableCard(
                                 Data = HomeworkMock[index],
-                                viewmodel = homeWorkPageState
+                                //viewmodel = homeWorkPageState
                             )
                         }
                     }

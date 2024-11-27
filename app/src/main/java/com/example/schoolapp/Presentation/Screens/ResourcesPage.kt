@@ -26,12 +26,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,7 +47,7 @@ import com.example.schoolapp.R
 
 //=======================================================
 //solved @LT #simple || explain this fun logic here       =
-
+//Will be removed
 /* this is resoruces page where the user will be able to find resources to help him study
 very similar to the exams page*/
 
@@ -103,8 +99,8 @@ fun ResourcesPage(mainviewmodel: MainViewModel = MainViewModel()) {
             onClick = {}
         )
     )
-
-    val bottomSheetStates = remember { mutableStateListOf<Boolean>(false,
+   //will change depending on number of subjects
+    val bottomSheetStates = remember { mutableStateListOf(false,
         false, false, false, false, false, false) }
 
     //create A state for the Resources page and add it to the main view model
