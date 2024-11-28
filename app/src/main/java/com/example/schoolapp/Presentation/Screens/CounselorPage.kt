@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose.AppTheme
 import com.example.schoolapp.Navigation.Screen
-import com.example.schoolapp.Presentation.Screens.ScreensPieces.CounselorTopAppBar
 import com.example.schoolapp.Presentation.Util.DatePickerModal
 import com.example.schoolapp.Presentation.VM.MainViewModel
 

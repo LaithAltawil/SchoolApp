@@ -51,6 +51,11 @@ class MainViewModel : ViewModel() {
     private val _Settingstate = MutableStateFlow(MainDataClass.SettingsPageState1())
     val Settingstate: StateFlow<MainDataClass.SettingsPageState1> = _Settingstate.asStateFlow()
 
+    fun showAlertDialog(index: Int, newState: Boolean){
+        if (index in _Settingstate.value.showAlertDialog.indices) {
+            _Settingstate.value.showAlertDialog[index] = newState
+        }
+    }
 
     //counselor Page
 //    private val _Counselorstate = MutableStateFlow(MainDataClass.CounselorsPageState1())
@@ -77,13 +82,14 @@ class MainViewModel : ViewModel() {
     //ResourcesPage
     private val _Resourcesstate = MutableStateFlow(MainDataClass.ResourcesPageState())
     val Resourcesstate: StateFlow<MainDataClass.ResourcesPageState> = _Resourcesstate.asStateFlow()
-
-
-    fun changeBottomSheetState(item: Int) {
-        val updatedShowBottomSheet = _Resourcesstate.value.showBottomSheet.toMutableList()
-        updatedShowBottomSheet[item] = !updatedShowBottomSheet[item]
-        _Resourcesstate.value = _Resourcesstate.value.copy(showBottomSheet = updatedShowBottomSheet)
+    fun updateBottomSheetState2(index: Int, newState: Boolean) {
+        // Ensure index is within bounds
+        if (index in _Resourcesstate.value.BottomSheet1.indices) {
+            _Resourcesstate.value.BottomSheet1[index] = newState
+        }
     }
+
+
 
     //ClassesPage
     private val _Classesstate = MutableStateFlow(MainDataClass.ClassesPageState())
@@ -97,8 +103,5 @@ class MainViewModel : ViewModel() {
     //CalenderPage
     private val _Calenderstate = MutableStateFlow(MainDataClass.CalenderPage())
     val Calenderstate: StateFlow<MainDataClass.CalenderPage> = _Calenderstate.asStateFlow()
-    fun isTopappbarVisible6() {
-        _Calenderstate.value =
-            MainDataClass.CalenderPage(isTopAppBarVisible = !_Calenderstate.value.isTopAppBarVisible)
-    }
+
 }

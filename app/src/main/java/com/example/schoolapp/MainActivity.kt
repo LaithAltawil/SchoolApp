@@ -16,6 +16,7 @@ import com.example.schoolapp.Presentation.Screens.MarksPage
 
 import com.example.schoolapp.Presentation.Screens.Profile_page
 import com.example.schoolapp.Presentation.Screens.ResourcesPage
+import com.example.schoolapp.Presentation.Screens.SettingPage
 import com.example.schoolapp.Presentation.Screens.StudentClass
 
 

@@ -19,7 +19,6 @@ sealed class MainDataClass{
     //todo @LT #simple|| "subjects" [22:21] must start with small latter
     //todo @LT #simple|| add usage
     data class ExamPageState1(
-        val showBottomSheet: Boolean = false,
         val Subjects: List<String> = listOf(
             "Math",
             "Science",
@@ -68,7 +67,8 @@ sealed class MainDataClass{
 
     //todo @LT #simple|| add usage
     data class SettingsPageState1(
-        val isTopBarVisible: Boolean = false
+        var showAlertDialog: MutableList<Boolean>
+        = mutableStateListOf(false, false, false, false, false, false, false)
     ) :MainDataClass()
 
     //todo @LT #simple|| "subjects" [82:13] must start with small latter
@@ -84,7 +84,8 @@ sealed class MainDataClass{
             Subjects("Computer Science",onClick = { }) ,
             Subjects("Geography",onClick = { })
         ),
-        val showBottomSheet: List<Boolean> = listOf(false, false, false, false, false, false, false)
+        var BottomSheet1: MutableList<Boolean>
+        = mutableStateListOf(false, false, false, false, false, false, false)
     ) : MainDataClass()
 
     //todo @LT #simple|| add usage

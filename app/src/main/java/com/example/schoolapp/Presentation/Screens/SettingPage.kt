@@ -1,5 +1,6 @@
 package com.example.schoolapp.Presentation.Screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,28 +11,34 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.Subjects
-import com.example.schoolapp.Presentation.Screens.ScreensPieces.SettingsTopAppBar
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 
@@ -40,9 +47,10 @@ import com.example.schoolapp.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingPage(
-    MainViewModel: MainViewModel = MainViewModel()
+    mainviewmodel: MainViewModel = MainViewModel(),
+    navController: NavController
 ) {
-    val state = MainViewModel.Settingstate.collectAsStateWithLifecycle()
+    val state = mainviewmodel.Settingstate.collectAsStateWithLifecycle()
     //create A state for the settings page and add it to the main view model
 
 
@@ -52,6 +60,7 @@ fun SettingPage(
         Subjects("Help & FAQ", painterResource(id = R.drawable.help),{}) ,
         Subjects("Contact us", painterResource(id = R.drawable.contact_us),{})
     )
+
 
     AppTheme {
         Surface(
@@ -63,11 +72,41 @@ fun SettingPage(
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 topBar = {
-                    SettingsTopAppBar(
-                        viewModel =
-                        MainViewModel,
-                        modifier = Modifier,
-                        Title = "Settings"
+                    LargeTopAppBar(
+                        title = {
+                            Row(modifier = Modifier.fillMaxWidth()) {
+                                Text(
+                                    text = "Settings", fontSize = 60.sp,
+                                    fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+                                    modifier = Modifier.padding(start = 40.dp)
+                                )
+                            }
+                        },
+                        modifier = Modifier.clip(
+                            RoundedCornerShape(
+                                bottomEnd = 25.dp,
+                                bottomStart = 25.dp
+                            )
+                        ),
+                        colors =
+                        TopAppBarDefaults.topAppBarColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                        ),
+                        navigationIcon = {
+                            IconButton(onClick = {
+                                navController.popBackStack()
+                            }) {
+                                Icon(
+                                    modifier = Modifier.size(50.dp),
+                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                    contentDescription = "Localized description",
+                                    tint = MaterialTheme.colorScheme.background
+                                )
+
+                            }
+
+                        }
                     )
                 },
                 // Add content padding
@@ -82,7 +121,7 @@ fun SettingPage(
                             .fillMaxWidth()
                             .padding(16.dp)
                     ) {
-                        items(settings) { item ->
+                        itemsIndexed(settings) { index,item ->
                             Card(
                                 colors = androidx.compose.material3.CardDefaults.cardColors(
                                     containerColor = MaterialTheme.colorScheme.primary,
@@ -94,7 +133,29 @@ fun SettingPage(
                                     .clip(RoundedCornerShape(20.dp))
                                     .height(50.dp)
                                     .width(350.dp)
+                                    .clickable {
+                                        mainviewmodel.showAlertDialog(index, true)
+
+                                    }
                             ) {
+                                if (state.value.showAlertDialog[index]) {
+                                    AlertDialog(
+                                        onDismissRequest = {
+                                            mainviewmodel.showAlertDialog(index, false)
+
+                                        },
+                                        title = { Text("Pop-up Title") },
+                                        text = { Text("This is the pop-up content.") },
+                                        confirmButton = {
+                                            Button(onClick = {
+                                                mainviewmodel.showAlertDialog(index, false)
+
+                                            }) {
+                                                Text("OK")
+                                            }
+                                        }
+                                    )
+                                }
                                 Column(
                                     modifier = Modifier
                                         .padding(start = 16.dp, end = 16.dp)
@@ -127,6 +188,7 @@ fun SettingPage(
                             }
                         }
                     }
+
                 }
             }
         }

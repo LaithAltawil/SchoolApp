@@ -67,8 +67,8 @@ fun Navigation() {
             composable(Screen.SignInPage.route) { entry ->
                 val viewModel = entry.AppViewModel<AppViewModel>(navController)
                 SignIn(viewModel) {
-                    //todo @LT #qustion|| here are you parsing the navigation map as function?
-                    //
+                    //solved @LT #qustion|| here are you parsing the navigation map as function?
+                    //we will use navcontroller to move the user to the Home route containing the rest of the app
                     navController.navigate("Home")
                 }
             }
@@ -81,7 +81,8 @@ fun Navigation() {
         ) {
             //main menu navigation
             composable(Screen.MainMenu.route) {
-                //todo @LT #qustion|| here are you parsing the navigation as function?
+                //solved @LT #qustion|| here are you parsing the navigation as function?
+                //passing the navcontroller to help me navigate from this menu to the rest of the app
                 MainMenu(navController)
             }
 
@@ -89,7 +90,9 @@ fun Navigation() {
             composable(Screen.ProfilePage.route) {
                 //solved @LT #qustion|| what is this?
                 //whenever we press a button this composable will be used to navigate to the profile page
-                Profile_page()
+                Profile_page(
+                    navController = navController
+                )
             }
 
 
@@ -115,14 +118,16 @@ fun Navigation() {
                 HomeworkPage(
                     //solved @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     //LT:Not needed to be parsed, but might parse it later depending on its need
-                    homeWorkPageState = viewModel
+                    homeWorkPageState = viewModel,
+                    navController = navController
                 )
             }
             composable(Screen.SettingsPage.route) {
                 SettingPage(
                     //solved @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     //LT:Not needed to be parsed, but might parse it later depending on its need
-                    MainViewModel = viewModel
+                    mainviewmodel = viewModel,
+                    navController = navController
                 )
 
             }
@@ -131,27 +136,30 @@ fun Navigation() {
                     //solved @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     //MAS: note it was MainViewModel then I fixed it to mainviewmodel
                     ////LT:Not needed to be parsed, but might parse it later depending on its need
-                    mainviewmodel = viewModel
+                    mainviewmodel = viewModel,
+                    navController = navController
                 )
 
             }
             composable(Screen.ResourcesPage.route) {
                 ResourcesPage(
-                    mainviewmodel = viewModel
+                    mainviewmodel = viewModel,
+                    navController = navController
                 )
 
             }
             composable(Screen.ExamsPage.route) {
                 ExamsPage(
                     //solved @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
-
-                    mainViewModel = viewModel
+                    mainViewModel = viewModel,
+                    navController = navController
                 )
 
             }
             composable(Screen.ClassesPage.route) {
                 StudentClass(
-                    mainViewModel = viewModel
+                    mainViewModel = viewModel,
+                    navController = navController
                 )
             }
         }

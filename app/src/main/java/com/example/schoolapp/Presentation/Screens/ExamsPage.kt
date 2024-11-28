@@ -15,32 +15,36 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.Exam
 import com.example.schoolapp.Data.Subjects
-import com.example.schoolapp.Presentation.Screens.ScreensPieces.ExamsMyTopAppBar
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 
@@ -49,7 +53,7 @@ import com.example.schoolapp.R
 //=======================================================
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExamsPage(mainViewModel: MainViewModel = MainViewModel()) {
+fun ExamsPage(mainViewModel: MainViewModel = MainViewModel(), navController: NavController) {
     //=======================================================
     //variables: local & states                             =
     //=======================================================
@@ -108,11 +112,43 @@ fun ExamsPage(mainViewModel: MainViewModel = MainViewModel()) {
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 //TAB
                 topBar = {
-                    ExamsMyTopAppBar(
-                        viewModel = mainViewModel,
-                        modifier = Modifier,
-                        title = "Exams"
+                    LargeTopAppBar(
+                        title = {
+                            //TAB main UI: Row
+                            Row(modifier = Modifier.fillMaxWidth()) {
+                                //TAB title
+                                Text(
+                                    text = "Exams", fontSize = 60.sp,
+                                    fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+                                    modifier = Modifier.padding(start = 40.dp)
+                                )
+                            }
+                        },
+                        modifier = Modifier.clip(
+                            RoundedCornerShape(
+                                bottomEnd = 25.dp,
+                                bottomStart = 25.dp
+                            )
+                        ),
+                        colors =
+                        TopAppBarDefaults.topAppBarColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                        ),
+                        navigationIcon = {
+                            IconButton(onClick = {
+                                navController.popBackStack()
+                            }) {
+                                Icon(
+                                    modifier = Modifier.size(50.dp),
+                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                    contentDescription = "Localized description",
+                                    tint = MaterialTheme.colorScheme.background
+                                )
+                            }
+                        }
                     )
+
                 },
                 // Add content padding
             ) { innerPadding ->
@@ -224,8 +260,8 @@ fun ExamDetailsColumn(subject: String, date: String, time: String, location: Str
         Text("Location: ${location}", style = MaterialTheme.typography.displayMedium)
     }
 }
-@Composable
-@Preview
-fun ExamsPagePreview() {
-    ExamsPage()
-}
+//@Composable
+//@Preview
+//fun ExamsPagePreview() {
+//    ExamsPage()
+//}

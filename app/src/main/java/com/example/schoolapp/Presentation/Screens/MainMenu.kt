@@ -33,6 +33,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,7 +45,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.MainMenuItem
 import com.example.schoolapp.Data.MockData.Mock
@@ -64,17 +69,22 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainMenu(navController: NavController) {
 
+
+
     //=======================================================
     //variables: local & states                             =
     //=======================================================
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+
+
     val menuItems = listOf(
         MainMenuItem(
             title = "Calender",
             icon = painterResource(id = R.drawable.calendar),
             onClick = {
                 navController.navigate(Screen.CalenderPage.route)
+                scope.launch { drawerState.close() }
             }
         ),
         MainMenuItem(
@@ -82,6 +92,7 @@ fun MainMenu(navController: NavController) {
             icon = painterResource(id = R.drawable.training),
             onClick = {
                 navController.navigate(Screen.ClassesPage.route)
+                scope.launch { drawerState.close() }
             }
         ),
         MainMenuItem(
@@ -89,6 +100,7 @@ fun MainMenu(navController: NavController) {
             icon = painterResource(id = R.drawable.exam__1_),
             onClick = {
                 navController.navigate(Screen.ExamsPage.route)
+                scope.launch { drawerState.close() }
             }
         ),
         MainMenuItem(
@@ -96,6 +108,7 @@ fun MainMenu(navController: NavController) {
             icon = painterResource(id = R.drawable.grade),
             onClick = {
                 navController.navigate(Screen.MarksPage.route)
+                scope.launch { drawerState.close() }
             }
         ),
         MainMenuItem(
@@ -103,6 +116,8 @@ fun MainMenu(navController: NavController) {
             icon = painterResource(id = R.drawable.baseline_class_24),
             onClick = {
                 navController.navigate(Screen.HomeworkPage.route)
+                scope.launch { drawerState.close() }
+
             }
         ),
         MainMenuItem(
@@ -110,6 +125,7 @@ fun MainMenu(navController: NavController) {
             icon = painterResource(id = R.drawable.baseline_settings_24),
             onClick = {
                 navController.navigate(Screen.SettingsPage.route)
+                scope.launch { drawerState.close() }
             }
         ),
         MainMenuItem(
@@ -156,6 +172,7 @@ fun MainMenu(navController: NavController) {
                         Button(
                             onClick = {
                                 navController.navigate(Screen.ProfilePage.route)
+                                scope.launch { drawerState.close() }
                             }, modifier = Modifier
                                 .padding(5.dp)
                                 .width(800.dp)
