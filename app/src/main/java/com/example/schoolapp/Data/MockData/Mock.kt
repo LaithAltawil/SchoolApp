@@ -4,6 +4,7 @@ import com.example.schoolapp.Data.Class
 import com.example.schoolapp.Data.Event
 import com.example.schoolapp.Data.Exam
 import com.example.schoolapp.Data.Homework
+import com.example.schoolapp.Data.Marks
 
 //=======================================================
 //Object class for mock data                            =
@@ -80,6 +81,26 @@ object Mock {
         Class("History", "Mr.Brown", "2:30 PM")
         // Add more classes as needed
     )
+    val classList1 = listOf(
+        Class("Science", "Ms.Johnson", "10:30 AM"),
+        Class("English", "Mrs.Williams", "1:00 PM"),
+        Class("History", "Mr.Brown", "2:30 PM"),
+        Class("Math", "Mr.Smith", "9:00 AM"),
+        Class("Science", "Ms.Johnson", "10:30 AM")
+    )
+    val classList2 = listOf(
+        Class("Math", "Mr.Smith", "9:00 AM"),
+        Class("Science", "Ms.Johnson", "10:30 AM"),
+        Class("English", "Mrs.Williams", "1:00 PM"),
+        Class("History", "Mr.Brown", "2:30 PM")
+
+    )
+    val ClassesList = listOf(
+        classList,
+        classList1,
+        classList2
+
+    )
     val mockExamList = listOf(
         Exam("Mathematics", "2023-12-15", "10:00 AM", "Room A101"),
         Exam("Physics", "2023-12-16", "02:00 PM", "Room B202"),
@@ -96,10 +117,34 @@ object Mock {
     )
     val ParentsDetails: MutableList<MutableList<String>> = mutableListOf(
         mutableListOf("Name", "Ahmad"),
+        mutableListOf("Phone Number", "58280430"),
+        mutableListOf("E-mail", "laithaltawil@gmail.com"),
+        mutableListOf("Age", "50"),
+        mutableListOf("relation", "Father")
+    )
+    val StudentDetails: MutableList<MutableList<String>> = mutableListOf(
+        mutableListOf("Name", "Ahmad"),
         mutableListOf("Phone Number", "58380430"),
         mutableListOf("E-mail", "laithaltawil@gmail.com"),
         mutableListOf("Age", "50"),
         mutableListOf("relation", "Father")
+    )
+    val OtherDetails: MutableList<MutableList<String>> = mutableListOf(
+        mutableListOf("Name", "Ahmad"),
+        mutableListOf("Phone Number", "58310430"),
+        mutableListOf("E-mail", "laithaltawil@gmail.com"),
+        mutableListOf("Age", "50"),
+        mutableListOf("relation", "Father")
+    )
+    val AllDetails: MutableList<MutableList<MutableList<String>>> = mutableListOf(
+        StudentDetails,
+        ParentsDetails,
+        OtherDetails
+    )
+    val Titles = listOf(
+        "Personal Information",
+        "Parents Details",
+        "Other Details"
     )
     val mockEvents = listOf(
         Event("Opening Ceremony", 1, "15/12/2023", "Friday", "The grand opening of the event."),
@@ -107,5 +152,24 @@ object Mock {
         Event("Conference", 3, "17/12/2023", "Sunday", "A conference featuring industry experts."),
         Event("Networking Session", 4, "18/12/2023", "Monday", "An opportunity to connect with other attendees."),
         Event("Closing Ceremony", 5, "19/12/2023", "Tuesday", "The closing ceremony of the event.")
+    )
+    val Mark= listOf(
+        Marks(
+            22,22,50
+        ),
+        Marks(
+            22,22,50
+        ),
+        Marks(
+            22,22,50),
+        Marks(
+            22,22,59)
+        ,Marks(
+                22,22,59)
+        ,Marks(
+            22,22,59)
+        ,Marks(
+            22,22,59)
+
     )
 }

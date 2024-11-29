@@ -20,6 +20,13 @@ data class Subjects(
     val exam: Exam? = null
 
 )
+data class MarksSubjects(
+    val name: String,
+    val imagePath: Painter? = null,
+    val onClick: () -> Unit,
+    val Marks: Marks? = null
+
+)
 /*LT: to add dates and events from the database to the Calender page
 MAS: I think we won't need it but I'll leave it until its time 👍*/
 //*todo @MAS #meduim || recreate data class to match the database
@@ -53,4 +60,9 @@ data class Event(val title: String,
                  val date: String,
                  val day: String,
                  val event: String
+)
+data class Marks(
+    val firstMark:Int,
+    val secondMark:Int,
+    val finalMark:Int
 )

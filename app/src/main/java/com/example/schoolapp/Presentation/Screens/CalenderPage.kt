@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.CalenderDays
 
@@ -60,7 +61,7 @@ column design:-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CalenderPage(mainViewModel: MainViewModel = MainViewModel()) {
+fun CalenderPage(mainViewModel: MainViewModel = MainViewModel(),navController: NavController) {
     //=======================================================
     //variables:local & states                              =
     //=======================================================
@@ -108,7 +109,7 @@ fun CalenderPage(mainViewModel: MainViewModel = MainViewModel()) {
                         ),
                         navigationIcon = {
                             IconButton(onClick = {
-                                /*TODO*/
+                                navController.popBackStack()
                             }) {
                                 Icon(
                                     modifier = Modifier.size(50.dp),
@@ -137,8 +138,9 @@ fun CalenderPage(mainViewModel: MainViewModel = MainViewModel()) {
         }
     }
 }
-@Composable
-@Preview
-fun CalenderPagePreview() {
-    CalenderPage()
-}
+
+//@Composable
+//@Preview
+//fun CalenderPagePreview() {
+//    CalenderPage()
+//}

@@ -109,7 +109,7 @@ fun HomeworkPage(homeWorkPageState: MainViewModel= MainViewModel(),navController
                     LazyColumn {
                         //controls the lazy size
                         items(HomeworkMock.size) { index ->
-                            //main homeWork card UI & Logic
+                            //done homeWork card UI & Logic
                             //todo @LT #medium|| please add more details like this:-
                             /*
                             * +---------------------------+

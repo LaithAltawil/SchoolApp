@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -29,7 +30,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.compose.AppTheme
-import com.example.schoolapp.Data.MockData.Mock.ParentsDetails
+import com.example.schoolapp.Data.MockData.Mock.AllDetails
+import com.example.schoolapp.Data.MockData.Mock.Titles
 import com.example.schoolapp.Presentation.Screens.ScreensPieces.ProfilePageBox
 import com.example.schoolapp.R
 
@@ -118,7 +120,8 @@ fun Profile_page(navController: NavController) {
                             verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center
                         ) {
                             LazyColumn(modifier = Modifier) {
-                                items(count = 3) {
+                                itemsIndexed(AllDetails) { index, item->
+
                                     Box(
                                         modifier = Modifier
                                             .padding(bottom= 10.dp)
@@ -127,7 +130,7 @@ fun Profile_page(navController: NavController) {
                                             .background(MaterialTheme.colorScheme.primary),
                                         contentAlignment = Alignment.Center
                                     ) {
-                                        ProfilePageBox("Personal INformation",ParentsDetails)
+                                        ProfilePageBox(Titles[index],AllDetails,index)
 
 
 

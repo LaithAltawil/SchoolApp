@@ -46,6 +46,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.Exam
+import com.example.schoolapp.Data.Marks
+import com.example.schoolapp.Data.MarksSubjects
 import com.example.schoolapp.Data.Subjects
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
@@ -68,38 +70,38 @@ fun MarksPage(mainviewmodel: MainViewModel = MainViewModel(),navController: NavC
     //=======================================================
     val state = mainviewmodel.Marksstate.collectAsStateWithLifecycle()
     val mainMenuItem = listOf(
-        Subjects("Maths", painterResource(id = R.drawable.math),
-            exam = Exam("Mathematics", "2023-12-15", "10:00 AM", "Room A101"),
+        MarksSubjects("Maths", painterResource(id = R.drawable.math),
+            Marks = Marks(25,22,50),
             onClick = {}
         ),
-        Subjects("Science", painterResource(id = R.drawable.science),
-            exam = Exam("Mathematics", "2023-12-15", "10:00 AM", "Room A101"),
+        MarksSubjects("Science", painterResource(id = R.drawable.science),
+            Marks = Marks(22,32,50),
             onClick = {}),
-        Subjects("English", painterResource(id = R.drawable.english),
-            exam = Exam("Mathematics", "2023-12-15", "10:00 AM", "Room A101"),
+        MarksSubjects("English", painterResource(id = R.drawable.english),
+            Marks = Marks(32,22,60),
             onClick = {}),
-        Subjects(
+        MarksSubjects(
             "History",
             painterResource(id = R.drawable.history),
-            exam = Exam("History", "2023-12-20", "11:00 AM", "Room F606"),
+            Marks = Marks(22,29,50),
             onClick = {}
         ),
-        Subjects(
+        MarksSubjects(
             "Arabic",
             painterResource(id = R.drawable.arabic),
-            exam = Exam("Arabic", "2023-12-21", "03:00 PM", "Room G707"),
+            Marks = Marks(22,26,50),
             onClick = {}
         ),
-        Subjects(
+        MarksSubjects(
             "Computer Science",
             painterResource(id = R.drawable.science),
-            exam = Exam("Computer Science", "2023-12-22", "09:00 AM", "Lab H808"),
+            Marks = Marks(29,26,50),
             onClick = {}
         ),
-        Subjects(
+        MarksSubjects(
             "Geography",
             painterResource(id = R.drawable.geography),
-            exam = Exam("Geography", "2023-12-23", "02:00 PM", "Hall I909"),
+            Marks = Marks(28,22,50),
             onClick = {}
         )
     )
@@ -222,26 +224,27 @@ fun MarksPage(mainviewmodel: MainViewModel = MainViewModel(),navController: NavC
                                             .fillMaxWidth()
                                             .padding(16.dp)
                                     ) {
-                                        Text(text = mainMenuItem[index].exam!!.subject,
-                                            style = MaterialTheme.typography.titleLarge)
+                                        Text(text = mainMenuItem[index].name,
+                                            fontSize = 40.sp)
                                         Spacer(modifier = Modifier.height(8.dp))
                                         Divider(modifier = Modifier.fillMaxWidth().size(1.dp))
                                         Spacer(modifier = Modifier.height(8.dp))
                                         //todo @LT #qustion[not answered] || what to do here?
                                         Row(modifier = Modifier.fillMaxWidth()) {
-                                            Text(text = "Date:")
+                                            Text(text = "First Exam:", fontSize = 30.sp)
                                             Spacer(modifier = Modifier.width(8.dp))
-                                            Text(text = mainMenuItem[index].exam!!.date)
+                                            Text(text =mainMenuItem[index].Marks!!.firstMark.toString(), fontSize = 30.sp )
                                         }
                                         Row(modifier = Modifier.fillMaxWidth()) {
-                                            Text(text = "time:")
+                                            Text(text = "Second Exam:", fontSize = 30.sp)
                                             Spacer(modifier = Modifier.width(8.dp))
-                                            Text(text = mainMenuItem[index].exam!!.time)
+                                            Text(text = mainMenuItem[index].Marks!!.secondMark.toString(), fontSize = 30.sp)
                                         }
                                         Row(modifier = Modifier.fillMaxWidth()) {
-                                            Text(text = "Location:")
+                                            Text(text = "Final Exam:", fontSize = 30.sp)
                                             Spacer(modifier = Modifier.width(8.dp))
-                                            Text(text = mainMenuItem[index].exam!!.location)
+                                            Text(text = mainMenuItem[index].Marks!!.finalMark.toString(), fontSize = 30.sp
+                                                )
                                         }
                                     }
                                 }

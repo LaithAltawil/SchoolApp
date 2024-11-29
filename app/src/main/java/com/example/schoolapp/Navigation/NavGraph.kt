@@ -101,7 +101,8 @@ fun Navigation() {
                     //solved @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     //will parse the navigation to be able to return to the main menu after finishing because parsing it rn will prevent us from
                     //using preview
-                    mainViewModel = viewModel
+                    mainViewModel = viewModel,
+                    navController = navController
                 )
             }
             composable(Screen.CounselorPage.route) {

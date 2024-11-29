@@ -1,6 +1,6 @@
 package com.example.schoolapp.Presentation.Screens
 
-import androidx.compose.foundation.background
+ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +12,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+ import androidx.compose.foundation.lazy.itemsIndexed
+ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -40,7 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.compose.AppTheme
-import com.example.schoolapp.Data.MockData.Mock.classList
+ import com.example.schoolapp.Data.MockData.Mock.ClassesList
+ import com.example.schoolapp.Data.MockData.Mock.classList
 import com.example.schoolapp.Data.MockData.Mock.daysOfWeek
 import com.example.schoolapp.Presentation.VM.MainViewModel
 
@@ -180,26 +182,26 @@ fun StudentClass(mainViewModel: MainViewModel = MainViewModel(),
                             ) {
                                 LazyColumn(state = lazyListState, modifier = Modifier
                                     .fillMaxWidth()) {
-                                    items(classList) { item ->
 
+                                        items(ClassesList) { List -> // Iterate through outer list
                                             Column(
                                                 modifier = Modifier
 
                                                     .fillMaxSize()
                                                     .padding(16.dp)
-                                                    ,
+                                                ,
                                                 horizontalAlignment = Alignment.CenterHorizontally
                                             ) {
 
                                                 Text(
-                                                    text = item.subjectName,
+                                                    text = List[selectedItemIndex].subjectName,
                                                     fontSize = 26.sp,
                                                     modifier = Modifier.padding(bottom = 8.dp),
                                                     color = MaterialTheme.colorScheme.onPrimary
                                                 )
                                                 Spacer(modifier = Modifier.height(8.dp))
                                                 Text(
-                                                    text = item.time,
+                                                    text = List[selectedItemIndex].teacher,
                                                     fontSize = 22.sp,
                                                     modifier = Modifier.padding(bottom = 8.dp)
                                                     ,
@@ -208,7 +210,7 @@ fun StudentClass(mainViewModel: MainViewModel = MainViewModel(),
                                                 )
                                                 Spacer(modifier = Modifier.height(8.dp))
                                                 Text(
-                                                    text = item.teacher,
+                                                    text = List[selectedItemIndex].time,
                                                     fontSize = 18.sp,
                                                     modifier = Modifier.padding(bottom = 8.dp),
                                                     color = MaterialTheme.colorScheme.onPrimary
@@ -220,8 +222,21 @@ fun StudentClass(mainViewModel: MainViewModel = MainViewModel(),
 
 
 
+                                        }
 
-                                    }
+
+
+
+
+
+
+
+
+
+
+
+
+
                                 }
 
                             }

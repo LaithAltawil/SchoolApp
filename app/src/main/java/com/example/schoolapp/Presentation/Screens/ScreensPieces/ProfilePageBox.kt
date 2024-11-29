@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 //todo @LT #simple~medium ||Under Going changes to make every box have different data
@@ -26,7 +25,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ProfilePageBox(
     Title: String,
-    listOfLists: List<List<String>>
+    listOfLists: MutableList<MutableList<MutableList<String>>>,
+    index: Int
 ) {
     Box(
         modifier = Modifier
@@ -56,12 +56,12 @@ fun ProfilePageBox(
                 modifier = Modifier
             ) {
                 Text(
-                    text = " ",
+                    text = listOfLists[index][0][0]+" :",
                     style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
                 Text(
-                    text = " ",
+                    text = listOfLists[index][0][1],
                     style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
@@ -70,25 +70,12 @@ fun ProfilePageBox(
             Spacer(modifier = Modifier.height(10.dp))
             Row {
                 Text(
-                    text = "Age : ",
+                    text = listOfLists[index][1][0]+" :",
                     style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
                 Text(
-                    text = "20",
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = Color.White
-                )
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            Row {
-                Text(
-                    text = "Gender : ",
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = Color.White
-                )
-                Text(
-                    text = "Male",
+                    text = listOfLists[index][1][1],
                     style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
@@ -96,21 +83,29 @@ fun ProfilePageBox(
             Spacer(modifier = Modifier.height(10.dp))
             Row {
                 Text(
-                    text = "Email : ",
+                    text =  listOfLists[index][2][0]+" :",
                     style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
                 Text(
-                    text = "",
+                    text = listOfLists[index][2][1],
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Color.White
+                )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Row {
+                Text(
+                    text =   listOfLists[index][3][0]+" : ",
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = Color.White
+                )
+                Text(
+                    text =  listOfLists[index][3][1],
                     style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
             }
         }
     }
-}
-@Composable
-@Preview
-fun ProfilePageBoxPreview(){
-    ProfilePageBox(Title = "Title", listOfLists = listOf(listOf("1","2")))
 }
