@@ -87,6 +87,9 @@ dependencies {
     debugImplementation(libs.ui.tooling)       // UI Toolkit
     debugImplementation(libs.ui.test.manifest) // Test Manifest
     implementation(libs.androidx.animation)
-    implementation (libs.androidx.runtime)
+    implementation(libs.androidx.runtime)
 
+    //retrofit
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
 }

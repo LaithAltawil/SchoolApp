@@ -362,6 +362,4 @@ fun MainMenu(navController: NavController) {
 @Preview
 fun MainMenuPreview() {
     //cant add preview due to the page needing context
-
-
 }

@@ -21,6 +21,7 @@ uiTextGoogleFonts = "1.7.1"
 uiTooling = "1.7.2"
 uiToolingPreview = "1.7.2"
 protoliteWellKnownTypes = "18.0.0"
+retrofit = "2.9.0"
 
 [libraries]
 androidx-animation = { module = "androidx.compose.animation:animation" }
@@ -53,7 +54,9 @@ ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "uiTestManifest" }
 ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "uiTooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "uiToolingPreview" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 protolite-well-known-types = { group = "com.google.firebase", name = "protolite-well-known-types", version.ref = "protoliteWellKnownTypes" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
