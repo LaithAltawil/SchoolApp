@@ -39,10 +39,10 @@ data class Student(
     var studentNationalId: Int,
 
     @ColumnInfo(name = "student_date_of_registration")
-    var studentDateOfRegistration: Date,
+    var studentDateOfRegistration: String,
 
     @ColumnInfo(name = "student_date_of_birth")
-    var studentDateOfBirth: Date,
+    var studentDateOfBirth: String,
 
     @ColumnInfo(name = "student_place_of_birth")
     var studentPlaceOfBirth: String,
