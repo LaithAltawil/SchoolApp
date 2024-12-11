@@ -24,6 +24,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -41,7 +42,7 @@ import com.example.schoolapp.R
 //Sign in page: Logic & UI                              =
 //=======================================================
 @Composable
-fun SignIn(viewModel: AppViewModel = AppViewModel(), onClick: () -> Unit = {}) {
+fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
     //=======================================================
     //variables: local & states                             =
     //=======================================================
@@ -150,5 +151,5 @@ fun SignIn(viewModel: AppViewModel = AppViewModel(), onClick: () -> Unit = {}) {
 @Composable
 @Preview
 fun SignInPage() {
-    SignIn()
+    //SignIn()
 }

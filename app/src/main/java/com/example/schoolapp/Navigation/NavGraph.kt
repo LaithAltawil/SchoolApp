@@ -1,9 +1,11 @@
 package com.example.schoolapp.Navigation
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
@@ -26,6 +28,7 @@ import com.example.schoolapp.Presentation.Screens.StartPage
 import com.example.schoolapp.Presentation.Screens.StudentClass
 import com.example.schoolapp.Presentation.VM.AppViewModel
 import com.example.schoolapp.Presentation.VM.MainViewModel
+import com.example.schoolapp.Presentation.VM.VMF.AppViewModelFactory
 
 //=======================================================
 //navigation logic                                      =
@@ -65,7 +68,8 @@ fun Navigation() {
 
             //sign in page navigation & Home map navigation
             composable(Screen.SignInPage.route) { entry ->
-                val viewModel = entry.AppViewModel<AppViewModel>(navController)
+                val context = LocalContext.current
+                val viewModel = entry.AppViewModel<AppViewModel>(navController, context)
                 SignIn(viewModel) {
                     //solved @LT #qustion|| here are you parsing the navigation map as function?
                     //we will use navcontroller to move the user to the Home route containing the rest of the app
@@ -174,16 +178,18 @@ fun Navigation() {
 @Composable
 inline fun <reified T : ViewModel> NavBackStackEntry.AppViewModel(
     navController: NavHostController,
+    context: Context
 ): T {
     // Get the route of the parent navigation graph
     val navGraphRoute = destination.parent?.route ?: return viewModel()
-
     // Get the NavBackStackEntry for the parent navigation graph
     val parentEntry = remember(this) {
         navController.getBackStackEntry(navGraphRoute)
     }
-    // Return the ViewModel scoped to the parent entry
-    return viewModel(parentEntry)
+    //creating factory to bind it with the viewModel
+    val factory = AppViewModelFactory(context) // Use your custom factory
+    //return the viewModel scoped to the parent entry
+    return viewModel(parentEntry, factory = factory)
 }
 
 //=======================================================

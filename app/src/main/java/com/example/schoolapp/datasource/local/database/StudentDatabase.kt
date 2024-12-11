@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.schoolapp.datasource.local.dao.StudentDao
 import com.example.schoolapp.datasource.local.entity.Student
 
-@Database(entities = [Student::class], version = 0, exportSchema = false)
+@Database(entities = [Student::class], version = 1, exportSchema = false)
 abstract class StudentDatabase : RoomDatabase() {
 
     abstract val studentDao: StudentDao
