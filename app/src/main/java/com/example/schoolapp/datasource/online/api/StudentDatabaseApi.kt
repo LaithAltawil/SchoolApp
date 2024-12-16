@@ -24,8 +24,8 @@ interface StudentDatabaseApi {
     //student sign-in API
     @GET(studentApi)
     suspend fun studentSignIn(
-        @Query("endApiCall") endApiCall: String = "student_sigjn_in",
-        @Query("studentUsername") studentUsername: String
+        @Query("studentUsername") studentUsername: String,
+        @Query("endApiCall") endApiCall: String = "student_sign_in",
     ): Response<StudentResponse>
 
     //notification problems API

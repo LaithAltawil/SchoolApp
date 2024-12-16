@@ -60,7 +60,7 @@ import com.example.schoolapp.R
 //solved @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MarksPage(mainviewmodel: MainViewModel = MainViewModel(),navController: NavController) {
+fun MarksPage(mainviewmodel: MainViewModel ,navController: NavController) {
 
     //todo @MAS #simple || please add the usage after answering the referred todo task
 

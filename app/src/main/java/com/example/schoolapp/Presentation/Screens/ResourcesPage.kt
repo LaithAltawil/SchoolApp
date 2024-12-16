@@ -65,7 +65,7 @@ very similar to the exams page*/
 @SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ResourcesPage(mainviewmodel: MainViewModel = MainViewModel(),navController: NavController?=null) {
+fun ResourcesPage(mainviewmodel: MainViewModel ,navController: NavController?=null) {
 
     //=======================================================
     //variables: local & states                             =
@@ -262,9 +262,10 @@ fun ResourcesPage(mainviewmodel: MainViewModel = MainViewModel(),navController: 
     }
 }
 
+/*
 @Composable
 @Preview
 fun ResourcesPagePreview() {
     ResourcesPage()
 
-}
+}*/

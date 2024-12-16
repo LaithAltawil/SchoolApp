@@ -29,6 +29,7 @@ import com.example.schoolapp.Presentation.Screens.StudentClass
 import com.example.schoolapp.Presentation.VM.AppViewModel
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.Presentation.VM.VMF.AppViewModelFactory
+import com.example.schoolapp.Presentation.VM.VMF.MainViewModelFactory
 
 //=======================================================
 //navigation logic                                      =
@@ -87,7 +88,9 @@ fun Navigation() {
             composable(Screen.MainMenu.route) {
                 //solved @LT #qustion|| here are you parsing the navigation as function?
                 //passing the navcontroller to help me navigate from this menu to the rest of the app
-                MainMenu(navController)
+                val context = LocalContext.current
+                val viewModel = it.MainViewModel<MainViewModel>(navController, context)
+                MainMenu(viewModel,navController)
             }
 
             //profile page navigation
@@ -198,6 +201,7 @@ inline fun <reified T : ViewModel> NavBackStackEntry.AppViewModel(
 @Composable
 inline fun <reified T : ViewModel> NavBackStackEntry.MainViewModel(
     navController: NavHostController,
+    context: Context
 ): T {
     // Get the route of the parent navigation graph
     val navGraphRoute = destination.parent?.route ?: return viewModel()
@@ -206,6 +210,10 @@ inline fun <reified T : ViewModel> NavBackStackEntry.MainViewModel(
     val parentEntry = remember(this) {
         navController.getBackStackEntry(navGraphRoute)
     }
+
+    //creating factory to bind it with the viewModel
+    val factory = MainViewModelFactory(context) // Use your custom factory
+
     // Return the ViewModel scoped to the parent entry
-    return viewModel(parentEntry)
+    return viewModel(parentEntry, factory = factory)
 }

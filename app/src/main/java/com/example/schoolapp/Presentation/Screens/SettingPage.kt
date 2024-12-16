@@ -47,7 +47,7 @@ import com.example.schoolapp.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingPage(
-    mainviewmodel: MainViewModel = MainViewModel(),
+    mainviewmodel: MainViewModel ,
     navController: NavController
 ) {
     val state = mainviewmodel.Settingstate.collectAsStateWithLifecycle()

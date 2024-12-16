@@ -61,7 +61,7 @@ column design:-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CalenderPage(mainViewModel: MainViewModel = MainViewModel(),navController: NavController) {
+fun CalenderPage(mainViewModel: MainViewModel ,navController: NavController) {
     //=======================================================
     //variables:local & states                              =
     //=======================================================

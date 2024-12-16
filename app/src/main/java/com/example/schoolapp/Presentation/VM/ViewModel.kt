@@ -2,7 +2,6 @@ package com.example.schoolapp.Presentation.VM
 
 import android.app.AlertDialog
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.schoolapp.Presentation.Util.SignInCallBack
@@ -11,7 +10,6 @@ import com.example.schoolapp.datasource.local.database.StudentDatabase
 import com.example.schoolapp.datasource.local.entity.Student
 import com.example.schoolapp.datasource.online.response.StudentResponse
 import com.example.schoolapp.datasource.repository.StudentRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -100,14 +98,6 @@ class AppViewModel(private val context: Context) : ViewModel() {
         }
     }
 
-    /*init {
-        viewModelScope.launch {
-            delay(5000)
-        _studentResponse.value =
-            studentRepository.getStudentFromApi(signInState.value.userName).body()
-            Log.e("student", studentResponse.value!!.message)
-    }
-    }*/
     //=======================================================
     //functions: private & public                           =
     //=======================================================
@@ -150,33 +140,4 @@ class AppViewModel(private val context: Context) : ViewModel() {
             return false
         }
     }
-
-    /*fun onSignInButtonClick(view: View) {
-       // Show loading dialog
-       val loadingDialog = ProgressDialog(context)
-       loadingDialog.setMessage("Signing in...")
-       loadingDialog.setCancelable(false)
-       loadingDialog.show()
-
-       signInFromApi(object : SignInCallBack {
-           override fun onSuccess(message: String) {
-               // Dismiss loading dialog
-               loadingDialog.dismiss()
-               // Handle success
-               if (checkStudent(context)) {
-                   insertApiStudentToLocalDatabase()
-               }
-           }
-
-           override fun onFailure(error: String) {
-               // Dismiss loading dialog
-               loadingDialog.dismiss()
-               // Handle failure
-               notifyMessage(
-                   context,
-                   error
-               )
-           }
-       })
-   }*/
 }

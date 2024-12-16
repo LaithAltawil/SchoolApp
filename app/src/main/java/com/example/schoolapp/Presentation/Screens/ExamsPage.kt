@@ -53,7 +53,7 @@ import com.example.schoolapp.R
 //=======================================================
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExamsPage(mainViewModel: MainViewModel = MainViewModel(), navController: NavController) {
+fun ExamsPage(mainViewModel: MainViewModel , navController: NavController) {
     //=======================================================
     //variables: local & states                             =
     //=======================================================

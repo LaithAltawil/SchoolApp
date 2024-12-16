@@ -55,6 +55,7 @@ import com.example.schoolapp.Data.MockData.Mock
 import com.example.schoolapp.Data.MockData.Mock.HomeworkMock
 import com.example.schoolapp.Navigation.Screen
 import com.example.schoolapp.Presentation.Util.ExpandableCard
+import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 import kotlinx.coroutines.launch
 
@@ -67,10 +68,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainMenu(navController: NavController) {
-
-
-
+fun MainMenu(viewModel: MainViewModel, navController: NavController) {
     //=======================================================
     //variables: local & states                             =
     //=======================================================

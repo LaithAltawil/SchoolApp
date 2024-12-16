@@ -67,9 +67,8 @@ class StudentRepository(
     //student sign-in API
     suspend fun getStudentFromApi(studentUsername: String): Response<StudentResponse> {
         val studentResponse = withContext(Dispatchers.IO) {
-            return@withContext studentApi.studentSignIn("student_sign_in",studentUsername);
+            return@withContext studentApi.studentSignIn(studentUsername)
         }
-        Log.d("studentResponse", studentResponse.toString())
         return studentResponse
     }
 }

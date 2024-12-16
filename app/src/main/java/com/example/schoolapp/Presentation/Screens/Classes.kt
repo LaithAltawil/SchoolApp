@@ -51,7 +51,7 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 //=======================================================
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StudentClass(mainViewModel: MainViewModel = MainViewModel(),
+fun StudentClass(mainViewModel: MainViewModel ,
                  navController: NavController) {
     //=======================================================
     //variables: local & stats                              =

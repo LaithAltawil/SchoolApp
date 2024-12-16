@@ -36,7 +36,7 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 //=======================================================
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeworkPage(homeWorkPageState: MainViewModel= MainViewModel(),navController: NavController) {
+fun HomeworkPage(homeWorkPageState: MainViewModel,navController: NavController) {
     //=======================================================
     //variables: local & states                             =
     //=======================================================
