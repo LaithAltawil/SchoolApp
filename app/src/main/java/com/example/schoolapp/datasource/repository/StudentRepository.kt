@@ -1,5 +1,6 @@
 package com.example.schoolapp.datasource.repository
 
+import android.util.Log
 import com.example.schoolapp.datasource.local.database.StudentDatabase
 import com.example.schoolapp.datasource.local.entity.Student
 import com.example.schoolapp.datasource.online.api.StudentDatabaseApi
@@ -66,8 +67,9 @@ class StudentRepository(
     //student sign-in API
     suspend fun getStudentFromApi(studentUsername: String): Response<StudentResponse> {
         val studentResponse = withContext(Dispatchers.IO) {
-            return@withContext studentApi.studentSignIn(studentUsername);
+            return@withContext studentApi.studentSignIn("student_sign_in",studentUsername);
         }
+        Log.d("studentResponse", studentResponse.toString())
         return studentResponse
     }
 }

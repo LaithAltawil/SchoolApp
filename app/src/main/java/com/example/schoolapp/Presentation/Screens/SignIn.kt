@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +22,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,7 +39,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.example.compose.AppTheme
+import com.example.schoolapp.Presentation.Util.SignInCallBack
 import com.example.schoolapp.Presentation.VM.AppViewModel
 import com.example.schoolapp.R
 
@@ -47,7 +54,8 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
     //variables: local & states                             =
     //=======================================================
     val state = viewModel.signInState.collectAsState()
-
+    var isLoading by remember { mutableStateOf(false) }
+    val context = LocalContext.current
     //=======================================================
     //Logic & UI                                            =
     //=======================================================
@@ -92,7 +100,7 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
                         maxLines = 1,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                         //save value to the ViewModel
-                        value = state.value.UserName,
+                        value = state.value.userName,
                         modifier = Modifier.clip(RoundedCornerShape(20.dp)),
                         onValueChange = {
                             viewModel.onUserNameChange(it)
@@ -131,9 +139,32 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             contentColor = MaterialTheme.colorScheme.primary
-                            //solved @LT #simple-medium|| fix this...
                         ), onClick = {
-                            onClick()
+                            // Validation logic
+                            if (state.value.userName.isEmpty() || state.value.password.isEmpty()) {
+                                viewModel.notifyMessage(context, "Please enter both username and password")
+                                return@Button
+                            }
+
+                            isLoading = true
+
+                            viewModel.signInFromApi(object : SignInCallBack {
+                                override fun onSuccess(message: String) {
+                                    isLoading = false
+                                    // Handle success
+                                    if (viewModel.checkStudent(context)) {
+                                        viewModel.insertApiStudentToLocalDatabase()
+                                        onClick()
+                                    }
+                                }
+
+                                override fun onFailure(error: String) {
+                                    isLoading = false
+                                    // Handle failure
+                                    viewModel.notifyMessage(context, error)
+                                }
+                            })
+
                         }) {
                         Text(
                             text = "Sign In",
@@ -152,4 +183,11 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
 @Preview
 fun SignInPage() {
     //SignIn()
+}
+
+@Composable
+fun LoadingDialog() {
+    Dialog(onDismissRequest = { /* Handle dismiss if needed */ }) {
+        CircularProgressIndicator()
+    }
 }
