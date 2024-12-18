@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.compose.AppTheme
+import com.example.schoolapp.Presentation.Screens.ScreensPieces.Alert_Dialog
 import com.example.schoolapp.Presentation.Util.callbacks.SignInCallBack
 import com.example.schoolapp.Presentation.VM.AppViewModel
 import com.example.schoolapp.R
@@ -160,6 +161,7 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
                                 override fun onFailure(error: String) {
                                     // Handle failure
                                     viewModel.notifyMessage(context, error)
+
                                 }
                             })
                         }

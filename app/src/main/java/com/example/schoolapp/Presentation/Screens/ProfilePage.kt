@@ -2,6 +2,7 @@ package com.example.schoolapp.Presentation.Screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -99,17 +100,17 @@ fun Profile_page(navController: NavController) {
                 Column(
                     modifier = Modifier
                         .padding(it)
-                        .fillMaxSize()
+                        .fillMaxWidth()
                 ) {
-                    Column(modifier = Modifier.fillMaxSize()) {
+                    Column(modifier = Modifier.fillMaxWidth()) {
                         Row(
                             modifier = Modifier,
-                            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween
+                            horizontalArrangement =Arrangement.Center
                         ) {
                             Text(
-                                text = "Laith Altawil",
+                                text = "Laith Ahmad Altawil",
                                 style = MaterialTheme.typography.headlineLarge,
-                                modifier = Modifier.offset(x = 125.dp, y = -90.dp)
+                                modifier = Modifier.offset(x = 70.dp, y = -80.dp)
                             )
                         }
                         Column(

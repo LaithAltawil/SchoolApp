@@ -1,7 +1,9 @@
 package com.example.schoolapp.Presentation.Screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,10 +27,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -40,6 +44,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -232,28 +237,18 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
             },
             content = {
                 Scaffold(modifier = Modifier.fillMaxSize(),
-                    containerColor = MaterialTheme.colorScheme.primaryContainer, topBar = {
-                        LargeTopAppBar(
-                            modifier = Modifier.clip(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    topBar = {
+                        Box(modifier = Modifier.fillMaxWidth()
+                            .clip(
                                 RoundedCornerShape(
                                     bottomEnd = 16.dp,
                                     bottomStart = 16.dp
-                                )
-                            ),
-                            title = {
-                                Column(modifier = Modifier.fillMaxWidth()) {
-                                    Text(
-                                        text = "Welcome, ${studentState.value?.studentFirstName}",
-                                        style = TextStyle(fontSize = 48.sp),
-                                        modifier = Modifier.padding(start = 10.dp),
-                                    )
-                                }
-                            },
-                            colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = MaterialTheme.colorScheme.primary,
-                                titleContentColor = MaterialTheme.colorScheme.onPrimary
-                            ), navigationIcon = {
-                                IconButton(onClick = {
+                                )).height(170.dp).background(MaterialTheme.colorScheme.primary)){
+                            Row(modifier = Modifier.fillMaxSize(),
+                                horizontalArrangement = Arrangement.Center
+                                ) {
+                                IconButton(modifier =Modifier.padding( top = 50.dp,start = 5.dp) , onClick = {
                                     scope.launch {
                                         drawerState.open()
                                     }
@@ -265,8 +260,53 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                         tint = MaterialTheme.colorScheme.onPrimary
                                     )
                                 }
+                                Spacer(modifier = Modifier.width(15.dp))
+                                Text(
+                                    text = "Welcome, Laith Ahmad Altawil" +
+                                            //" ${studentState.value?.studentFirstName}" +
+                                            "",
+                                    style = TextStyle(fontSize = 36.sp),
+                                    modifier = Modifier.padding(top = 58.dp),
+                                    overflow = TextOverflow.Visible,
+                                    color = MaterialTheme.colorScheme.onPrimary
+
+                                )
+
+
                             }
-                        )
+
+
+
+
+
+
+                        }
+//                            modifier = Modifier.clip(
+//                                RoundedCornerShape(
+//                                    bottomEnd = 16.dp,
+//                                    bottomStart = 16.dp
+//                                )
+//                            ),
+//                            title = {
+//
+//                            },
+//                            colors = TopAppBarDefaults.topAppBarColors(
+//                                containerColor = MaterialTheme.colorScheme.primary,
+//                                titleContentColor = MaterialTheme.colorScheme.onPrimary
+//                            ), navigationIcon = {
+//                                Row(modifier = Modifier.fillMaxSize()) {
+//                                    Column(modifier = Modifier.fillMaxSize()) {
+
+//                                    }
+//
+//                                }
+//
+//
+//
+
+//                            }
+
+
                     }
                 ) {
                     Column(

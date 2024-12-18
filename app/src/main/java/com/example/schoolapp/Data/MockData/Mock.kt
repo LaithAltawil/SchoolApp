@@ -78,7 +78,8 @@ object Mock {
         Class("Math", "Mr.Smith", "9:00 AM"),
         Class("Science", "Ms.Johnson", "10:30 AM"),
         Class("English", "Mrs.Williams", "1:00 PM"),
-        Class("History", "Mr.Brown", "2:30 PM")
+        Class("History", "Mr.Brown", "2:30 PM"),
+                Class("Science", "Ms.Johnson", "10:30 AM")
         // Add more classes as needed
     )
     val classList1 = listOf(
@@ -92,7 +93,8 @@ object Mock {
         Class("Math", "Mr.Smith", "9:00 AM"),
         Class("Science", "Ms.Johnson", "10:30 AM"),
         Class("English", "Mrs.Williams", "1:00 PM"),
-        Class("History", "Mr.Brown", "2:30 PM")
+        Class("History", "Mr.Brown", "2:30 PM"),
+                Class("Science", "Ms.Johnson", "10:30 AM")
 
     )
     val ClassesList = listOf(
