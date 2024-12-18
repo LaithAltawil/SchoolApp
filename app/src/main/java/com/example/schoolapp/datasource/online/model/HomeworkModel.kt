@@ -1,13 +1,12 @@
 package com.example.schoolapp.datasource.online.model
 
-import androidx.core.text.util.LocalePreferences.FirstDayOfWeek.Days
 import com.google.gson.annotations.SerializedName
 import java.time.DayOfWeek
 import java.util.Date
 
 data class HomeworkModel(
-    @SerializedName("homeworkId") val homeworkId: String,
-    @SerializedName("homeworkTeacherId") val homeworkTeacherId: String,
+    @SerializedName("homeworkId") val homeworkId: Int,
+    @SerializedName("homeworkTeacherId") val homeworkTeacherId: Int,
     @SerializedName("homeworkTeacherClass") val homeworkTeacherClass: String,
     @SerializedName("homeworkTeacherSubject") val homeworkTeacherSubject: String,
     @SerializedName("homeworkDetails") val homeworkDetails: String,

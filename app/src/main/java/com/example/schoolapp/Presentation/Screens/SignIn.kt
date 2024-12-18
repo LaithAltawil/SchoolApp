@@ -41,9 +41,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.compose.AppTheme
-import com.example.schoolapp.Presentation.Util.SignInCallBack
+import com.example.schoolapp.Presentation.Util.callbacks.SignInCallBack
 import com.example.schoolapp.Presentation.VM.AppViewModel
 import com.example.schoolapp.R
+import kotlinx.coroutines.time.delay
 
 //=======================================================
 //Sign in page: Logic & UI                              =
@@ -54,7 +55,8 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
     //variables: local & states                             =
     //=======================================================
     val state = viewModel.signInState.collectAsState()
-    var isLoading by remember { mutableStateOf(false) }
+    var loading by remember { mutableStateOf(false) }
+    val isLoading by viewModel.isLoading.collectAsState()
     val context = LocalContext.current
     //=======================================================
     //Logic & UI                                            =
@@ -146,26 +148,22 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
                                 return@Button
                             }
 
-                            isLoading = true
-
                             viewModel.signInFromApi(object : SignInCallBack {
                                 override fun onSuccess(message: String) {
-                                    isLoading = false
                                     // Handle success
                                     if (viewModel.checkStudent(context)) {
                                         viewModel.insertApiStudentToLocalDatabase()
-                                        onClick()
+                                        viewModel.startStudentFlagCheck(onClick)
                                     }
                                 }
 
                                 override fun onFailure(error: String) {
-                                    isLoading = false
                                     // Handle failure
                                     viewModel.notifyMessage(context, error)
                                 }
                             })
-
-                        }) {
+                        }
+                    ) {
                         Text(
                             text = "Sign In",
                             style = MaterialTheme.typography.bodyLarge,
@@ -173,21 +171,18 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
                             fontWeight = FontWeight.Bold
                         )
                     }
+                    if (isLoading) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-@Preview
-fun SignInPage() {
-    //SignIn()
-}
-
-@Composable
-fun LoadingDialog() {
-    Dialog(onDismissRequest = { /* Handle dismiss if needed */ }) {
-        CircularProgressIndicator()
     }
 }

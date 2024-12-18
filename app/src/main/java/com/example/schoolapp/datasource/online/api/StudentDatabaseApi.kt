@@ -51,6 +51,14 @@ interface StudentDatabaseApi {
         @Query("endApiCall") endApiCall: String = "homeworks"
     ): Response<HomeworkListResponse>
 
+    //homework (by Id) API
+    @GET(studentApi)
+    suspend fun homeworkById(
+        @Query("studentClass") studentClass: String,
+        @Query("homeworkId") homeworkId: Int,
+        @Query("endApiCall") endApiCall: String = "homework_by_id"
+    ): Response<HomeworkListResponse>
+
     //profile API
     @GET(studentApi)
     suspend fun profile(

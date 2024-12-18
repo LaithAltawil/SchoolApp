@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -33,8 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,16 +40,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.MainMenuItem
-import com.example.schoolapp.Data.MockData.Mock
 import com.example.schoolapp.Data.MockData.Mock.HomeworkMock
 import com.example.schoolapp.Navigation.Screen
 import com.example.schoolapp.Presentation.Util.ExpandableCard
@@ -60,22 +53,24 @@ import com.example.schoolapp.R
 import kotlinx.coroutines.launch
 
 //=======================================================
-//solved @LT #simple || explain this fun logic here       =
-//main menu containing a drawer, scafold and a top app bar
-//any edits is highly thought after
+//Main Page                                             =
 //=======================================================
-//solved @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainMenu(viewModel: MainViewModel, navController: NavController) {
     //=======================================================
+    // initializing variables data                          =
+    //=======================================================
+
+
+    //=======================================================
     //variables: local & states                             =
     //=======================================================
+    //states                                                =
+    //=======================================================
+    val studentState = viewModel.student.collectAsState()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-
-
     val menuItems = listOf(
         MainMenuItem(
             title = "Calender",
@@ -141,8 +136,8 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
         "item6",
     )
     //=======================================================
-    //Logic & UI,solved @LT @MAS #simple || explain the code  =
-    //this is the main page of the app which the student enters after signing in
+    //this is the main page of the app which the student    =
+    // enters after signing in                              =
     //=======================================================
     AppTheme {
         ModalNavigationDrawer(
@@ -197,18 +192,22 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                         }
                         LazyColumn {
                             items(menuItems.size) { item ->
-                                Card(modifier = Modifier
-                                    .padding(12.dp)
-                                    .width(600.dp)
-                                    .height(70.dp)
-                                    .clickable {
-                                        menuItems[item].onClick()
-                                    }, colors = CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.primaryContainer
-                                )) {
-                                    Column(modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(10.dp)) {
+                                Card(
+                                    modifier = Modifier
+                                        .padding(12.dp)
+                                        .width(600.dp)
+                                        .height(70.dp)
+                                        .clickable {
+                                            menuItems[item].onClick()
+                                        }, colors = CardDefaults.cardColors(
+                                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                                    )
+                                ) {
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(10.dp)
+                                    ) {
                                         Row(
                                             modifier = Modifier.fillMaxSize(),
                                             verticalAlignment = Alignment.CenterVertically,
@@ -239,11 +238,12 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                 RoundedCornerShape(
                                     bottomEnd = 16.dp,
                                     bottomStart = 16.dp
-                                )),
+                                )
+                            ),
                             title = {
                                 Column(modifier = Modifier.fillMaxWidth()) {
                                     Text(
-                                        text = "Welcome, Laith",
+                                        text = "Welcome, ${studentState.value?.studentFirstName}",
                                         style = TextStyle(fontSize = 48.sp),
                                         modifier = Modifier.padding(start = 10.dp),
                                     )
@@ -253,7 +253,6 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                 containerColor = MaterialTheme.colorScheme.primary,
                                 titleContentColor = MaterialTheme.colorScheme.onPrimary
                             ), navigationIcon = {
-
                                 IconButton(onClick = {
                                     scope.launch {
                                         drawerState.open()
@@ -305,11 +304,14 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                     verticalArrangement = Arrangement.Center,
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
-                                    Icon(painter = painterResource(id = R.drawable.training), contentDescription =null )
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.training),
+                                        contentDescription = null
+                                    )
 
                                 }
 
-                                
+
                             }
                             Spacer(modifier = Modifier.height(10.dp))
                             Text(
@@ -320,32 +322,12 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                             )
                             Spacer(modifier = Modifier.height(10.dp))
                             LazyColumn {
-//                                items(item.size) {
-//                                    Card(modifier = Modifier
-//                                        .clip(
-//                                            RoundedCornerShape(
-//                                                topEnd = 25.dp,
-//                                                topStart = 25.dp,
-//                                                bottomEnd = 25.dp,
-//                                                bottomStart = 25.dp
-//                                            )
-//                                        )
-//                                        .padding(11.dp)
-//                                        .width(600.dp)
-//                                        .height(100.dp)
-//                                        .clickable { }, colors = CardDefaults.cardColors(
-//                                        containerColor = MaterialTheme.colorScheme.primary
-//                                    )) {
-//                                        Column(modifier = Modifier.fillMaxSize()) {
-//                                        }
-//                                    }
-//                                }
                                 items(HomeworkMock.size) { index ->
-
-                                         if (!HomeworkMock[index].isCompleted){
-                                    ExpandableCard(
-                                        Data = HomeworkMock[index]
-                                    )}
+                                    if (!HomeworkMock[index].isCompleted) {
+                                        ExpandableCard(
+                                            Data = HomeworkMock[index]
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -354,10 +336,4 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
             }
         )
     }
-}
-
-@Composable
-@Preview
-fun MainMenuPreview() {
-    //cant add preview due to the page needing context
 }

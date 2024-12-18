@@ -4,12 +4,14 @@ import android.app.AlertDialog
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.schoolapp.Presentation.Util.SignInCallBack
+import com.example.schoolapp.Presentation.Util.callbacks.DatabaseCallback
+import com.example.schoolapp.Presentation.Util.callbacks.SignInCallBack
 import com.example.schoolapp.Presentation.VM.States.SignInPageState
 import com.example.schoolapp.datasource.local.database.StudentDatabase
 import com.example.schoolapp.datasource.local.entity.Student
 import com.example.schoolapp.datasource.online.response.StudentResponse
 import com.example.schoolapp.datasource.repository.StudentRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,6 +30,10 @@ class AppViewModel(private val context: Context) : ViewModel() {
     //=======================================================
     //variables: local & states                             =
     //=======================================================
+    // Loading state
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
     //signIn data get data from user (UI)
     private val _signInState = MutableStateFlow(SignInPageState())
     val signInState: StateFlow<SignInPageState> = _signInState.asStateFlow()
@@ -40,16 +46,24 @@ class AppViewModel(private val context: Context) : ViewModel() {
     private val _student = MutableStateFlow<Student?>(null) // Initialize with null
     val student: StateFlow<Student?> = _student.asStateFlow()
 
-    //student object handles ROOM operations
-    private val _localStudent = MutableStateFlow<Student?>(null) // Initialize with null
-    val localStudent: StateFlow<Student?> = _student.asStateFlow()
+    //student flag handle sign-in status
+    private val _studentFlag = MutableStateFlow(false) // Initialize with null
+    val studentFlag: StateFlow<Boolean> = _studentFlag.asStateFlow()
 
     //=======================================================
     // ROOM side                                            =
     //=======================================================
-    private fun insertStudent(student: Student) {
+    private fun insertStudent(student: Student, databaseCallback: DatabaseCallback) {
         viewModelScope.launch {
-            studentRepository.insertStudent(student)
+            _isLoading.value = true
+            try {
+                studentRepository.insertStudent(student)
+                databaseCallback.onSuccess("Student inserted successfully")
+            } catch (e: Exception) {
+                databaseCallback.onFailure(e.message.toString())
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 
@@ -78,7 +92,14 @@ class AppViewModel(private val context: Context) : ViewModel() {
                     studentProfileImage = it.studentProfileImage
                 )
             }
-            insertStudent(student.value!!)
+             insertStudent(student.value!!,object : DatabaseCallback {
+                override fun onSuccess(message: String) {
+                    _studentFlag.value = true
+                }
+                override fun onFailure(error: String) {
+                    _studentFlag.value = false
+                }
+            })
         }
     }
 
@@ -87,13 +108,14 @@ class AppViewModel(private val context: Context) : ViewModel() {
     //=======================================================
     fun signInFromApi(signInCallBack: SignInCallBack) {
         viewModelScope.launch {
+            _isLoading.value = true
             try {
-                _studentResponse.value =
-                    studentRepository.getStudentFromApi(signInState.value.userName).body()
+                _studentResponse.value = studentRepository.getStudentFromApi(signInState.value.userName).body()
                 signInCallBack.onSuccess(studentResponse.value?.message.toString())
-
             } catch (e: Exception) {
                 signInCallBack.onFailure(studentResponse.value?.message.toString())
+            } finally {
+                _isLoading.value = false
             }
         }
     }
@@ -138,6 +160,15 @@ class AppViewModel(private val context: Context) : ViewModel() {
         else {
             notifyMessage(context, "Wrong Username!!")
             return false
+        }
+    }
+
+    fun startStudentFlagCheck(onClick: () -> Unit) {
+        viewModelScope.launch {
+            while (!studentFlag.value) {
+                delay(100) // Add a small delay to avoid busy-waiting
+            }
+            onClick()
         }
     }
 }

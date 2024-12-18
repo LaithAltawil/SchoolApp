@@ -41,7 +41,7 @@ fun Navigation() {
     //=======================================================
     //viewModel                                             =
     //=======================================================
-    val viewModel = viewModel<MainViewModel>()
+    //val viewModel = viewModel<MainViewModel>()
 
     //=======================================================
     //navigation                                            =
@@ -104,6 +104,8 @@ fun Navigation() {
 
 
             composable(Screen.CalenderPage.route) {
+                val context = LocalContext.current
+                val viewModel = it.MainViewModel<MainViewModel>(navController, context)
                 CalenderPage(
                     //solved @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     //will parse the navigation to be able to return to the main menu after finishing because parsing it rn will prevent us from
@@ -123,6 +125,8 @@ fun Navigation() {
                 //)
             }
             composable(Screen.HomeworkPage.route) {
+                val context = LocalContext.current
+                val viewModel = it.MainViewModel<MainViewModel>(navController, context)
                 HomeworkPage(
                     //solved @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     //LT:Not needed to be parsed, but might parse it later depending on its need
@@ -131,6 +135,8 @@ fun Navigation() {
                 )
             }
             composable(Screen.SettingsPage.route) {
+                val context = LocalContext.current
+                val viewModel = it.MainViewModel<MainViewModel>(navController, context)
                 SettingPage(
                     //solved @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     //LT:Not needed to be parsed, but might parse it later depending on its need
@@ -140,6 +146,8 @@ fun Navigation() {
 
             }
             composable(Screen.MarksPage.route) {
+                val context = LocalContext.current
+                val viewModel = it.MainViewModel<MainViewModel>(navController, context)
                 MarksPage(
                     //solved @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     //MAS: note it was MainViewModel then I fixed it to mainviewmodel
@@ -150,6 +158,8 @@ fun Navigation() {
 
             }
             composable(Screen.ResourcesPage.route) {
+                val context = LocalContext.current
+                val viewModel = it.MainViewModel<MainViewModel>(navController, context)
                 ResourcesPage(
                     mainviewmodel = viewModel,
                     navController = navController
@@ -157,6 +167,8 @@ fun Navigation() {
 
             }
             composable(Screen.ExamsPage.route) {
+                val context = LocalContext.current
+                val viewModel = it.MainViewModel<MainViewModel>(navController, context)
                 ExamsPage(
                     //solved @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     mainViewModel = viewModel,
@@ -165,6 +177,8 @@ fun Navigation() {
 
             }
             composable(Screen.ClassesPage.route) {
+                val context = LocalContext.current
+                val viewModel = it.MainViewModel<MainViewModel>(navController, context)
                 StudentClass(
                     mainViewModel = viewModel,
                     navController = navController

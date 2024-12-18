@@ -2,12 +2,16 @@ package com.example.schoolapp.Presentation.VM
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.schoolapp.Presentation.VM.States.MainDataClass
 import com.example.schoolapp.datasource.local.database.StudentDatabase
+import com.example.schoolapp.datasource.local.entity.Homework
+import com.example.schoolapp.datasource.local.entity.Student
 import com.example.schoolapp.datasource.repository.StudentRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 //Main viewModel
 class MainViewModel(private val context: Context) : ViewModel() {
@@ -16,14 +20,32 @@ class MainViewModel(private val context: Context) : ViewModel() {
     //Repository: Student                                   =
     //=======================================================
     private val studentRepository = StudentRepository(
-        StudentDatabase.getInstance(context))
+        StudentDatabase.getInstance(context)
+    )
 
     //=======================================================
-    //variables: local & states                             =
+    //variables: states                                     =
     //=======================================================
-    // Homework Page
-    private val _state = MutableStateFlow(MainDataClass.HomeworkPageState1())
-    val state: StateFlow<MainDataClass.HomeworkPageState1> = _state.asStateFlow()
+    // student                                              =
+    //=======================================================
+    //handles ROOM operations for student
+    private val _student = MutableStateFlow<Student?>(null) // Initialize with null
+    val student: StateFlow<Student?> = _student.asStateFlow()
+
+    //=======================================================
+    // main menu page                                       =
+    //=======================================================
+    //homework object handles ROOM operations for main menu
+    private val _localHomeworkList = MutableStateFlow<List<Homework>?>(null) // Initialize with null
+    val localHomeworkList: StateFlow<List<Homework>?> = _localHomeworkList.asStateFlow()
+
+    //homework object handles UI operations for main menu
+    private val _homeworkList = MutableStateFlow<List<Homework>?>(null) // Initialize with null
+    val homeworkList: StateFlow<List<Homework>?> = _homeworkList.asStateFlow()
+
+    //homework int represent the last id number
+    private val _lastHomeworkId = MutableStateFlow<Int?>(null) // Initialize with null
+    val lastHomeworkId: StateFlow<Int?> = _lastHomeworkId.asStateFlow()
 
     //Exam Page
     private val _Examstate = MutableStateFlow(MainDataClass.ExamPageState1())
@@ -37,7 +59,6 @@ class MainViewModel(private val context: Context) : ViewModel() {
     private val _Settingstate = MutableStateFlow(MainDataClass.SettingsPageState1())
     val Settingstate: StateFlow<MainDataClass.SettingsPageState1> = _Settingstate.asStateFlow()
 
-
     //ClassesPage
     private val _Classesstate = MutableStateFlow(MainDataClass.ClassesPageState())
     val Classesstate: StateFlow<MainDataClass.ClassesPageState> = _Classesstate.asStateFlow()
@@ -45,6 +66,160 @@ class MainViewModel(private val context: Context) : ViewModel() {
     //CalenderPage
     private val _Calenderstate = MutableStateFlow(MainDataClass.CalenderPage())
     val Calenderstate: StateFlow<MainDataClass.CalenderPage> = _Calenderstate.asStateFlow()
+
+    // Homework Page
+    private val _state = MutableStateFlow(MainDataClass.HomeworkPageState1())
+    val state: StateFlow<MainDataClass.HomeworkPageState1> = _state.asStateFlow()
+
+    //=======================================================
+    // ROOM side                                            =
+    //=======================================================
+    // student                                              =
+    //=======================================================
+    private fun setStudent() {
+        viewModelScope.launch {
+            _student.value = studentRepository.setStudent()
+        }
+    }
+
+    init {
+        setStudent()
+    }
+
+    //=======================================================
+    // main menu                                            =
+    //=======================================================
+    //insert homework from the API list
+    private fun insertHomework(homework: Homework) {
+        viewModelScope.launch {
+            studentRepository.insertHomework(homework)
+        }
+    }
+
+    //initialize homework list from the local ROOM
+    private fun showHomework(homework: Homework) {
+        viewModelScope.launch {
+            _localHomeworkList.value = studentRepository.getHomeworkForTodo()
+        }
+    }
+
+    //get all the homework list from the local ROOM
+    private fun getAllHomeworkList() {
+        viewModelScope.launch {
+            _localHomeworkList.value = studentRepository.getAllHomework()
+        }
+    }
+
+    private fun getLastHomeworkId() {
+        viewModelScope.launch {
+            _lastHomeworkId.value = studentRepository.getLastHomeworkId()
+        }
+    }
+
+    private fun getHomeworkList() {
+        viewModelScope.launch {
+            _homeworkList.value = studentRepository.getHomeworkForTodo()
+        }
+    }
+
+    //=======================================================
+    // Api side                                             =
+    //=======================================================
+    // main menu                                            =
+    //=======================================================
+    private fun insertHomeworkListFromApi() {
+        viewModelScope.launch {
+            //initializing the value of localHomeworkList
+            getAllHomeworkList()
+            //if the app's database doesn't have any homework fetch all the homework from the api
+            if (localHomeworkList.value!!.isEmpty()) {
+                //getting the number of the homework in the online database
+                val numOfHomework: Int =
+                    studentRepository.getHomeworkFromApi(student.value!!.studentClass)
+                        .body()?.homeworks?.count()
+                        ?: 0
+                //fetch all the homework until last ine
+                while (numOfHomework != 0) {
+                    val apiHomework: Homework
+                    //mapping api homework to local homework
+                    studentRepository.getHomeworkFromApi(student.value!!.studentClass)
+                        .body()!!.homeworks[numOfHomework - 1].let {
+                        apiHomework = Homework(
+                            homeworkId = it.homeworkId,
+                            homeworkTeacherId = it.homeworkTeacherId,
+                            homeworkTeacherClass = it.homeworkTeacherClass,
+                            homeworkTeacherSubject = it.homeworkTeacherSubject,
+                            homeworkDetails = it.homeworkDetails,
+                            homeworkStartDate = it.homeworkStartDate.toString(),
+                            homeworkEndDate = it.homeworkEndDate.toString(),
+                            homeworkStartDay = it.homeworkStartDay.toString(),
+                            homeworkEndDay = it.homeworkEndDay.toString()
+                        )
+                    }
+                    //inserting every homework to the local database
+                    insertHomework(apiHomework)
+                    numOfHomework - 1
+                }
+                //setting the new homework list for UI
+                getHomeworkList()
+            }
+        }
+    }
+
+    //calling fun
+    fun initializeHomeworkList() {
+        insertHomeworkListFromApi()
+    }
+
+    //getting only the homework that are not in the local database
+    private fun getHomeworkByIdListFromApi() {
+        viewModelScope.launch {
+            //initializing the value of localHomeworkList
+            getAllHomeworkList()
+            //if the app's database have homework fetch only the new ones
+            if (localHomeworkList.value!!.isNotEmpty()) {
+                getLastHomeworkId()
+                //getting the number of the new homework in the online database
+                val numOfHomework: Int =
+                    studentRepository.getHomeworkByIdFromApi(
+                        student.value!!.studentClass,
+                        lastHomeworkId.value!!
+                    ).body()
+                        ?.homeworks?.count() ?: 0
+                while (numOfHomework != 0) {
+                    val apiHomework: Homework
+                    //mapping api homework to local homework
+                    studentRepository.getHomeworkByIdFromApi(
+                        student.value!!.studentClass,
+                        lastHomeworkId.value!!
+                    ).body()!!.homeworks[numOfHomework - 1].let {
+                        apiHomework = Homework(
+                            homeworkId = it.homeworkId,
+                            homeworkTeacherId = it.homeworkTeacherId,
+                            homeworkTeacherClass = it.homeworkTeacherClass,
+                            homeworkTeacherSubject = it.homeworkTeacherSubject,
+                            homeworkDetails = it.homeworkDetails,
+                            homeworkStartDate = it.homeworkStartDate.toString(),
+                            homeworkEndDate = it.homeworkEndDate.toString(),
+                            homeworkStartDay = it.homeworkStartDay.toString(),
+                            homeworkEndDay = it.homeworkEndDay.toString()
+                        )
+                    }
+                    //inserting every homework to the local database
+                    insertHomework(apiHomework)
+                    numOfHomework - 1
+                }
+            }
+        }
+        //setting the new homework list for UI
+        getHomeworkList()
+    }
+
+    //calling fun
+    fun getTodoHomework() {
+        getHomeworkByIdListFromApi()
+    }
+
     //=======================================================
     //functions: public & private                           =
     //=======================================================
@@ -64,7 +239,7 @@ class MainViewModel(private val context: Context) : ViewModel() {
         }
     }
 
-    fun showAlertDialog(index: Int, newState: Boolean){
+    fun showAlertDialog(index: Int, newState: Boolean) {
         if (index in _Settingstate.value.showAlertDialog.indices) {
             _Settingstate.value.showAlertDialog[index] = newState
         }
