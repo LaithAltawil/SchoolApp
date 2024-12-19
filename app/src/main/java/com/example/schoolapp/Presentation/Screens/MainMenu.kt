@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
@@ -239,20 +240,29 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                 Scaffold(modifier = Modifier.fillMaxSize(),
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     topBar = {
-                        Box(modifier = Modifier.fillMaxWidth()
-                            .clip(
-                                RoundedCornerShape(
-                                    bottomEnd = 16.dp,
-                                    bottomStart = 16.dp
-                                )).height(170.dp).background(MaterialTheme.colorScheme.primary)){
-                            Row(modifier = Modifier.fillMaxSize(),
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(
+                                    RoundedCornerShape(
+                                        bottomEnd = 16.dp,
+                                        bottomStart = 16.dp
+                                    )
+                                )
+                                .height(170.dp)
+                                .background(MaterialTheme.colorScheme.primary)
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxSize(),
                                 horizontalArrangement = Arrangement.Center
-                                ) {
-                                IconButton(modifier =Modifier.padding( top = 50.dp,start = 5.dp) , onClick = {
-                                    scope.launch {
-                                        drawerState.open()
-                                    }
-                                }) {
+                            ) {
+                                IconButton(
+                                    modifier = Modifier.padding(top = 50.dp, start = 5.dp),
+                                    onClick = {
+                                        scope.launch {
+                                            drawerState.open()
+                                        }
+                                    }) {
                                     Icon(
                                         Icons.Outlined.Menu,
                                         contentDescription = null,
@@ -276,35 +286,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                             }
 
 
-
-
-
-
                         }
-//                            modifier = Modifier.clip(
-//                                RoundedCornerShape(
-//                                    bottomEnd = 16.dp,
-//                                    bottomStart = 16.dp
-//                                )
-//                            ),
-//                            title = {
-//
-//                            },
-//                            colors = TopAppBarDefaults.topAppBarColors(
-//                                containerColor = MaterialTheme.colorScheme.primary,
-//                                titleContentColor = MaterialTheme.colorScheme.onPrimary
-//                            ), navigationIcon = {
-//                                Row(modifier = Modifier.fillMaxSize()) {
-//                                    Column(modifier = Modifier.fillMaxSize()) {
-
-//                                    }
-//
-//                                }
-//
-//
-//
-
-//                            }
 
 
                     }
@@ -320,39 +302,49 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                 .padding(start = 10.dp, end = 10.dp, top = 10.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Spacer(modifier = Modifier)
-                            Card(
-                                modifier = Modifier
-                                    .clip(
-                                        RoundedCornerShape(
-                                            topEnd = 25.dp,
-                                            topStart = 25.dp,
-                                            bottomEnd = 25.dp,
-                                            bottomStart = 25.dp
+                            LazyRow{
+
+                                items(3){
+                                    Card(
+                                        modifier = Modifier
+                                            .clip(
+                                                RoundedCornerShape(
+                                                    topEnd = 25.dp,
+                                                    topStart = 25.dp,
+                                                    bottomEnd = 25.dp,
+                                                    bottomStart = 25.dp
+                                                )
+                                            )
+                                            .padding(10.dp)
+                                            .width(400.dp)
+                                            .height(200.dp)
+                                            .clickable {
+                                            }, colors = CardDefaults.cardColors(
+                                            containerColor = MaterialTheme.colorScheme.primary
                                         )
-                                    )
-                                    .padding(10.dp)
-                                    .width(600.dp)
-                                    .height(200.dp)
-                                    .clickable {
-                                    }, colors = CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.primary
-                                )
-                            ) {
-                                Column(
-                                    modifier = Modifier.fillMaxSize(),
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.training),
-                                        contentDescription = null
-                                    )
+                                    ) {
+                                        Column(
+                                            modifier = Modifier.fillMaxSize(),
+                                            verticalArrangement = Arrangement.Center,
+                                            horizontalAlignment = Alignment.CenterHorizontally
+                                        ) {
+                                            Icon(
+                                                painter = painterResource(id = R.drawable.training),
+                                                contentDescription = null
+                                            )
+
+                                        }
+
+
+                                    }
+
+
 
                                 }
 
-
                             }
+
+
                             Spacer(modifier = Modifier.height(10.dp))
                             Text(
                                 text = "To Do",
@@ -364,6 +356,8 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                             LazyColumn {
                                 items(HomeworkMock.size) { index ->
                                     if (!HomeworkMock[index].isCompleted) {
+
+
                                         ExpandableCard(
                                             Data = HomeworkMock[index]
                                         )

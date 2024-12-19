@@ -1,5 +1,6 @@
 package com.example.schoolapp.Presentation.Screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -50,6 +52,7 @@ import kotlinx.coroutines.time.delay
 //=======================================================
 //Sign in page: Logic & UI                              =
 //=======================================================
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
     //=======================================================
@@ -145,9 +148,12 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
                         ), onClick = {
                             // Validation logic
                             if (state.value.userName.isEmpty() || state.value.password.isEmpty()) {
-                                viewModel.notifyMessage(context, "Please enter both username and password")
+                                //New Alert dialog
+                                viewModel.onDialog(true,"Please enter both username and password")
+                                //viewModel.notifyMessage(context, "Please enter both username and password")
                                 return@Button
                             }
+
 
                             viewModel.signInFromApi(object : SignInCallBack {
                                 override fun onSuccess(message: String) {
@@ -158,14 +164,45 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
                                     }
                                 }
 
+
                                 override fun onFailure(error: String) {
                                     // Handle failure
-                                    viewModel.notifyMessage(context, error)
+                                    //viewModel.notifyMessage(context, error)
+                                    viewModel.onDialog(true, error)
+
 
                                 }
+
                             })
                         }
+
                     ) {
+                        //pop up to appear when something wrong in sign in
+                        if (viewModel.signInState.value.alertDialog) {
+                            AlertDialog(
+                                onDismissRequest = {
+                                    viewModel.onDialog(false)
+
+
+                                },
+                                title = { Text("Pop-up Title") },
+                                text = { Text(viewModel.signInState.value.message) },
+                                confirmButton = {
+
+                                    Button(onClick = {
+                                        viewModel.removeDialog()
+
+
+                                    }) {
+                                        Text("OK")
+
+                                    }
+                                }
+                            )
+
+                        }
+
+
                         Text(
                             text = "Sign In",
                             style = MaterialTheme.typography.bodyLarge,

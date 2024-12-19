@@ -123,6 +123,13 @@ class AppViewModel(private val context: Context) : ViewModel() {
     //=======================================================
     //functions: private & public                           =
     //=======================================================
+    fun onDialog(value: Boolean, message: String=""){
+        _signInState.update { it.copy(alertDialog = value, message = message) }
+    }
+    //dumb i know but i am not touching it :) if it works it works:))))
+    fun removeDialog(){
+        _signInState.update { it.copy(alertDialog = false,message = "") }
+    }
     fun onUserNameChange(userName: String) {
         _signInState.update { it.copy(userName = userName) }
     }
@@ -151,13 +158,16 @@ class AppViewModel(private val context: Context) : ViewModel() {
             }
             //password != to the student
             else {
+
                 val studentFirstName = studentResponse.value!!.student!!.studentFirstName
-                notifyMessage(context, "Wrong Password for \'$studentFirstName\' !!")
+                onDialog(true,"Wrong Password for \'$studentFirstName\' !!")
+                //notifyMessage(context, "Wrong Password for \'$studentFirstName\' !!")
                 return false
             }
         }
         //username exist and != to an actual student
         else {
+
             notifyMessage(context, "Wrong Username!!")
             return false
         }

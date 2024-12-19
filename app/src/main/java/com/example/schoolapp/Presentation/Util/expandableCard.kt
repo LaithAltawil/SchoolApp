@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -79,6 +80,8 @@ fun ExpandableCard(Data: Homework) {
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 //LT: this date will be replaced with the actual date when database is setup
+                Text("Sunday")
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "20/10/2024",
                     style = MaterialTheme.typography.labelLarge

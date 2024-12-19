@@ -5,5 +5,7 @@ data class SignInPageState(
     val password: String = "",
     val isPasswordVisible: Boolean = false,
     val signInError: String? = null,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val alertDialog: Boolean = false,
+    val message: String = ""
 )
