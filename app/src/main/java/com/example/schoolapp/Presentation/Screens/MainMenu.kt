@@ -247,18 +247,14 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                 }
             },
             content = {
-                Scaffold(modifier = Modifier.fillMaxSize(),
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     topBar = {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clip(
-                                    RoundedCornerShape(
-                                        bottomEnd = 16.dp,
-                                        bottomStart = 16.dp
-                                    )
-                                )
+                                .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
                                 .height(170.dp)
                                 .background(MaterialTheme.colorScheme.primary)
                         ) {
@@ -268,13 +264,8 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                             ) {
                                 IconButton(
                                     modifier = Modifier.padding(top = 50.dp, start = 5.dp),
-                                    onClick = {
-                                        scope.launch {
-                                            drawerState.open()
-                                        }
-                                    }
-                                )
-                                {
+                                    onClick = { scope.launch { drawerState.open() } }
+                                ) {
                                     Icon(
                                         Icons.Outlined.Menu,
                                         contentDescription = null,
@@ -293,116 +284,77 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                             }
                         }
                     }
-                ) {
+                ) { paddingValues ->
                     Column(
                         modifier = Modifier
-                            .padding(it)
+                            .padding(paddingValues)
                             .fillMaxSize()
                     ) {
-                        Column(
+                        // Quick Access Cards in horizontal scroll
+                        LazyRow(
                             modifier = Modifier
-                                .fillMaxSize()
-                                .padding(start = 10.dp, end = 10.dp, top = 10.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                                .padding(16.dp)
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            Spacer(modifier = Modifier)
-                            Card(
-                                modifier = Modifier
-                                    .clip(
-                                        RoundedCornerShape(
-                                            topEnd = 25.dp,
-                                            topStart = 25.dp,
-                                            bottomEnd = 25.dp,
-                                            bottomStart = 25.dp
-                                        )
+                            items(3) {
+                                Card(
+                                    modifier = Modifier
+                                        .width(200.dp)
+                                        .height(120.dp),
+                                    colors = CardDefaults.cardColors(
+                                        containerColor = MaterialTheme.colorScheme.primary
                                     )
-                                    .padding(10.dp)
-                                    .width(600.dp)
-                                    .height(200.dp)
-                                    .clickable {
-                                    }, colors = CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.primary
-                                )
-                            ) {
-                                Column(
-                                    modifier = Modifier.fillMaxSize(),
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.training),
-                                        contentDescription = null
+                                    Column(
+                                        modifier = Modifier.fillMaxSize(),
+                                        verticalArrangement = Arrangement.Center,
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.training),
+                                            contentDescription = null
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        // To Do Section Title
+                        Text(
+                            text = "To Do",
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.displayLarge,
+                            color = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                        )
+
+                        // Homework List
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                                .padding(horizontal = 16.dp)
+                        ) {
+                            val homeworks = homeworkListState.value
+                            if (homeworks != null) {
+                                items(homeworks.size) { index ->
+                                    val isComplete = homeworks[index].homeworkIsComplete ?: false
+                                    if (!isComplete) {
+                                        ExpandableCard(
+                                            homeworks[index],
+                                            viewModel,
+                                            LocalContext.current
+                                        )
+                                    }
+                                }
+                            } else {
+                                item {
+                                    Text(
+                                        "No homework available",
+                                        modifier = Modifier.padding(16.dp),
+                                        style = MaterialTheme.typography.bodyLarge
                                     )
-                                }
-                                LazyRow {
-                                    items(3) {
-                                        Card(
-                                            modifier = Modifier
-                                                .clip(
-                                                    RoundedCornerShape(
-                                                        topEnd = 25.dp,
-                                                        topStart = 25.dp,
-                                                        bottomEnd = 25.dp,
-                                                        bottomStart = 25.dp
-                                                    )
-                                                )
-                                                .padding(10.dp)
-                                                .width(400.dp)
-                                                .height(200.dp)
-                                                .clickable {
-                                                }, colors = CardDefaults.cardColors(
-                                                containerColor = MaterialTheme.colorScheme.primary
-                                            )
-                                        ) {
-                                            Column(
-                                                modifier = Modifier.fillMaxSize(),
-                                                verticalArrangement = Arrangement.Center,
-                                                horizontalAlignment = Alignment.CenterHorizontally
-                                            ) {
-                                                Icon(
-                                                    painter = painterResource(id = R.drawable.training),
-                                                    contentDescription = null
-                                                )
-                                            }
-                                        }
-                                    }
-                                }
-                                Spacer(modifier = Modifier.height(10.dp))
-                                Text(
-                                    text = "To Do",
-                                    textAlign = TextAlign.Center,
-                                    style = MaterialTheme.typography.displayLarge,
-                                    color = MaterialTheme.colorScheme.secondary
-                                )
-                                Spacer(modifier = Modifier.height(10.dp))
-                                LazyColumn {
-                                    if (homeworkListState.value != null) {
-                                        items(homeworkListState.value!!.size) { index ->
-                                            Log.d(
-                                                "HomeworkDebug",
-                                                "Checking homework at index $index: ${homeworkListState.value!![index]}"
-                                            )
-                                            if (!homeworkListState.value!![index].homeworkIsComplete ?: false) {
-                                                Log.d(
-                                                    "HomeworkDebug",
-                                                    "Showing homework card for: ${homeworkListState.value!![index]}"
-                                                )
-                                                ExpandableCard(
-                                                    homeworkListState.value!![index],
-                                                    viewModel,
-                                                    LocalContext.current
-                                                )
-                                            }
-                                        }
-                                    } else {
-                                        item {
-                                            Text(
-                                                "No homework available",
-                                                modifier = Modifier.padding(16.dp),
-                                                style = MaterialTheme.typography.bodyLarge
-                                            )
-                                        }
-                                    }
                                 }
                             }
                         }
