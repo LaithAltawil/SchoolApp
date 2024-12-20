@@ -29,6 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.MockData.Mock.HomeworkMock
+import com.example.schoolapp.Navigation.Screen
 import com.example.schoolapp.Presentation.Util.ExpandableCard
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.datasource.local.entity.Homework
@@ -122,7 +123,10 @@ fun HomeworkPage(homeWorkPageState: MainViewModel,navController: NavController) 
                                 HomeworkMock[index] as Homework,
                                 homeWorkPageState,
                                 LocalContext.current
-                            )
+                            ){
+                                //will be working on making the expandable card open in Homework page
+                                navController.navigate(Screen.HomeworkPage.route)
+                            }
                         }
                     }
                 }

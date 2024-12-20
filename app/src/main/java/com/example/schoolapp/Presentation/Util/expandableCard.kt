@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.schoolapp.Navigation.Screen
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 import com.example.schoolapp.datasource.local.entity.Homework
@@ -40,13 +43,13 @@ import com.example.schoolapp.datasource.local.entity.Homework
 //=======================================================
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ExpandableCard(homework: Homework, viewModel: MainViewModel, context: Context) {
+fun ExpandableCard(homework: Homework, viewModel: MainViewModel, context: Context,onClick: () -> Unit) {
     //=======================================================
     //variables: local & states                             =
     //=======================================================
     // states                                               =
     //=======================================================
-    var isExpanded by remember { mutableStateOf(false) }
+    //var isExpanded by remember { mutableStateOf(false) }
 
     //=======================================================
     //Local variables                                      =
@@ -67,9 +70,12 @@ fun ExpandableCard(homework: Homework, viewModel: MainViewModel, context: Contex
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
-            .combinedClickable {
-                isExpanded = !isExpanded
+            .padding(10.dp)
+            .clickable {
+
+                   onClick()
+                    //isExpanded = !isExpanded
+
             },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary,
@@ -83,7 +89,8 @@ fun ExpandableCard(homework: Homework, viewModel: MainViewModel, context: Contex
                     text = homework.homeworkTeacherSubject,
                     style = MaterialTheme.typography.headlineLarge
                 )
-                Spacer(modifier = Modifier.weight(1f))
+                //Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.width(80.dp))
                 //LT: this date will be replaced with the actual date when database is setup
                 Text(homework.homeworkEndDay)
                 Spacer(modifier = Modifier.width(8.dp))
@@ -92,45 +99,45 @@ fun ExpandableCard(homework: Homework, viewModel: MainViewModel, context: Contex
                     style = MaterialTheme.typography.labelLarge
                 )
             }
-            if (isExpanded) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = homework.homeworkDetails,
-                    style = MaterialTheme.typography.titleMedium
-                )
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
-                ) {
-                    Button(
-                        enabled = if (homework.homeworkIsComplete) false else true,
-                        onClick = {
-                            // Trigger file picker
-                            filePickerLauncher.launch(
-                                arrayOf(
-                                    "image/*",
-                                    "application/*"
-                                )
-                            )
-                        }, colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.onPrimary,
-                            contentColor = MaterialTheme.colorScheme.primary
-                        )
-                    ) {
-                        Text("Upload File")
-                    }
-                    Icon(
-                        modifier = Modifier.size(30.dp),
-                        painter =
-                        if (homework.homeworkIsComplete) {
-                            painterResource(id = R.drawable.baseline_check_circle_24)
-                        } else {
-                            painterResource(id = R.drawable.baseline_radio_button_unchecked_24)
-                        }, contentDescription = null
-                    )
-                }
-            }
+//            if (isExpanded) {
+//                Spacer(modifier = Modifier.height(8.dp))
+//                Text(
+//                    text = homework.homeworkDetails,
+//                    style = MaterialTheme.typography.titleMedium
+//                )
+//                Row(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    horizontalArrangement = Arrangement.SpaceBetween,
+//                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+//                ) {
+//                    Button(
+//                        enabled = if (homework.homeworkIsComplete) false else true,
+//                        onClick = {
+//                            // Trigger file picker
+//                            filePickerLauncher.launch(
+//                                arrayOf(
+//                                    "image/*",
+//                                    "application/*"
+//                                )
+//                            )
+//                        }, colors = ButtonDefaults.buttonColors(
+//                            containerColor = MaterialTheme.colorScheme.onPrimary,
+//                            contentColor = MaterialTheme.colorScheme.primary
+//                        )
+//                    ) {
+//                        Text("Upload File")
+//                    }
+//                    Icon(
+//                        modifier = Modifier.size(30.dp),
+//                        painter =
+//                        if (homework.homeworkIsComplete) {
+//                            painterResource(id = R.drawable.baseline_check_circle_24)
+//                        } else {
+//                            painterResource(id = R.drawable.baseline_radio_button_unchecked_24)
+//                        }, contentDescription = null
+//                    )
+//                }
+//            }
         }
     }
 }

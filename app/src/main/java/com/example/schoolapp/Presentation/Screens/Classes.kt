@@ -1,7 +1,8 @@
 package com.example.schoolapp.Presentation.Screens
 
  import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
+ import androidx.compose.foundation.layout.Box
+ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +18,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
+ import androidx.compose.material.icons.outlined.ArrowBack
+ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -75,42 +77,40 @@ fun StudentClass(mainViewModel: MainViewModel ,
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 //TAB main UI & Logic
                 topBar = {
-                    LargeTopAppBar(
-                        title = {
-                            //TAB main :Row
-                            Row(modifier = Modifier.fillMaxWidth()) {
-                                //TAB title
-                                Text(
-                                    text = "Classes", fontSize = 60.sp,
-                                    fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
-                                    modifier = Modifier.padding(start = 40.dp)
-                                )
-                            }
-                        },
-                        modifier = Modifier.clip(
-                            RoundedCornerShape(
-                                bottomEnd = 25.dp,
-                                bottomStart = 25.dp
-                            )
-                        ),
-                        colors =
-                        TopAppBarDefaults.topAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                        ),
-                        navigationIcon = {
-                            IconButton(onClick = {
-                                navController.popBackStack()
-                            }) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
+                            .height(170.dp)
+                            .background(MaterialTheme.colorScheme.primary)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxSize(),
+
+                            ) {
+                            IconButton(
+                                modifier = Modifier.padding(top = 50.dp, start = 5.dp),
+                                onClick = {
+                                    navController?.popBackStack()
+                                }
+                            ) {
                                 Icon(
+                                    Icons.Outlined.ArrowBack,
+                                    contentDescription = null,
                                     modifier = Modifier.size(50.dp),
-                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                    contentDescription = "Localized description",
-                                    tint = MaterialTheme.colorScheme.background
+                                    tint = MaterialTheme.colorScheme.onPrimary
                                 )
                             }
+                            Spacer(modifier = Modifier.width(20.dp))
+                            Text(
+                                text = "Classes", fontSize = 70.sp,
+                                fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+                                modifier = Modifier.padding(top=40.dp),
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
                         }
-                    )
+                    }
+
                 },
                 // Add content padding
             ) {

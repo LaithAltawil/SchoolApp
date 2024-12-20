@@ -300,8 +300,8 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                             items(3) {
                                 Card(
                                     modifier = Modifier
-                                        .width(200.dp)
-                                        .height(120.dp),
+                                        .width(400.dp)
+                                        .height(200.dp),
                                     colors = CardDefaults.cardColors(
                                         containerColor = MaterialTheme.colorScheme.primary
                                     )
@@ -329,6 +329,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                         )
 
+
                         // Homework List
                         LazyColumn(
                             modifier = Modifier
@@ -345,7 +346,9 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                             homeworks[index],
                                             viewModel,
                                             LocalContext.current
-                                        )
+                                        ){
+                                            navController.navigate(Screen.HomeworkPage.route)
+                                        }
                                     }
                                 }
                             } else {
@@ -353,7 +356,8 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                     Text(
                                         "No homework available",
                                         modifier = Modifier.padding(16.dp),
-                                        style = MaterialTheme.typography.bodyLarge
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        fontSize = 20.sp
                                     )
                                 }
                             }
