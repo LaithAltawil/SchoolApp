@@ -31,7 +31,7 @@ class AppViewModel(private val context: Context) : ViewModel() {
     //variables: local & states                             =
     //=======================================================
     // Loading state
-    private val _isLoading = MutableStateFlow(false)
+    private var _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     //signIn data get data from user (UI)
@@ -175,10 +175,12 @@ class AppViewModel(private val context: Context) : ViewModel() {
 
     fun startStudentFlagCheck(onClick: () -> Unit) {
         viewModelScope.launch {
-            while (!studentFlag.value) {
-                delay(100) // Add a small delay to avoid busy-waiting
+            studentFlag.collect { flag ->
+                if (flag) {
+                    onClick()
+                    return@collect
+                }
             }
-            onClick()
         }
     }
 }

@@ -22,6 +22,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -30,6 +31,7 @@ import com.example.compose.AppTheme
 import com.example.schoolapp.Data.MockData.Mock.HomeworkMock
 import com.example.schoolapp.Presentation.Util.ExpandableCard
 import com.example.schoolapp.Presentation.VM.MainViewModel
+import com.example.schoolapp.datasource.local.entity.Homework
 
 //=======================================================
 //home work page: UI & logic                            =
@@ -117,8 +119,9 @@ fun HomeworkPage(homeWorkPageState: MainViewModel,navController: NavController) 
                             * +---------------------------+
                             * due date can be the general format or day counter example: 2 day to submit       */
                             ExpandableCard(
-                                Data = HomeworkMock[index],
-                                //viewmodel = homeWorkPageState
+                                HomeworkMock[index] as Homework,
+                                homeWorkPageState,
+                                LocalContext.current
                             )
                         }
                     }

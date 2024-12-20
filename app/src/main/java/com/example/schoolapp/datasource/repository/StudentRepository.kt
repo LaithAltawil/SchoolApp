@@ -97,7 +97,7 @@ class StudentRepository(
         return homeworkList
     }
 
-    suspend fun getLastHomeworkId(): Int{
+    suspend fun getLastHomeworkId(): Int {
         val lastId = withContext(Dispatchers.IO) {
             studentDatabase.getLastHomeworkId()
         }
@@ -108,6 +108,13 @@ class StudentRepository(
     suspend fun deleteHomework(id: Int) {
         withContext(Dispatchers.IO) {
             studentDatabase.deleteHomework(id)
+        }
+    }
+
+    //delete all homework
+    suspend fun deleteAllHomework() {
+        withContext(Dispatchers.IO) {
+            studentDatabase.deleteAllHomework()
         }
     }
 
@@ -131,7 +138,10 @@ class StudentRepository(
     }
 
     //Homework API (by Id)
-    suspend fun getHomeworkByIdFromApi(studentClass: String, homeworkId: Int): Response<HomeworkListResponse> {
+    suspend fun getHomeworkByIdFromApi(
+        studentClass: String,
+        homeworkId: Int
+    ): Response<HomeworkListResponse> {
         val homeworkResponse = withContext(Dispatchers.IO) {
             return@withContext studentApi.homeworkById(studentClass, homeworkId)
         }

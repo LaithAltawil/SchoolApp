@@ -1,7 +1,8 @@
 package com.example.schoolapp.Presentation.Util
 
-import android.app.Activity
-import android.content.Intent
+import android.content.Context
+import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -30,35 +31,40 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.schoolapp.Data.Homework
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
+import com.example.schoolapp.datasource.local.entity.Homework
 
 //=======================================================
-//todo @LT #simple || explain this fun logic here       =
+//Expandable card holds the logic for viewing it        =
 //=======================================================
-//todo @LT #simple || @(43:20)=="Data" variable name must start with small litter
-//todo @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ExpandableCard(Data: Homework) {
-
+fun ExpandableCard(homework: Homework, viewModel: MainViewModel, context: Context) {
     //=======================================================
     //variables: local & states                             =
     //=======================================================
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val uri = result.data?.data // The selected file's URI
-            // Handle the URI and save the file to the database
+    // states                                               =
+    //=======================================================
+    var isExpanded by remember { mutableStateOf(false) }
+
+    //=======================================================
+    //Local variables                                      =
+    //=======================================================
+    val filePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            viewModel.uploadFileToFirebase(uri) // Delegate upload to ViewModel
+        } else {
+            Toast.makeText(context, "No file selected", Toast.LENGTH_SHORT).show()
         }
     }
-    var isExpanded by remember { mutableStateOf(false) }
 
     //=======================================================
     //Logic & UI                                            =
     //=======================================================
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -75,7 +81,7 @@ fun ExpandableCard(Data: Homework) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row {
                 Text(
-                    text = Data.title,
+                    text = homework.homeworkTeacherSubject,
                     style = MaterialTheme.typography.headlineLarge
                 )
                 Spacer(modifier = Modifier.weight(1f))
@@ -83,16 +89,14 @@ fun ExpandableCard(Data: Homework) {
                 Text("Sunday")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "20/10/2024",
+                    text = homework.homeworkEndDate,
                     style = MaterialTheme.typography.labelLarge
                 )
-
             }
-
             if (isExpanded) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = Data.description,
+                    text = homework.homeworkDetails,
                     style = MaterialTheme.typography.titleMedium
                 )
                 Row(
@@ -101,14 +105,15 @@ fun ExpandableCard(Data: Homework) {
                     verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
                 ) {
                     Button(
-
-                        enabled = if (Data.isCompleted) false else true,
+                        enabled = if (homework.homeworkIsComplete) false else true,
                         onClick = {
-                            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                                addCategory(Intent.CATEGORY_OPENABLE)
-                                type = "*/*" // Allow all file types
-                            }
-                            launcher.launch(intent)
+                            // Trigger file picker
+                            filePickerLauncher.launch(
+                                arrayOf(
+                                    "image/*",
+                                    "application/*"
+                                )
+                            )
                         }, colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.onPrimary,
                             contentColor = MaterialTheme.colorScheme.primary
@@ -119,7 +124,7 @@ fun ExpandableCard(Data: Homework) {
                     Icon(
                         modifier = Modifier.size(30.dp),
                         painter =
-                        if (Data.isCompleted) {
+                        if (homework.homeworkIsComplete) {
                             painterResource(id = R.drawable.baseline_check_circle_24)
                         } else {
                             painterResource(id = R.drawable.baseline_radio_button_unchecked_24)

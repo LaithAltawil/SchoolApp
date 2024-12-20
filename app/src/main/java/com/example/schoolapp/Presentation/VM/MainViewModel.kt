@@ -1,6 +1,8 @@
 package com.example.schoolapp.Presentation.VM
 
 import android.content.Context
+import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.schoolapp.Presentation.VM.States.MainDataClass
@@ -8,6 +10,7 @@ import com.example.schoolapp.datasource.local.database.StudentDatabase
 import com.example.schoolapp.datasource.local.entity.Homework
 import com.example.schoolapp.datasource.local.entity.Student
 import com.example.schoolapp.datasource.repository.StudentRepository
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -72,6 +75,10 @@ class MainViewModel(private val context: Context) : ViewModel() {
     val state: StateFlow<MainDataClass.HomeworkPageState1> = _state.asStateFlow()
 
     //=======================================================
+    // Local variables                                      =
+    //=======================================================
+
+    //=======================================================
     // ROOM side                                            =
     //=======================================================
     // student                                              =
@@ -90,36 +97,26 @@ class MainViewModel(private val context: Context) : ViewModel() {
     // main menu                                            =
     //=======================================================
     //insert homework from the API list
-    private fun insertHomework(homework: Homework) {
-        viewModelScope.launch {
-            studentRepository.insertHomework(homework)
-        }
+    private suspend fun insertHomework(homework: Homework) {
+        studentRepository.insertHomework(homework)
     }
 
     //initialize homework list from the local ROOM
-    private fun showHomework(homework: Homework) {
-        viewModelScope.launch {
-            _localHomeworkList.value = studentRepository.getHomeworkForTodo()
-        }
+    private suspend fun showHomework(homework: Homework) {
+        _localHomeworkList.value = studentRepository.getHomeworkForTodo()
     }
 
     //get all the homework list from the local ROOM
-    private fun getAllHomeworkList() {
-        viewModelScope.launch {
-            _localHomeworkList.value = studentRepository.getAllHomework()
-        }
+    private suspend fun getAllHomeworkList() {
+        _localHomeworkList.value = studentRepository.getAllHomework()
     }
 
-    private fun getLastHomeworkId() {
-        viewModelScope.launch {
-            _lastHomeworkId.value = studentRepository.getLastHomeworkId()
-        }
+    private suspend fun getLastHomeworkId() {
+        _lastHomeworkId.value = studentRepository.getLastHomeworkId()
     }
 
-    private fun getHomeworkList() {
-        viewModelScope.launch {
-            _homeworkList.value = studentRepository.getHomeworkForTodo()
-        }
+    private suspend fun getHomeworkList() {
+        _homeworkList.value = studentRepository.getHomeworkForTodo()
     }
 
     //=======================================================
@@ -134,12 +131,13 @@ class MainViewModel(private val context: Context) : ViewModel() {
             //if the app's database doesn't have any homework fetch all the homework from the api
             if (localHomeworkList.value!!.isEmpty()) {
                 //getting the number of the homework in the online database
-                val numOfHomework: Int =
+                var numOfHomework: Int =
                     studentRepository.getHomeworkFromApi(student.value!!.studentClass)
                         .body()?.homeworks?.count()
-                        ?: 0
+                        ?: -1
+                Log.w("here", numOfHomework.toString())
                 //fetch all the homework until last ine
-                while (numOfHomework != 0) {
+                while (numOfHomework > 0) {
                     val apiHomework: Homework
                     //mapping api homework to local homework
                     studentRepository.getHomeworkFromApi(student.value!!.studentClass)
@@ -152,13 +150,14 @@ class MainViewModel(private val context: Context) : ViewModel() {
                             homeworkDetails = it.homeworkDetails,
                             homeworkStartDate = it.homeworkStartDate.toString(),
                             homeworkEndDate = it.homeworkEndDate.toString(),
-                            homeworkStartDay = it.homeworkStartDay.toString(),
-                            homeworkEndDay = it.homeworkEndDay.toString()
+                            homeworkStartDay = it.homeworkStartDay,
+                            homeworkEndDay = it.homeworkEndDay
                         )
                     }
                     //inserting every homework to the local database
                     insertHomework(apiHomework)
-                    numOfHomework - 1
+                    Log.w("here", apiHomework.toString())
+                    numOfHomework--
                 }
                 //setting the new homework list for UI
                 getHomeworkList()
@@ -178,15 +177,16 @@ class MainViewModel(private val context: Context) : ViewModel() {
             getAllHomeworkList()
             //if the app's database have homework fetch only the new ones
             if (localHomeworkList.value!!.isNotEmpty()) {
-                getLastHomeworkId()
+                //getLastHomeworkId()
+                _lastHomeworkId.value = studentRepository.getLastHomeworkId()
                 //getting the number of the new homework in the online database
-                val numOfHomework: Int =
+                var numOfHomework: Int =
                     studentRepository.getHomeworkByIdFromApi(
                         student.value!!.studentClass,
                         lastHomeworkId.value!!
                     ).body()
-                        ?.homeworks?.count() ?: 0
-                while (numOfHomework != 0) {
+                        ?.homeworks?.count() ?: -1
+                while (numOfHomework > 0) {
                     val apiHomework: Homework
                     //mapping api homework to local homework
                     studentRepository.getHomeworkByIdFromApi(
@@ -206,13 +206,14 @@ class MainViewModel(private val context: Context) : ViewModel() {
                         )
                     }
                     //inserting every homework to the local database
+                    Log.w("here", apiHomework.toString())
                     insertHomework(apiHomework)
-                    numOfHomework - 1
+                    numOfHomework--
                 }
             }
+            //setting the new homework list for UI
+            getHomeworkList()
         }
-        //setting the new homework list for UI
-        getHomeworkList()
     }
 
     //calling fun
@@ -220,10 +221,35 @@ class MainViewModel(private val context: Context) : ViewModel() {
         getHomeworkByIdListFromApi()
     }
 
+    //delete all homework
+    private fun deleteAllHomework() {
+        viewModelScope.launch {
+            studentRepository.deleteAllHomework()
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            deleteAllHomework()
+        }
+    }
     //=======================================================
     //functions: public & private                           =
     //=======================================================
-    //todo @LT #simple|| please format the file with the provided pattern
+    // main menu                                            =
+    //=======================================================
+    fun uploadFileToFirebase(fileUri: Uri) {
+        val storageRef = FirebaseStorage.getInstance().reference
+        val riversRef =
+            storageRef.child("uploads/${fileUri.lastPathSegment}") // Customize the path as needed
+
+        val uploadTask = riversRef.putFile(fileUri)
+        uploadTask.addOnFailureListener {
+            Log.e("FirebaseUpload", "Upload failed: ${it.message}")
+        }.addOnSuccessListener { taskSnapshot ->
+            Log.d("FirebaseUpload", "Upload succeeded. Metadata: ${taskSnapshot.metadata}")
+        }
+    }
 
     fun updateBottomSheetState(index: Int, newState: Boolean) {
         // Ensure index is within bounds
@@ -281,5 +307,4 @@ class MainViewModel(private val context: Context) : ViewModel() {
         _Classesstate.value =
             MainDataClass.ClassesPageState(isTopAppBarVisible = !_Classesstate.value.isTopAppBarVisible)
     }
-
 }

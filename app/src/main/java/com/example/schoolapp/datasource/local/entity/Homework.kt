@@ -34,6 +34,9 @@ data class Homework(
     @ColumnInfo(name = "homework_end_day")
     val homeworkEndDay: String,
 
-    @ColumnInfo(name = "homework_done_flag")
-    val homeworkDoneFlag: Boolean = false
+    @ColumnInfo(name = "homework_is_complete")
+    val homeworkIsComplete: Boolean = false,
+
+    @ColumnInfo(name = "homework_file_path")
+    val homeworkFilePath: String? = null
 )

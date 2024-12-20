@@ -56,7 +56,7 @@ interface StudentDatabaseApi {
     suspend fun homeworkById(
         @Query("studentClass") studentClass: String,
         @Query("homeworkId") homeworkId: Int,
-        @Query("endApiCall") endApiCall: String = "homework_by_id"
+        @Query("endApiCall") endApiCall: String = "homeworks_by_id"
     ): Response<HomeworkListResponse>
 
     //profile API

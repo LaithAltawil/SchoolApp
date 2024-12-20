@@ -32,4 +32,9 @@ interface HomeworkDao {
     //delete homework
     @Query("DELETE FROM homework_table where homework_id = :id")
     suspend fun deleteHomework(id: Int)
+
+    //delete all homework
+    @Query("DELETE FROM homework_table")
+    suspend fun deleteAllHomework()
+
 }

@@ -9,7 +9,7 @@ import com.example.schoolapp.datasource.local.dao.StudentDao
 import com.example.schoolapp.datasource.local.entity.Homework
 import com.example.schoolapp.datasource.local.entity.Student
 
-@Database(entities = [Student::class, Homework::class], version = 2, exportSchema = false)
+@Database(entities = [Student::class, Homework::class], version = 3, exportSchema = false)
 abstract class StudentDatabase : RoomDatabase() {
 
     abstract val studentDao: StudentDao
@@ -59,5 +59,6 @@ abstract class StudentDatabase : RoomDatabase() {
     suspend fun getHomeworkForTodo() = homeworkDao.getListOfHomeworkBasedOnDate()
     suspend fun getLastHomeworkId() = homeworkDao.getLastHomeworkId()
     suspend fun deleteHomework(id: Int) = homeworkDao.deleteHomework(id)
+    suspend fun deleteAllHomework() = homeworkDao.deleteAllHomework()
 
 }
