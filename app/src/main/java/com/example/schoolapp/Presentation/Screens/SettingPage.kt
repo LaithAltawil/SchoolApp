@@ -47,6 +47,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.Subjects
+import com.example.schoolapp.Data.setting
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 
@@ -64,10 +65,10 @@ fun SettingPage(
 
 
     val settings = listOf(
-        Subjects("Profile", painterResource(id = R.drawable.baseline_account_box_24),{}) ,
-        Subjects("Notifications", painterResource(id = R.drawable.baseline_notifications_24),{}) ,
-        Subjects("Help & FAQ", painterResource(id = R.drawable.help),{}) ,
-        Subjects("Contact us", painterResource(id = R.drawable.contact_us),{})
+        setting("Profile", painterResource(id = R.drawable.baseline_account_box_24),"Edit Profile") ,
+        setting("Notifications", painterResource(id = R.drawable.baseline_notifications_24),"Notifications") ,
+        setting("Help & FAQ", painterResource(id = R.drawable.help),"Help & FAQ") ,
+        setting("Contact us", painterResource(id = R.drawable.contact_us),"Contact us")
     )
 
 

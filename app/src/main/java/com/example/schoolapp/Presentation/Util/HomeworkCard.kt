@@ -47,13 +47,13 @@ import java.util.Locale
 //=======================================================
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ExpandableCard(homework: Homework, viewModel: MainViewModel, context: Context,onClick: () -> Unit) {
+fun homeworkCard(homework: Homework, viewModel: MainViewModel, context: Context,expand: Boolean = false) {
     //=======================================================
     //variables: local & states                             =
     //=======================================================
     // states                                               =
     //=======================================================
-    //var isExpanded by remember { mutableStateOf(false) }
+    var isExpanded by remember { mutableStateOf(false) }
 
     //=======================================================
     //Local variables                                      =
@@ -76,8 +76,8 @@ fun ExpandableCard(homework: Homework, viewModel: MainViewModel, context: Contex
             .padding(10.dp)
             .clickable {
 
-                   onClick()
-                    //isExpanded = !isExpanded
+
+                isExpanded = !isExpanded
 
             },
         colors = CardDefaults.cardColors(
@@ -93,7 +93,7 @@ fun ExpandableCard(homework: Homework, viewModel: MainViewModel, context: Contex
                     style = MaterialTheme.typography.headlineLarge
                 )
                 //Spacer(modifier = Modifier.weight(1f))
-                Spacer(modifier = Modifier.width(100.dp))
+                Spacer(modifier = Modifier.width(80.dp))
                 //LT: this date will be replaced with the actual date when database is setup
                 Text(homework.homeworkEndDay)
                 Spacer(modifier = Modifier.width(8.dp))
@@ -102,7 +102,45 @@ fun ExpandableCard(homework: Homework, viewModel: MainViewModel, context: Contex
                     style = MaterialTheme.typography.labelLarge
                 )
             }
-
+            if (isExpanded) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = homework.homeworkDetails,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                ) {
+                    Button(
+                        enabled = if (homework.homeworkIsComplete) false else true,
+                        onClick = {
+                            // Trigger file picker
+                            filePickerLauncher.launch(
+                                arrayOf(
+                                    "image/*",
+                                    "application/*"
+                                )
+                            )
+                        }, colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.onPrimary,
+                            contentColor = MaterialTheme.colorScheme.primary
+                        )
+                    ) {
+                        Text("Upload File")
+                    }
+                    Icon(
+                        modifier = Modifier.size(30.dp),
+                        painter =
+                        if (homework.homeworkIsComplete) {
+                            painterResource(id = R.drawable.baseline_check_circle_24)
+                        } else {
+                            painterResource(id = R.drawable.baseline_radio_button_unchecked_24)
+                        }, contentDescription = null
+                    )
+                }
+            }
         }
     }
 }

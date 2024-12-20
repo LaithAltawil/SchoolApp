@@ -18,7 +18,11 @@ data class Subjects(
     val imagePath: Painter? = null,
     val onClick: () -> Unit,
     val exam: Exam? = null
-
+)
+data class setting(
+    val name: String,
+    val imagePath: Painter? = null,
+    val details:String
 )
 data class MarksSubjects(
     val name: String,

@@ -32,6 +32,7 @@ import com.example.compose.AppTheme
 import com.example.schoolapp.Data.MockData.Mock.HomeworkMock
 import com.example.schoolapp.Navigation.Screen
 import com.example.schoolapp.Presentation.Util.ExpandableCard
+import com.example.schoolapp.Presentation.Util.homeworkCard
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.datasource.local.entity.Homework
 
@@ -123,16 +124,16 @@ fun HomeworkPage(viewModel: MainViewModel, navController: NavController) {
                         val homeworks = homeworkListState.value
                         if (homeworks != null) {
                             items(homeworks.size) { index ->
-                                val isComplete = homeworks[index].homeworkIsComplete ?: false
-                                if (!isComplete) {
-                                    ExpandableCard(
-                                        homeworks[index],
-                                        viewModel,
-                                        LocalContext.current
-                                    ){
-                                        navController.navigate(Screen.HomeworkPage.route)
-                                    }
-                                }
+                                if(
+
+                                    true
+                                    //will replace it with a checker to expand the clicked
+                                ){homeworkCard(
+                                    homework = homeworks[index],
+                                    viewModel = viewModel,
+                                    context = context
+                                )}
+
                             }
                         } else {
                             item {
