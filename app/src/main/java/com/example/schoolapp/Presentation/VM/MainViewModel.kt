@@ -15,6 +15,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 //Main viewModel
 class MainViewModel(private val context: Context) : ViewModel() {
@@ -78,7 +81,8 @@ class MainViewModel(private val context: Context) : ViewModel() {
     //=======================================================
     // Local variables                                      =
     //=======================================================
-
+    private val date =
+        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
     //=======================================================
     // ROOM side                                            =
     //=======================================================
@@ -162,10 +166,10 @@ class MainViewModel(private val context: Context) : ViewModel() {
                                 homeworkTeacherClass = it.homeworkTeacherClass,
                                 homeworkTeacherSubject = it.homeworkTeacherSubject,
                                 homeworkDetails = it.homeworkDetails,
-                                homeworkStartDate = it.homeworkStartDate.toString(),
-                                homeworkEndDate = it.homeworkEndDate.toString(),
-                                homeworkStartDay = it.homeworkStartDay.toString(),
-                                homeworkEndDay = it.homeworkEndDay.toString()
+                                homeworkStartDate =  date.format(it.homeworkStartDate.toString()),
+                                homeworkEndDate = date.format(it.homeworkEndDate.toString()),
+                                homeworkStartDay = it.homeworkStartDay,
+                                homeworkEndDay = it.homeworkEndDay
                             )
                         }
                     //inserting every homework to the local database
@@ -242,7 +246,7 @@ class MainViewModel(private val context: Context) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            //deleteAllHomework()
+            deleteAllHomework()
         }
     }
 

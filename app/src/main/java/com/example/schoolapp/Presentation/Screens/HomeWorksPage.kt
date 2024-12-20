@@ -20,6 +20,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -38,11 +39,20 @@ import com.example.schoolapp.datasource.local.entity.Homework
 //=======================================================
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeworkPage(homeWorkPageState: MainViewModel,navController: NavController) {
+fun HomeworkPage(viewModel: MainViewModel, navController: NavController) {
     //=======================================================
     //variables: local & states                             =
     //=======================================================
-    val state = homeWorkPageState.state.collectAsStateWithLifecycle()
+    //states                                                =
+    //=======================================================
+    val state = viewModel.state.collectAsStateWithLifecycle()
+    val homeworkListState = viewModel.homeworkList.collectAsState()
+    val studentState = viewModel.student.collectAsState()
+
+    //=======================================================
+    //local variables                                       =
+    //=======================================================
+    val context = LocalContext.current
 
     //=======================================================
     //UI & Logic                                            =
@@ -109,20 +119,26 @@ fun HomeworkPage(homeWorkPageState: MainViewModel,navController: NavController) 
                 ) {
                     //lazy column to hold the data logic & UI design
                     LazyColumn {
-                        //controls the lazy size
-                        items(HomeworkMock.size) { index ->
-                            //done homeWork card UI & Logic
-                            //todo @LT #medium|| please add more details like this:-
-                            /*
-                            * +---------------------------+
-                            * |subject name     due date* |
-                            * +---------------------------+
-                            * due date can be the general format or day counter example: 2 day to submit       */
-                            ExpandableCard(
-                                HomeworkMock[index] as Homework,
-                                homeWorkPageState,
-                                LocalContext.current
-                            )
+                        val homeworks = homeworkListState.value
+                        if (homeworks != null) {
+                            items(homeworks.size) { index ->
+                                val isComplete = homeworks[index].homeworkIsComplete ?: false
+                                if (!isComplete) {
+                                    ExpandableCard(
+                                        homeworks[index],
+                                        viewModel,
+                                        LocalContext.current
+                                    )
+                                }
+                            }
+                        } else {
+                            item {
+                                Text(
+                                    "No homework available",
+                                    modifier = Modifier.padding(16.dp),
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
+                            }
                         }
                     }
                 }

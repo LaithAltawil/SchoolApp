@@ -130,7 +130,7 @@ fun Navigation() {
                 HomeworkPage(
                     //solved @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
                     //LT:Not needed to be parsed, but might parse it later depending on its need
-                    homeWorkPageState = viewModel,
+                    viewModel = viewModel,
                     navController = navController
                 )
             }
