@@ -2,6 +2,7 @@ package com.example.schoolapp.Presentation.Util
 
 import android.content.Context
 import android.net.Uri
+import android.text.format.DateUtils
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -37,6 +38,9 @@ import com.example.schoolapp.Navigation.Screen
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 import com.example.schoolapp.datasource.local.entity.Homework
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 //=======================================================
 //Expandable card holds the logic for viewing it        =
@@ -63,7 +67,6 @@ fun ExpandableCard(homework: Homework, viewModel: MainViewModel, context: Contex
             Toast.makeText(context, "No file selected", Toast.LENGTH_SHORT).show()
         }
     }
-
     //=======================================================
     //Logic & UI                                            =
     //=======================================================
