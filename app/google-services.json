@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "311000516164",
+    "firebase_url": "https://hashemite-university-project-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "hashemite-university-project",
+    "storage_bucket": "hashemite-university-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311000516164:android:17c3fff2763d6d26f21e11",
+        "android_client_info": {
+          "package_name": "com.example.schoolapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoAijdSkBuaMw9bpEtTBON_n69d-szf-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311000516164:android:81434759fcfce627f21e11",
+        "android_client_info": {
+          "package_name": "com.test_one.project_one"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoAijdSkBuaMw9bpEtTBON_n69d-szf-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
