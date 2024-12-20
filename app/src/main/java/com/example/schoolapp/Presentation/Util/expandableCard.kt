@@ -64,7 +64,6 @@ fun ExpandableCard(homework: Homework, viewModel: MainViewModel, context: Contex
     //=======================================================
     //Logic & UI                                            =
     //=======================================================
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -86,7 +85,7 @@ fun ExpandableCard(homework: Homework, viewModel: MainViewModel, context: Contex
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 //LT: this date will be replaced with the actual date when database is setup
-                Text("Sunday")
+                Text(homework.homeworkEndDay)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = homework.homeworkEndDate,

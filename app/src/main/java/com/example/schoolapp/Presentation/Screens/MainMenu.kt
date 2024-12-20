@@ -1,5 +1,6 @@
 package com.example.schoolapp.Presentation.Screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +33,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -47,12 +49,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.MainMenuItem
-import com.example.schoolapp.Data.MockData.Mock.HomeworkMock
 import com.example.schoolapp.Navigation.Screen
 import com.example.schoolapp.Presentation.Util.ExpandableCard
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
-import com.example.schoolapp.datasource.local.entity.Homework
 import kotlinx.coroutines.launch
 
 //=======================================================
@@ -70,6 +70,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
     //=======================================================
     //states                                                =
     //=======================================================
+    val homeworkListState = viewModel.homeworkList.collectAsState()
     val studentState = viewModel.student.collectAsState()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -142,13 +143,18 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
             onClick = { /*TODO*/ }
         )
     )
-
+    val studentFirstName = studentState.value?.studentFirstName
+    val studentSecondName = studentState.value?.studentSecondName
+    val studentThirdName = studentState.value?.studentThirdName
+    val studentName = "$studentFirstName $studentSecondName $studentThirdName"
     //=======================================================
     //this is the main page of the app which the student    =
     // enters after signing in                              =
     //=======================================================
-    viewModel.initializeHomeworkList()
-    viewModel.getTodoHomework()
+    LaunchedEffect(Unit) {
+        //setting todo_list with homeworks
+        viewModel.initializeHomeworkList()
+    }
     AppTheme {
         ModalNavigationDrawer(
             drawerState = drawerState,
@@ -278,9 +284,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                 }
                                 Spacer(modifier = Modifier.width(15.dp))
                                 Text(
-                                    text = "Welcome, Laith Ahmad Altawil" +
-                                            //" ${studentState.value?.studentFirstName}" +
-                                            "",
+                                    text = "Welcome, $studentName",
                                     style = TextStyle(fontSize = 36.sp),
                                     modifier = Modifier.padding(top = 58.dp),
                                     overflow = TextOverflow.Visible,
@@ -372,15 +376,30 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                 )
                                 Spacer(modifier = Modifier.height(10.dp))
                                 LazyColumn {
-                                    items(viewModel.homeworkList.value?.size ?: 0) { index ->
-                                        if (!viewModel.homeworkList.value?.get(index)?.homeworkIsComplete!!
-                                                ?: false
-                                        ) {
-                                            ExpandableCard(
-                                                viewModel.homeworkList.value!![0]
-                                                    ?: HomeworkMock[0] as Homework,
-                                                viewModel,
-                                                LocalContext.current
+                                    if (homeworkListState.value != null) {
+                                        items(homeworkListState.value!!.size) { index ->
+                                            Log.d(
+                                                "HomeworkDebug",
+                                                "Checking homework at index $index: ${homeworkListState.value!![index]}"
+                                            )
+                                            if (!homeworkListState.value!![index].homeworkIsComplete ?: false) {
+                                                Log.d(
+                                                    "HomeworkDebug",
+                                                    "Showing homework card for: ${homeworkListState.value!![index]}"
+                                                )
+                                                ExpandableCard(
+                                                    homeworkListState.value!![index],
+                                                    viewModel,
+                                                    LocalContext.current
+                                                )
+                                            }
+                                        }
+                                    } else {
+                                        item {
+                                            Text(
+                                                "No homework available",
+                                                modifier = Modifier.padding(16.dp),
+                                                style = MaterialTheme.typography.bodyLarge
                                             )
                                         }
                                     }
