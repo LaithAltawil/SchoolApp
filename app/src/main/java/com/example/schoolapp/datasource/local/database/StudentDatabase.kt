@@ -58,6 +58,7 @@ abstract class StudentDatabase : RoomDatabase() {
     suspend fun getAllHomework() = homeworkDao.getListOfHomework()
     suspend fun getHomeworkForTodo() = homeworkDao.getListOfHomeworkBasedOnDate()
     suspend fun getLastHomeworkId() = homeworkDao.getLastHomeworkId()
+    suspend fun getLastHomeworkClass() = homeworkDao.getLastHomeworkClass()
     suspend fun deleteHomework(id: Int) = homeworkDao.deleteHomework(id)
     suspend fun deleteAllHomework() = homeworkDao.deleteAllHomework()
 

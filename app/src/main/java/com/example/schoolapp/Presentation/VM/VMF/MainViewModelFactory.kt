@@ -3,7 +3,6 @@ package com.example.schoolapp.Presentation.VM.VMF
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.schoolapp.Presentation.VM.AppViewModel
 import com.example.schoolapp.Presentation.VM.MainViewModel
 
 class MainViewModelFactory(

@@ -13,5 +13,7 @@ data class HomeworkModel(
     @SerializedName("homeworkStartDate") val homeworkStartDate: Date,
     @SerializedName("homeworkEndDate") val homeworkEndDate: Date,
     @SerializedName("homeworkStartDay") val homeworkStartDay: String,
-    @SerializedName("homeworkEndDay") val homeworkEndDay: String
+    @SerializedName("homeworkEndDay") val homeworkEndDay: String,
+    @SerializedName("homeworkIsCompleted") val homeworkIsCompleted: Boolean,
+    @SerializedName("homeworkFilePath") val homeworkFilePath: String
 )

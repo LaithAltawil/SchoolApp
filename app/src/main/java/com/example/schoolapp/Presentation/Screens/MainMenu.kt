@@ -64,7 +64,6 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
     // initializing variables data                          =
     //=======================================================
 
-
     //=======================================================
     //variables: local & states                             =
     //=======================================================
@@ -74,7 +73,6 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
     val studentState = viewModel.student.collectAsState()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-
 
     //=======================================================
     //local variables                                       =
@@ -153,7 +151,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
     //=======================================================
     LaunchedEffect(Unit) {
         //setting todo_list with homeworks
-        viewModel.initializeHomeworkList()
+        viewModel.checkHomework()
     }
     AppTheme {
         ModalNavigationDrawer(
@@ -319,7 +317,6 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                 }
                             }
                         }
-
                         // To Do Section Title
                         Text(
                             text = "To Do",
@@ -328,8 +325,6 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                             color = MaterialTheme.colorScheme.secondary,
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                         )
-
-
                         // Homework List
                         LazyColumn(
                             modifier = Modifier
@@ -337,16 +332,16 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                 .weight(1f)
                                 .padding(horizontal = 16.dp)
                         ) {
-                            val homeworks = homeworkListState.value
-                            if (homeworks != null) {
-                                items(homeworks.size) { index ->
-                                    val isComplete = homeworks[index].homeworkIsComplete ?: false
+                            if (homeworkListState.value != null) {
+                                items(homeworkListState.value!!.size) { index ->
+                                    val isComplete =
+                                        homeworkListState.value!![index].homeworkIsComplete ?: false
                                     if (!isComplete) {
                                         ExpandableCard(
-                                            homeworks[index],
+                                            homeworkListState.value!![index],
                                             viewModel,
                                             LocalContext.current
-                                        ){
+                                        ) {
                                             navController.navigate(Screen.HomeworkPage.route)
                                         }
                                     }

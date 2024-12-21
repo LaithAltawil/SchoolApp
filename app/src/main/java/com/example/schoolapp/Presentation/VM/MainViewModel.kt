@@ -15,9 +15,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 //Main viewModel
 class MainViewModel(private val context: Context) : ViewModel() {
@@ -54,6 +51,10 @@ class MainViewModel(private val context: Context) : ViewModel() {
     private val _lastHomeworkId = MutableStateFlow<Int?>(null) // Initialize with null
     val lastHomeworkId: StateFlow<Int?> = _lastHomeworkId.asStateFlow()
 
+    //homework string represent the last homework class
+    private val _lastHomeworkClass = MutableStateFlow<String?>(null) // Initialize with null
+    val lastHomeworkClass: StateFlow<String?> = _lastHomeworkClass.asStateFlow()
+
     //Exam Page
     private val _Examstate = MutableStateFlow(MainDataClass.ExamPageState1())
     val Examstate: StateFlow<MainDataClass.ExamPageState1> = _Examstate.asStateFlow()
@@ -81,8 +82,7 @@ class MainViewModel(private val context: Context) : ViewModel() {
     //=======================================================
     // Local variables                                      =
     //=======================================================
-    private val date =
-        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
     //=======================================================
     // ROOM side                                            =
     //=======================================================
@@ -106,20 +106,22 @@ class MainViewModel(private val context: Context) : ViewModel() {
         studentRepository.insertHomework(homework)
     }
 
-    //initialize homework list from the local ROOM
-    private suspend fun showHomework(homework: Homework) {
-        _localHomeworkList.value = studentRepository.getHomeworkForTodo()
-    }
-
     //get all the homework list from the local ROOM
     private suspend fun getAllHomeworkList() {
         _localHomeworkList.value = studentRepository.getAllHomework()
     }
 
+    //get last homework id for DB query
     private suspend fun getLastHomeworkId() {
         _lastHomeworkId.value = studentRepository.getLastHomeworkId()
     }
 
+    //get last homework class for DB query
+    private suspend fun getLastHomeworkClass() {
+        _lastHomeworkClass.value = studentRepository.getLastHomeworkClass()
+    }
+
+    //getting the homeworks for the todo_list, condition > current date
     private suspend fun getHomeworkList() {
         //get all the homework in the local database.
         //where homework date is starting from the current date.
@@ -131,58 +133,60 @@ class MainViewModel(private val context: Context) : ViewModel() {
     //=======================================================
     // main menu                                            =
     //=======================================================
+    //delete all homework
+    private suspend fun deleteAllHomework() {
+        studentRepository.deleteAllHomework()
+    }
+
     //getting only the homework that are not in the local database
     private fun getHomeworkByIdListFromApi() {
         viewModelScope.launch {
-            //initializing the value of localHomeworkList
-            //Which will be all the homework are currently saved locally.
-            getAllHomeworkList()
-            //if the app's database have homework fetch only the new ones
-            if (localHomeworkList.value!!.isNotEmpty()) {
-                //getting the last homework id in the local database
-                //so only the homework with id > from the last saved homework id will be fetched
-                getLastHomeworkId()
-                //getting the number of the new homework in the online database
-                var numOfHomework: Int =
-                    studentRepository.getHomeworkByIdFromApi(
-                        student.value!!.studentClass,
-                        lastHomeworkId.value!!
-                    ).body()
-                        ?.homeworks
-                        ?.count()
-                        ?: -1
-                while (numOfHomework > 0) {
-                    val apiHomework: Homework
-                    //mapping api homework to local homework
-                    studentRepository.getHomeworkByIdFromApi(
-                        student.value!!.studentClass,
-                        lastHomeworkId.value!!
-                    ).body()!!
-                        .homeworks[numOfHomework - 1]
-                        .let {
-                            apiHomework = Homework(
-                                homeworkId = it.homeworkId,
-                                homeworkTeacherId = it.homeworkTeacherId,
-                                homeworkTeacherClass = it.homeworkTeacherClass,
-                                homeworkTeacherSubject = it.homeworkTeacherSubject,
-                                homeworkDetails = it.homeworkDetails,
-                                homeworkStartDate =  date.format(it.homeworkStartDate.toString()),
-                                homeworkEndDate = date.format(it.homeworkEndDate.toString()),
-                                homeworkStartDay = it.homeworkStartDay,
-                                homeworkEndDay = it.homeworkEndDay
-                            )
-                        }
-                    //inserting every homework to the local database
-                    insertHomework(apiHomework)
-                    numOfHomework--
-                }
-                //get all the homework in the local database.
-                //usage: main menu lazy row
-                getHomeworkList()
+            //getting the last homework id in the local database
+            //so only the homework with id > from the last saved homework id will be fetched
+            getLastHomeworkId()
+            //getting the number of the new homework in the online database
+            var numOfHomework: Int =
+                studentRepository.getHomeworkByIdFromApi(
+                    student.value!!.studentClass,
+                    lastHomeworkId.value!!
+                ).body()
+                    ?.homeworks
+                    ?.count()
+                    ?: -1
+            while (numOfHomework > 0) {
+                val apiHomework: Homework
+                //mapping api homework to local homework
+                studentRepository.getHomeworkByIdFromApi(
+                    student.value!!.studentClass,
+                    lastHomeworkId.value!!
+                ).body()!!
+                    .homeworks[numOfHomework - 1]
+                    .let {
+                        apiHomework = Homework(
+                            homeworkId = it.homeworkId,
+                            homeworkTeacherId = it.homeworkTeacherId,
+                            homeworkTeacherClass = it.homeworkTeacherClass,
+                            homeworkTeacherSubject = it.homeworkTeacherSubject,
+                            homeworkDetails = it.homeworkDetails,
+                            homeworkStartDate = it.homeworkStartDate.toString(),
+                            homeworkEndDate = it.homeworkEndDate.toString(),
+                            homeworkStartDay = it.homeworkStartDay,
+                            homeworkEndDay = it.homeworkEndDay,
+                            homeworkIsComplete = it.homeworkIsCompleted,
+                            homeworkFilePath = it.homeworkFilePath
+                        )
+                    }
+                //inserting every homework to the local database
+                insertHomework(apiHomework)
+                numOfHomework--
             }
+            //get all the homework in the local database.
+            //usage: main menu lazy row
+            getHomeworkList()
         }
     }
 
+    //handle the insert for new homework for first time
     private fun insertHomeworkListFromApi() {
         viewModelScope.launch {
             //initializing the value of localHomeworkList.
@@ -214,7 +218,9 @@ class MainViewModel(private val context: Context) : ViewModel() {
                                 homeworkStartDate = it.homeworkStartDate.toString(),
                                 homeworkEndDate = it.homeworkEndDate.toString(),
                                 homeworkStartDay = it.homeworkStartDay,
-                                homeworkEndDay = it.homeworkEndDay
+                                homeworkEndDay = it.homeworkEndDay,
+                                homeworkIsComplete = it.homeworkIsCompleted,
+                                homeworkFilePath = it.homeworkFilePath
                             )
                         }
                     //inserting every homework to the local database
@@ -230,24 +236,28 @@ class MainViewModel(private val context: Context) : ViewModel() {
         }
     }
 
-    //calling fun
-    fun initializeHomeworkList() {
-        insertHomeworkListFromApi()
-    }
-
-
-
-    //delete all homework
-    private fun deleteAllHomework() {
+    //comparing student data class with the local database.
+    //usage: if new student with different class signed in then delete all the homework.
+    //and insert new ones
+    private fun compareHomeworkByClass() {
         viewModelScope.launch {
-            studentRepository.deleteAllHomework()
+            //get last homework class
+            getLastHomeworkClass()
+            //check if the student class == the last homework class
+            if (student.value!!.studentClass != lastHomeworkClass.value) {
+                //delete all the homework
+                deleteAllHomework()
+                //insert new homework
+                insertHomeworkListFromApi()
+            } else
+            //handle else homework operations
+                insertHomeworkListFromApi()
         }
     }
 
-    init {
-        viewModelScope.launch {
-            deleteAllHomework()
-        }
+    //calling the compare function
+    fun checkHomework() {
+        compareHomeworkByClass()
     }
 
     //=======================================================

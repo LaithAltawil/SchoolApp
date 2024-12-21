@@ -104,6 +104,13 @@ class StudentRepository(
         return lastId
     }
 
+    suspend fun getLastHomeworkClass(): String {
+        val lastClass = withContext(Dispatchers.IO) {
+            studentDatabase.getLastHomeworkClass()
+        }
+        return lastClass
+    }
+
     //delete homework
     suspend fun deleteHomework(id: Int) {
         withContext(Dispatchers.IO) {
@@ -146,5 +153,12 @@ class StudentRepository(
             return@withContext studentApi.homeworkById(studentClass, homeworkId)
         }
         return homeworkResponse
+    }
+
+    //update homework
+    suspend fun updateHomework(isCompleted: Boolean,filePath: String, id: Int) {
+        withContext(Dispatchers.IO) {
+            studentApi.updateHomework(isCompleted,filePath,id)
+        }
     }
 }

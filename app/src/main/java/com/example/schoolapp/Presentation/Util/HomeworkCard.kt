@@ -2,13 +2,11 @@ package com.example.schoolapp.Presentation.Util
 
 import android.content.Context
 import android.net.Uri
-import android.text.format.DateUtils
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,21 +31,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.example.schoolapp.Navigation.Screen
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 import com.example.schoolapp.datasource.local.entity.Homework
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 //=======================================================
 //Expandable card holds the logic for viewing it        =
 //=======================================================
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun homeworkCard(homework: Homework, viewModel: MainViewModel, context: Context,expand: Boolean = false) {
+fun homeworkCard(
+    homework: Homework,
+    viewModel: MainViewModel,
+    context: Context,
+    expand: Boolean = false
+) {
     //=======================================================
     //variables: local & states                             =
     //=======================================================
@@ -75,10 +73,7 @@ fun homeworkCard(homework: Homework, viewModel: MainViewModel, context: Context,
             .fillMaxWidth()
             .padding(10.dp)
             .clickable {
-
-
                 isExpanded = !isExpanded
-
             },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary,
@@ -94,7 +89,6 @@ fun homeworkCard(homework: Homework, viewModel: MainViewModel, context: Context,
                 )
                 //Spacer(modifier = Modifier.weight(1f))
                 Spacer(modifier = Modifier.width(80.dp))
-                //LT: this date will be replaced with the actual date when database is setup
                 Text(homework.homeworkEndDay)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(

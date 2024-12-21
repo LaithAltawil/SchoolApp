@@ -22,12 +22,16 @@ interface HomeworkDao {
     suspend fun getListOfHomework(): List<Homework>
 
     //get list of homework based on date
-    @Query("SELECT * from homework_table where homework_start_date >= DATE('now')")
+    @Query("SELECT * from homework_table where homework_start_date >= DATE('now') and homework_is_complete = 0")
     suspend fun getListOfHomeworkBasedOnDate(): List<Homework>
 
     //get the last homework Id
     @Query("SELECT homework_id from homework_table ORDER BY homework_id DESC LIMIT 1")
     suspend fun getLastHomeworkId(): Int
+
+    //get the last homework Class
+    @Query("SELECT homework_teacher_class from homework_table ORDER BY homework_id DESC LIMIT 1")
+    suspend fun getLastHomeworkClass(): String
 
     //delete homework
     @Query("DELETE FROM homework_table where homework_id = :id")
