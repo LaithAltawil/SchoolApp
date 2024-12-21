@@ -422,10 +422,12 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                                 ExpandableCard(
                                                     homeworkListState.value!![index],
                                                     viewModel,
-                                                    LocalContext.current
-                                                ) {
+                                                    LocalContext.current,
+                                                    ){
                                                     navController.navigate(Screen.HomeworkPage.route)
                                                 }
+
+
                                             }
                                         }
                                     }

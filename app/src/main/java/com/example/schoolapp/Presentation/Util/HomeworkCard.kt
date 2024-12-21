@@ -2,9 +2,11 @@ package com.example.schoolapp.Presentation.Util
 
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,9 +33,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.schoolapp.Data.variable.opened
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 import com.example.schoolapp.datasource.local.entity.Homework
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 //=======================================================
 //Expandable card holds the logic for viewing it        =
@@ -44,7 +50,7 @@ fun homeworkCard(
     homework: Homework,
     viewModel: MainViewModel,
     context: Context,
-    expand: Boolean = false
+
 ) {
     //=======================================================
     //variables: local & states                             =
@@ -53,9 +59,17 @@ fun homeworkCard(
     //=======================================================
     var isExpanded by remember { mutableStateOf(false) }
 
+
+
     //=======================================================
     //Local variables                                      =
     //=======================================================
+
+        if(opened==homework.homeworkId){
+            isExpanded = true
+        }
+
+
     val filePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
     ) { uri: Uri? ->
@@ -68,11 +82,28 @@ fun homeworkCard(
     //=======================================================
     //Logic & UI                                            =
     //=======================================================
+    //handle the time format
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun convertDateString(dateFromApi: String): String {
+        // Define the input date format
+        val inputFormatter =
+            DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+
+        // Parse the input date string to a LocalDateTime
+        val parsedDate = LocalDateTime.parse(dateFromApi, inputFormatter)
+
+        // Define the output date format
+        val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+        // Format the parsed date to the desired format
+        return parsedDate.format(outputFormatter)
+    }
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)
             .clickable {
+
                 isExpanded = !isExpanded
             },
         colors = CardDefaults.cardColors(
@@ -87,14 +118,17 @@ fun homeworkCard(
                     text = homework.homeworkTeacherSubject,
                     style = MaterialTheme.typography.headlineLarge
                 )
-                //Spacer(modifier = Modifier.weight(1f))
-                Spacer(modifier = Modifier.width(80.dp))
-                Text(homework.homeworkEndDay)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = homework.homeworkEndDate,
-                    style = MaterialTheme.typography.labelLarge
-                )
+                Spacer(modifier = Modifier.weight(1f))
+
+                Column {
+                    Text(homework.homeworkEndDay)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = convertDateString(homework.homeworkEndDate),
+                        style = MaterialTheme.typography.labelLarge
+                    )
+
+                }
             }
             if (isExpanded) {
                 Spacer(modifier = Modifier.height(8.dp))

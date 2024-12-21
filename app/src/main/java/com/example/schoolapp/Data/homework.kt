@@ -12,6 +12,9 @@ data class Homework(
     val dueDate: String,
     val isCompleted: Boolean
 )
+object variable{
+    var opened:Int?=null
+}
 //*todo @MAS #meduim || recreate data class to match the database
 data class Subjects(
     val name: String,

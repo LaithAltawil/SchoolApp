@@ -1,5 +1,6 @@
 package com.example.schoolapp.Presentation.Screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,27 +22,29 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.compose.AppTheme
-import com.example.schoolapp.Data.MockData.Mock.HomeworkMock
-import com.example.schoolapp.Navigation.Screen
-import com.example.schoolapp.Presentation.Util.ExpandableCard
 import com.example.schoolapp.Presentation.Util.homeworkCard
 import com.example.schoolapp.Presentation.VM.MainViewModel
-import com.example.schoolapp.datasource.local.entity.Homework
+
 
 //=======================================================
 //home work page: UI & logic                            =
 //=======================================================
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeworkPage(viewModel: MainViewModel, navController: NavController) {
+fun HomeworkPage(viewModel: MainViewModel, navController: NavController,opened:Int?=null) {
     //=======================================================
     //variables: local & states                             =
     //=======================================================
@@ -50,6 +53,7 @@ fun HomeworkPage(viewModel: MainViewModel, navController: NavController) {
     val state = viewModel.state.collectAsStateWithLifecycle()
     val homeworkListState = viewModel.homeworkList.collectAsState()
     val studentState = viewModel.student.collectAsState()
+    var isExpanded by remember { mutableStateOf(false) }
 
     //=======================================================
     //local variables                                       =
@@ -114,6 +118,7 @@ fun HomeworkPage(viewModel: MainViewModel, navController: NavController) {
                 },
                 // Add content padding
             ) { innerPadding ->
+                val homeworks = homeworkListState.value
                 //main homeWork UI: column
                 Column(
                     modifier = Modifier.padding(innerPadding),
@@ -121,7 +126,7 @@ fun HomeworkPage(viewModel: MainViewModel, navController: NavController) {
                 ) {
                     //lazy column to hold the data logic & UI design
                     LazyColumn {
-                        val homeworks = homeworkListState.value
+
                         if (homeworks != null) {
                             items(homeworks.size) { index ->
                                 if(
@@ -145,6 +150,95 @@ fun HomeworkPage(viewModel: MainViewModel, navController: NavController) {
                             }
                         }
                     }
+                    Column(
+                        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+                    ) {
+                        Text(textAlign = TextAlign.Center,
+                            text = "Finished Homeworks", fontSize = 32.sp,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    isExpanded = !isExpanded
+                                } // Toggle expansion
+                                .padding(16.dp)
+                        )
+                        // Show child items if expanded
+                        if (isExpanded) {
+                            Column(modifier = Modifier.fillMaxWidth()) {
+                                LazyColumn {
+                                    if (homeworks!=null) {
+                                        items(homeworks.size) { index ->
+                                            if(
+                                                homeworks[index].homeworkIsComplete
+                                            //will replace it with a checker to expand the clicked
+                                            ){homeworkCard(
+                                                homework = homeworks[index],
+                                                viewModel = viewModel,
+                                                context = context
+                                            )}
+
+                                        }
+                                    } else {
+                                        item {
+                                            Text(
+                                                "No homework available",
+                                                modifier = Modifier.padding(16.dp),
+                                                style = MaterialTheme.typography.bodyLarge,
+
+                                            )
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                    Column(
+                        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+                    ) {
+                        Text(textAlign = TextAlign.Center,
+                            text = "overDue homeworks", fontSize = 32.sp,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    isExpanded = !isExpanded
+                                } // Toggle expansion
+                                .padding(16.dp)
+                        )
+                        // Show child items if expanded
+                        if (isExpanded) {
+                            Column(modifier = Modifier.fillMaxWidth()) {
+                                LazyColumn {
+                                    if (homeworks!=null) {
+                                        items(homeworks.size) { index ->
+                                            if(true
+                                                //homeworks[index].homeworkIsComplete
+                                            //will replace it with a checker to expand the clicked
+                                            ){homeworkCard(
+                                                homework = homeworks[index],
+                                                viewModel = viewModel,
+                                                context = context
+                                            )}
+
+                                        }
+                                    } else {
+                                        item {
+                                            Text(
+                                                "No homework available",
+                                                modifier = Modifier.padding(16.dp),
+                                                style = MaterialTheme.typography.bodyLarge,
+
+                                                )
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+
+
+
                 }
             }
         }
