@@ -5,12 +5,14 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.schoolapp.Presentation.VM.States.HomeworkLoadingState
 import com.example.schoolapp.Presentation.VM.States.MainDataClass
 import com.example.schoolapp.datasource.local.database.StudentDatabase
 import com.example.schoolapp.datasource.local.entity.Homework
 import com.example.schoolapp.datasource.local.entity.Student
 import com.example.schoolapp.datasource.repository.StudentRepository
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -54,6 +56,10 @@ class MainViewModel(private val context: Context) : ViewModel() {
     //homework string represent the last homework class
     private val _lastHomeworkClass = MutableStateFlow<String?>(null) // Initialize with null
     val lastHomeworkClass: StateFlow<String?> = _lastHomeworkClass.asStateFlow()
+
+    //handle the homework loading state operations
+    private val _loadingState = MutableStateFlow<HomeworkLoadingState>(HomeworkLoadingState.Initial)
+    val loadingState: StateFlow<HomeworkLoadingState> = _loadingState.asStateFlow()
 
     //Exam Page
     private val _Examstate = MutableStateFlow(MainDataClass.ExamPageState1())
@@ -183,6 +189,8 @@ class MainViewModel(private val context: Context) : ViewModel() {
             //get all the homework in the local database.
             //usage: main menu lazy row
             getHomeworkList()
+            //loading state complete
+            _loadingState.value = HomeworkLoadingState.Completed
         }
     }
 
@@ -230,9 +238,14 @@ class MainViewModel(private val context: Context) : ViewModel() {
                 //get all the homework in the local database.
                 //usage: main menu lazy row
                 getHomeworkList()
-            } else
-            //getting only the homework that are not in the local database
+                //complete loading state after getting homework
+                _loadingState.value = HomeworkLoadingState.Completed
+            } else {
+                //update loading state to checking new homework
+                _loadingState.value = HomeworkLoadingState.CheckingNewHomework
+                //getting only the homework that are not in the local database
                 getHomeworkByIdListFromApi()
+            }
         }
     }
 
@@ -241,17 +254,22 @@ class MainViewModel(private val context: Context) : ViewModel() {
     //and insert new ones
     private fun compareHomeworkByClass() {
         viewModelScope.launch {
-            //get last homework class
+            //start loading state
+            _loadingState.value = HomeworkLoadingState.CheckingHomework
+            //get the last homework class
             getLastHomeworkClass()
-            //check if the student class == the last homework class
             if (student.value!!.studentClass != lastHomeworkClass.value) {
-                //delete all the homework
                 deleteAllHomework()
-                //insert new homework
+                //update loading state to fetching
+                _loadingState.value = HomeworkLoadingState.FetchingHomework
+                //insert new homework from API
                 insertHomeworkListFromApi()
-            } else
-            //handle else homework operations
+            } else {
+                //update loading state to fetching
+                _loadingState.value = HomeworkLoadingState.FetchingHomework
+                //insert new homework from API
                 insertHomeworkListFromApi()
+            }
         }
     }
 

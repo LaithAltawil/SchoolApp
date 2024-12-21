@@ -1,6 +1,5 @@
 package com.example.schoolapp.Presentation.Screens
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +22,7 @@ import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -52,6 +52,7 @@ import com.example.schoolapp.Data.MainMenuItem
 import com.example.schoolapp.Navigation.Screen
 import com.example.schoolapp.Presentation.Util.ExpandableCard
 import com.example.schoolapp.Presentation.VM.MainViewModel
+import com.example.schoolapp.Presentation.VM.States.HomeworkLoadingState
 import com.example.schoolapp.R
 import kotlinx.coroutines.launch
 
@@ -71,6 +72,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
     //=======================================================
     val homeworkListState = viewModel.homeworkList.collectAsState()
     val studentState = viewModel.student.collectAsState()
+    val loadingState = viewModel.loadingState.collectAsState()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -332,28 +334,101 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                 .weight(1f)
                                 .padding(horizontal = 16.dp)
                         ) {
-                            if (homeworkListState.value != null) {
-                                items(homeworkListState.value!!.size) { index ->
-                                    val isComplete =
-                                        homeworkListState.value!![index].homeworkIsComplete ?: false
-                                    if (!isComplete) {
-                                        ExpandableCard(
-                                            homeworkListState.value!![index],
-                                            viewModel,
-                                            LocalContext.current
+                            //handle different loading states
+                            when (loadingState.value) {
+                                //=======================================================
+                                //Initial state                                         =
+                                //=======================================================
+                                HomeworkLoadingState.Initial -> {
+                                    item {
+                                        Text(
+                                            "No homework available",
+                                            modifier = Modifier.padding(16.dp),
+                                            style = MaterialTheme.typography.bodyLarge,
+                                            fontSize = 20.sp
+                                        )
+                                    }
+                                }
+                                //=======================================================
+                                //Loading states                                        =
+                                //=======================================================
+                                //checking homework state
+                                HomeworkLoadingState.CheckingHomework -> {
+                                    item {
+                                        Column(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalAlignment = Alignment.CenterHorizontally
                                         ) {
-                                            navController.navigate(Screen.HomeworkPage.route)
+                                            CircularProgressIndicator(
+                                                modifier = Modifier.size(50.dp),
+                                                color = MaterialTheme.colorScheme.secondary
+                                            )
+                                            Spacer(modifier = Modifier.height(16.dp))
+                                            Text(
+                                                "Checking homework...",
+                                                style = MaterialTheme.typography.bodyLarge
+                                            )
                                         }
                                     }
                                 }
-                            } else {
-                                item {
-                                    Text(
-                                        "No homework available",
-                                        modifier = Modifier.padding(16.dp),
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        fontSize = 20.sp
-                                    )
+                                //fetching homework state
+                                HomeworkLoadingState.FetchingHomework -> {
+                                    item {
+                                        Column(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalAlignment = Alignment.CenterHorizontally
+                                        ) {
+                                            CircularProgressIndicator(
+                                                modifier = Modifier.size(50.dp),
+                                                color = MaterialTheme.colorScheme.secondary
+                                            )
+                                            Spacer(modifier = Modifier.height(16.dp))
+                                            Text(
+                                                "Getting homework...",
+                                                style = MaterialTheme.typography.bodyLarge
+                                            )
+                                        }
+                                    }
+                                }
+                                //checking new homework state
+                                HomeworkLoadingState.CheckingNewHomework -> {
+                                    item {
+                                        Column(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalAlignment = Alignment.CenterHorizontally
+                                        ) {
+                                            CircularProgressIndicator(
+                                                modifier = Modifier.size(50.dp),
+                                                color = MaterialTheme.colorScheme.secondary
+                                            )
+                                            Spacer(modifier = Modifier.height(16.dp))
+                                            Text(
+                                                "Checking new homework...",
+                                                style = MaterialTheme.typography.bodyLarge
+                                            )
+                                        }
+                                    }
+                                }
+                                //=======================================================
+                                //Completed state                                       =
+                                //=======================================================
+                                HomeworkLoadingState.Completed -> {
+                                    if (homeworkListState.value != null) {
+                                        items(homeworkListState.value!!.size) { index ->
+                                            val isComplete =
+                                                homeworkListState.value!![index].homeworkIsComplete
+                                                    ?: false
+                                            if (!isComplete) {
+                                                ExpandableCard(
+                                                    homeworkListState.value!![index],
+                                                    viewModel,
+                                                    LocalContext.current
+                                                ) {
+                                                    navController.navigate(Screen.HomeworkPage.route)
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
