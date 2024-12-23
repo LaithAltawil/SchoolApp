@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -153,88 +154,95 @@ fun HomeworkPage(viewModel: MainViewModel, navController: NavController,opened:I
                     Column(
                         horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
                     ) {
-                        Text(textAlign = TextAlign.Center,
-                            text = "Finished Homeworks", fontSize = 32.sp,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    isExpanded = !isExpanded
-                                } // Toggle expansion
-                                .padding(16.dp)
-                        )
-                        // Show child items if expanded
-                        if (isExpanded) {
-                            Column(modifier = Modifier.fillMaxWidth()) {
-                                LazyColumn {
-                                    if (homeworks!=null) {
-                                        items(homeworks.size) { index ->
-                                            if(
-                                                homeworks[index].homeworkIsComplete
-                                            //will replace it with a checker to expand the clicked
-                                            ){homeworkCard(
-                                                homework = homeworks[index],
-                                                viewModel = viewModel,
-                                                context = context
-                                            )}
+                        Card {
+                            Text(textAlign = TextAlign.Center,
+                                text = "Finished Homeworks", fontSize = 32.sp,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        isExpanded = !isExpanded
+                                    } // Toggle expansion
+                                    .padding(16.dp)
+                            )
+                            // Show child items if expanded
+                            if (isExpanded) {
+                                Column(modifier = Modifier.fillMaxWidth()) {
+                                    LazyColumn {
+                                        if (homeworks!=null) {
+                                            items(homeworks.size) { index ->
+                                                if(
+                                                    homeworks[index].homeworkIsComplete
+                                                //will replace it with a checker to expand the clicked
+                                                ){homeworkCard(
+                                                    homework = homeworks[index],
+                                                    viewModel = viewModel,
+                                                    context = context
+                                                )}
 
-                                        }
-                                    } else {
-                                        item {
-                                            Text(
-                                                "No homework available",
-                                                modifier = Modifier.padding(16.dp),
-                                                style = MaterialTheme.typography.bodyLarge,
+                                            }
+                                        } else {
+                                            item {
+                                                Text(
+                                                    "No homework available",
+                                                    modifier = Modifier.padding(16.dp),
+                                                    style = MaterialTheme.typography.bodyLarge,
 
-                                            )
+                                                    )
+                                            }
                                         }
                                     }
-                                }
 
+                                }
                             }
                         }
+
                     }
                     Column(
                         horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
                     ) {
-                        Text(textAlign = TextAlign.Center,
-                            text = "overDue homeworks", fontSize = 32.sp,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    isExpanded = !isExpanded
-                                } // Toggle expansion
-                                .padding(16.dp)
-                        )
-                        // Show child items if expanded
-                        if (isExpanded) {
-                            Column(modifier = Modifier.fillMaxWidth()) {
-                                LazyColumn {
-                                    if (homeworks!=null) {
-                                        items(homeworks.size) { index ->
-                                            if(true
+                        Card {
+                            Text(textAlign = TextAlign.Center,
+                                text = "overDue homeworks", fontSize = 32.sp,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        isExpanded = !isExpanded
+                                    } // Toggle expansion
+                                    .padding(16.dp)
+                            )
+                            // Show child items if expanded
+                            if (isExpanded) {
+                                Column(modifier = Modifier.fillMaxWidth()) {
+                                    LazyColumn {
+                                        if (homeworks!=null) {
+                                            items(homeworks.size) { index ->
+                                                if(true
                                                 //homeworks[index].homeworkIsComplete
-                                            //will replace it with a checker to expand the clicked
-                                            ){homeworkCard(
-                                                homework = homeworks[index],
-                                                viewModel = viewModel,
-                                                context = context
-                                            )}
+                                                //will replace it with a checker to expand the clicked
+                                                ){homeworkCard(
+                                                    homework = homeworks[index],
+                                                    viewModel = viewModel,
+                                                    context = context
+                                                )}
 
-                                        }
-                                    } else {
-                                        item {
-                                            Text(
-                                                "No homework available",
-                                                modifier = Modifier.padding(16.dp),
-                                                style = MaterialTheme.typography.bodyLarge,
+                                            }
+                                        } else {
+                                            item {
+                                                Text(
+                                                    "No homework available",
+                                                    modifier = Modifier.padding(16.dp),
+                                                    style = MaterialTheme.typography.bodyLarge,
 
-                                                )
+                                                    )
+                                            }
                                         }
                                     }
-                                }
 
+                                }
                             }
+
                         }
+
                     }
 
 

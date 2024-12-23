@@ -14,13 +14,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -96,22 +99,29 @@ fun ExpandableCard(
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.padding(10.dp)) {
+            Row(modifier = Modifier.fillMaxSize(),verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = homework.homeworkTeacherSubject,
                     style = MaterialTheme.typography.headlineLarge
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Column {
-                    Text(homework.homeworkEndDay)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = convertDateString(homework.homeworkEndDate),
-                        style = MaterialTheme.typography.labelLarge
-                    )
+                Text("Submit by")
+                Spacer(modifier = Modifier.width(8.dp))
+                Card(modifier = Modifier.height(50.dp).width(100.dp)){
+                    Column(horizontalAlignment = Alignment.CenterHorizontally
+                        ,verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
+                        modifier =Modifier.fillMaxSize() ) {
+                        Text(homework.homeworkEndDay)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = convertDateString(homework.homeworkEndDate),
+                            style = MaterialTheme.typography.labelLarge
+                        )
 
+                    }
                 }
+
             }
         }
     }

@@ -24,6 +24,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -214,27 +215,41 @@ fun ExamsPage(mainViewModel: MainViewModel , navController: NavController) {
                                         mainViewModel.updateBottomSheetState(index,false)
                                     }
                                 ) {
+                                    Text(modifier = Modifier.padding(8.dp),
+                                        text=mainMenuItem[index].name,fontSize = 44.sp )
+                                    Divider()
                                     // Bottom sheet content
                                     Column(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .padding(16.dp)
                                     ) {
+                                        Text(text = mainMenuItem[index].exam!!.subject+" First Exam",
+                                            fontSize = 26.sp)
                                         //todo @LT #qustion[not answered] || what to do here?
-                                        Row(modifier = Modifier.fillMaxWidth()) {
-                                            Text(text = "Date:")
-                                            Spacer(modifier = Modifier.width(8.dp))
-                                            Text(text = mainMenuItem[index].exam!!.date)
+                                        Row(modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceBetween){
+                                            Card(modifier = Modifier.padding(10.dp).width(100.dp)) {
+                                                Text(text = "Date:",modifier = Modifier.padding(6.dp),
+                                                    fontSize =23.sp )
+                                                Spacer(modifier = Modifier.width(8.dp))
+                                                Text(text = mainMenuItem[index].exam!!.date,modifier = Modifier.padding(6.dp))
+                                            }
+                                            Spacer(modifier = Modifier.width(10.dp))
+                                            Card(modifier = Modifier.padding(10.dp).width(100.dp)){
+                                                Text(text = "time:",modifier = Modifier.padding(6.dp),fontSize =23.sp )
+                                                Spacer(modifier = Modifier.width(8.dp))
+                                                Text(text = mainMenuItem[index].exam!!.time,modifier = Modifier.padding(6.dp),)
+                                            }
+
                                         }
                                         Row(modifier = Modifier.fillMaxWidth()) {
-                                            Text(text = "time:")
-                                            Spacer(modifier = Modifier.width(8.dp))
-                                            Text(text = mainMenuItem[index].exam!!.time)
+
                                         }
                                         Row(modifier = Modifier.fillMaxWidth()) {
-                                            Text(text = "Location:")
+                                            Text(text = "Location:",fontSize =23.sp )
                                             Spacer(modifier = Modifier.width(8.dp))
-                                            Text(text = mainMenuItem[index].exam!!.location)
+                                            Text(text = mainMenuItem[index].exam!!.location,fontSize =23.sp )
                                         }
                                     }
                                 }

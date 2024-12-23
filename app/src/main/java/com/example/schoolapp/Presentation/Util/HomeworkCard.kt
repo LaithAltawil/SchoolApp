@@ -103,16 +103,17 @@ fun homeworkCard(
             .fillMaxWidth()
             .padding(10.dp)
             .clickable {
-
                 isExpanded = !isExpanded
             },
         colors = CardDefaults.cardColors(
+
             containerColor = MaterialTheme.colorScheme.primary,
+
             contentColor = MaterialTheme.colorScheme.onPrimary
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(10.dp)) {
             Row {
                 Text(
                     text = homework.homeworkTeacherSubject,
@@ -121,21 +122,33 @@ fun homeworkCard(
                 Spacer(modifier = Modifier.weight(1f))
 
                 Column {
-                    Text(homework.homeworkEndDay)
+                    Row {
+                        Text("date start ")
+                        Text(convertDateString(homework.homeworkStartDate))
+                    }
+                    Row {
+                        Text("Submit By ")
+                        Text(convertDateString(homework.homeworkEndDate))
+                    }
+
+                    //Text(homework.homeworkEndDay)
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = convertDateString(homework.homeworkEndDate),
-                        style = MaterialTheme.typography.labelLarge
-                    )
+
 
                 }
             }
             if (isExpanded) {
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = homework.homeworkDetails,
-                    style = MaterialTheme.typography.titleMedium
-                )
+                Card(
+                    modifier = Modifier.fillMaxWidth().height(90.dp).padding(10.dp)
+                ) {
+                    Text(modifier = Modifier.padding(10.dp),
+                        text = homework.homeworkDetails,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+
+                }
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
