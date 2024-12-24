@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.example.schoolapp.Presentation.Screens.CalenderPage
+import com.example.schoolapp.Presentation.Screens.CounselorPage
 
 import com.example.schoolapp.Presentation.Screens.ExamsPage
 import com.example.schoolapp.Presentation.Screens.HomeworkPage
@@ -115,14 +116,12 @@ fun Navigation() {
                 )
             }
             composable(Screen.CounselorPage.route) {
-                //CounselorPage(
-                    //todo @LT #qustion|| why didn't you parse the navigation instead of the viewModel?
-                    //LT:Not needed to be parsed, but might parse it later depending on its need
-                    //MAS: so I understand the need of injecting the viewModel but what is happening
-                    //MAS: when you inject navigation or ProfilePage like in [89,17]?
-                    //after some consideration i decided to parse navigation but after finishing each respective page
-                  //  mainViewModel = viewModel
-                //)
+                val context = LocalContext.current
+                val viewModel = it.MainViewModel<MainViewModel>(navController, context)
+                CounselorPage(
+                    navController = navController,
+                    mainViewModel = viewModel
+                )
             }
             composable(Screen.HomeworkPage.route) {
                 val context = LocalContext.current

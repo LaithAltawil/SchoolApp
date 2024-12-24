@@ -138,6 +138,12 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
             }
         ),
         MainMenuItem(
+            title = "Counsellor",
+            icon = painterResource(id = R.drawable.help),
+            onClick = {
+                navController.navigate(Screen.CounselorPage.route)
+            }),
+        MainMenuItem(
             title = "Logout",
             icon = painterResource(id = R.drawable.ic_logout),
             onClick = { /*TODO*/ }
@@ -423,7 +429,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                                     homeworkListState.value!![index],
                                                     viewModel,
                                                     LocalContext.current,
-                                                    ){
+                                                ) {
                                                     navController.navigate(Screen.HomeworkPage.route)
                                                 }
 
