@@ -149,7 +149,7 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
                             // Validation logic
                             if (state.value.userName.isEmpty() || state.value.password.isEmpty()) {
                                 //New Alert dialog
-                                viewModel.onDialog(true,"Please enter both username and password")
+                                viewModel.onDialog(true, "Please enter both username and password")
                                 return@Button
                             }
                             viewModel.signInFromApi(object : SignInCallBack {
@@ -160,6 +160,7 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
                                         viewModel.startStudentFlagCheck(onClick)
                                     }
                                 }
+
                                 override fun onFailure(error: String) {
                                     // Handle failure
                                     viewModel.onDialog(true, error)

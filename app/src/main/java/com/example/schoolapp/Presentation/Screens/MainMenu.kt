@@ -50,6 +50,7 @@ import androidx.navigation.NavController
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.MainMenuItem
 import com.example.schoolapp.Navigation.Screen
+import com.example.schoolapp.Presentation.Screens.ScreensPieces.MainCards
 import com.example.schoolapp.Presentation.Util.ExpandableCard
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.Presentation.VM.States.HomeworkLoadingState
@@ -144,6 +145,11 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
             icon = painterResource(id = R.drawable.ic_logout),
             onClick = { /*TODO*/ }
         )
+    )
+    val menuCard=listOf(
+        MainCards(),
+        MainCards(),
+        MainCards()
     )
     val studentFirstName = studentState.value?.studentFirstName
     val studentSecondName = studentState.value?.studentSecondName
@@ -299,26 +305,8 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                 .fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            items(3) {
-                                Card(
-                                    modifier = Modifier
-                                        .width(400.dp)
-                                        .height(200.dp),
-                                    colors = CardDefaults.cardColors(
-                                        containerColor = MaterialTheme.colorScheme.primary
-                                    )
-                                ) {
-                                    Column(
-                                        modifier = Modifier.fillMaxSize(),
-                                        verticalArrangement = Arrangement.Center,
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Icon(
-                                            painter = painterResource(id = R.drawable.training),
-                                            contentDescription = null
-                                        )
-                                    }
-                                }
+                            items(menuCard.size) {
+                                MainCards()
                             }
                         }
                         // To Do Section Title
