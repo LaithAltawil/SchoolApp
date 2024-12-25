@@ -61,7 +61,7 @@ fun ProfilePageBox(
                     color = Color.White
                 )
                 Text(
-                    text = listOfLists[index][0][1]+ ": ",
+                    text = listOfLists[index][0][1]+ " ",
                     style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
@@ -106,6 +106,21 @@ fun ProfilePageBox(
                     color = Color.White
                 )
             }
+            //extra row for all cards
+            Spacer(modifier = Modifier.height(10.dp))
+            Row {
+                Text(
+                    text =   listOfLists[index][4][0],
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = Color.White
+                )
+                Text(
+                    text =  listOfLists[index][4][1],
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = Color.White
+                )
+            }
+
         }
     }
 }

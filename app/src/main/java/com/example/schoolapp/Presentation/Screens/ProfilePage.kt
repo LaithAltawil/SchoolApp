@@ -83,7 +83,8 @@ fun Profile_page(viewModel: MainViewModel, navController: NavController) {
         mutableListOf(
             "Date of Birth",
             convertDateString(studentState.value?.studentDateOfBirth.toString())
-        )
+        ),
+        mutableListOf("", "")
     )
     val parentsDetails: MutableList<MutableList<String>> = mutableListOf(
         mutableListOf("Name", studentSecondName.toString()),
@@ -91,12 +92,14 @@ fun Profile_page(viewModel: MainViewModel, navController: NavController) {
         mutableListOf("Job", parentState.value?.parentJob.toString()),
         mutableListOf("Nationality", parentState.value?.parentNationality.toString()),
         mutableListOf("Address", parentState.value?.parentAddress.toString())
+
     )
     val otherDetails: MutableList<MutableList<String>> = mutableListOf(
         mutableListOf("National Id", studentState.value?.studentNationalId.toString()),
         mutableListOf("Place of Birth", studentState.value?.studentPlaceOfBirth.toString()),
         mutableListOf("City of residence", studentState.value?.studentCity.toString()),
-        mutableListOf("Residential area", studentState.value?.studentResidence.toString())
+        mutableListOf("Residential area", studentState.value?.studentResidence.toString()),
+        mutableListOf("", "")
     )
     val allDetails: MutableList<MutableList<MutableList<String>>> = mutableListOf(
         studentDetails,
@@ -146,7 +149,11 @@ fun Profile_page(viewModel: MainViewModel, navController: NavController) {
                             contentAlignment = Alignment.Center
                         ) {
                             Button(
-                                onClick = { /*TODO*/ },
+                                onClick = {
+
+                                    /*TODO*/
+
+                                },
                                 modifier = Modifier
                                     .size(200.dp)
                                     .offset(y = (-100).dp), // Keep only vertical offset if needed
@@ -212,90 +219,3 @@ fun Profile_page(viewModel: MainViewModel, navController: NavController) {
         }
     }
 }
-/*
-//Keep in case of errors
-//Box(modifier = Modifier
-//
-//.clip(RoundedCornerShape(26.dp))
-//.border(3.dp, Color.White,
-//shape = RoundedCornerShape(26.dp))
-//.size(337.dp)
-//
-//.background(MaterialTheme.colorScheme.primary)){
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(top = 20.dp),
-//        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
-//    ) {
-//        Text(text = "Personal Information",
-//            style = MaterialTheme.typography.headlineLarge,
-//            fontWeight = FontWeight.Bold,
-//            color = Color.White)
-//        Spacer(modifier = Modifier.height(20.dp))
-//        Row(horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween
-//            , modifier = Modifier) {
-//            Text(
-//                text = "Name : ",
-//                style = MaterialTheme.typography.headlineSmall,
-//                color = Color.White
-//            )
-//            Text(
-//                text = "Laith Altawil",
-//                style = MaterialTheme.typography.headlineSmall,
-//                color = Color.White
-//            )
-//        }
-//        Spacer(modifier = Modifier.height(10.dp))
-//        Row {
-//            Text(
-//                text = "Age : ",
-//                style = MaterialTheme.typography.headlineSmall
-//                ,
-//                color = Color.White
-//            )
-//            Text(
-//                text = "20",
-//                style = MaterialTheme.typography.headlineSmall
-//                ,
-//                color = Color.White
-//            )
-//
-//        }
-//        Spacer(modifier = Modifier.height(10.dp))
-//        Row {
-//            Text(
-//                text = "Gender : ",
-//                style = MaterialTheme.typography.headlineSmall
-//                ,
-//                color = Color.White
-//            )
-//            Text(
-//                text = "Male",
-//                style = MaterialTheme.typography.headlineSmall
-//                ,
-//                color = Color.White
-//            )
-//
-//        }
-//        Spacer(modifier = Modifier.height(10.dp))
-//        Row {
-//            Text(
-//                text = "Email : ",
-//                style = MaterialTheme.typography.headlineSmall
-//                ,
-//                color = Color.White
-//            )
-//            Text(
-//                text = "",
-//                style = MaterialTheme.typography.headlineSmall
-//                ,
-//                color = Color.White
-//            )
-//        }
-//
-//
-//
-//    }
-//}
- */

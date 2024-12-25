@@ -12,6 +12,14 @@ data class Homework(
     val dueDate: String,
     val isCompleted: Boolean
 )
+data class MainMenuCard(
+    val title: String,
+    val date:String,
+    val eventTitle:String,
+    val eventDescription:String,
+
+    val onClick: () -> Unit
+)
 object variable{
     var opened:Int?=null
 }
