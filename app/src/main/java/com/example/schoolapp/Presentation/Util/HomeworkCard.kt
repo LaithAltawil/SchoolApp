@@ -59,16 +59,12 @@ fun homeworkCard(
     //=======================================================
     var isExpanded by remember { mutableStateOf(false) }
 
-
-
     //=======================================================
     //Local variables                                      =
     //=======================================================
-
         if(opened==homework.homeworkId){
             isExpanded = true
         }
-
 
     val filePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()

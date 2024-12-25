@@ -59,5 +59,8 @@ data class Student(
     var studentNotes: String?,
 
     @ColumnInfo(name = "student_profile_image")
-    var studentProfileImage: String?
+    var studentProfileImage: String?,
+
+    @ColumnInfo(name = "image_flag")
+    var imageFlag: Boolean
 )

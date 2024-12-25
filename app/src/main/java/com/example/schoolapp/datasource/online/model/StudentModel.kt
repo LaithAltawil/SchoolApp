@@ -21,5 +21,6 @@ data class StudentModel(
     @SerializedName("studentResidence") val studentResidence: String,
     @SerializedName("studentNationality") val studentNationality: String,
     @SerializedName("studentNotes") val studentNotes: String?,
-    @SerializedName("studentProfileImage") val studentProfileImage: String?
+    @SerializedName("studentProfileImage") val studentProfileImage: String?,
+    @SerializedName("imageFlag") val imageFlag: Boolean
 )

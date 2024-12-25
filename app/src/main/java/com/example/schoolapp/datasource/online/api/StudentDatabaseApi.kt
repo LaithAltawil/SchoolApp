@@ -5,9 +5,11 @@ import com.example.schoolapp.datasource.online.response.CounselorCalenderListRes
 import com.example.schoolapp.datasource.online.response.ExamListResponse
 import com.example.schoolapp.datasource.online.response.HomeworkListResponse
 import com.example.schoolapp.datasource.online.response.MarksListResponse
+import com.example.schoolapp.datasource.online.response.NotificationEventResponse
 import com.example.schoolapp.datasource.online.response.NotificationExamsListResponse
 import com.example.schoolapp.datasource.online.response.StudentResponse
 import com.example.schoolapp.datasource.online.response.NotificationProblemsListResponse
+import com.example.schoolapp.datasource.online.response.ParentResponse
 import com.example.schoolapp.datasource.online.response.SessionListResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -28,11 +30,17 @@ interface StudentDatabaseApi {
         @Query("endApiCall") endApiCall: String = "student_sign_in",
     ): Response<StudentResponse>
 
+    //parent API
+    @GET(studentApi)
+    suspend fun parent(
+        @Query("studentId") studentId: Int,
+        @Query("endApiCall") endApiCall: String = "profile",
+    ): Response<ParentResponse>
+
     //notification problems API
     @GET(studentApi)
     suspend fun notificationProblems(
         @Query("studentId") studentId: Int,
-        @Query("studentClass") studentClass: String,
         @Query("endApiCall") endApiCall: String = "notification_problems"
     ): Response<NotificationProblemsListResponse>
 
@@ -43,6 +51,14 @@ interface StudentDatabaseApi {
         @Query("studentClass") studentClass: String,
         @Query("endApiCall") endApiCall: String = "notification_exams"
     ): Response<NotificationExamsListResponse>
+
+    //notification events API
+    @GET(studentApi)
+    suspend fun notificationEvents(
+        @Query("studentId") studentId: Int,
+        @Query("studentClass") studentClass: String,
+        @Query("endApiCall") endApiCall: String = "notification_event"
+    ): Response<NotificationEventResponse>
 
     //homework API
     @GET(studentApi)
@@ -67,13 +83,6 @@ interface StudentDatabaseApi {
         @Query("homeworkId") homeworkId: Int,
         @Query("endApiCall") endApiCall: String = "update_homework"
     )
-
-    //profile API
-    @GET(studentApi)
-    suspend fun profile(
-        @Query("studentId") studentId: Int,
-        @Query("endApiCall") endApiCall: String = "profile"
-    ): Response<StudentResponse>
 
     //calender of the semester API
     @GET(studentApi)
@@ -108,7 +117,6 @@ interface StudentDatabaseApi {
         @Query("studentClass") studentClass: String,
         @Query("endApiCall") endApiCall: String = "sessions"
     ): Response<SessionListResponse>
-
 
     companion object {
         //logic for invoke the api

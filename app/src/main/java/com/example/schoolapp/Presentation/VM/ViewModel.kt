@@ -11,7 +11,6 @@ import com.example.schoolapp.datasource.local.database.StudentDatabase
 import com.example.schoolapp.datasource.local.entity.Student
 import com.example.schoolapp.datasource.online.response.StudentResponse
 import com.example.schoolapp.datasource.repository.StudentRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -69,7 +68,10 @@ class AppViewModel(private val context: Context) : ViewModel() {
 
     fun insertApiStudentToLocalDatabase() {
         if (!studentResponse.value!!.error) {
-            studentResponse.value!!.student!!.let {
+            studentResponse
+                .value!!
+                .student!!
+                .let {
                 _student.value = Student(
                     //always 0 cus I want only one student
                     studentId = 0,
@@ -89,13 +91,15 @@ class AppViewModel(private val context: Context) : ViewModel() {
                     studentResidence = it.studentResidence,
                     studentNationality = it.studentNationality,
                     studentNotes = it.studentNotes,
-                    studentProfileImage = it.studentProfileImage
+                    studentProfileImage = it.studentProfileImage,
+                    imageFlag = it.imageFlag
                 )
             }
-             insertStudent(student.value!!,object : DatabaseCallback {
+            insertStudent(student.value!!, object : DatabaseCallback {
                 override fun onSuccess(message: String) {
                     _studentFlag.value = true
                 }
+
                 override fun onFailure(error: String) {
                     _studentFlag.value = false
                 }
@@ -110,7 +114,8 @@ class AppViewModel(private val context: Context) : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                _studentResponse.value = studentRepository.getStudentFromApi(signInState.value.userName).body()
+                _studentResponse.value =
+                    studentRepository.getStudentFromApi(signInState.value.userName).body()
                 signInCallBack.onSuccess(studentResponse.value?.message.toString())
             } catch (e: Exception) {
                 signInCallBack.onFailure(studentResponse.value?.message.toString())
@@ -123,13 +128,15 @@ class AppViewModel(private val context: Context) : ViewModel() {
     //=======================================================
     //functions: private & public                           =
     //=======================================================
-    fun onDialog(value: Boolean, message: String=""){
+    fun onDialog(value: Boolean, message: String = "") {
         _signInState.update { it.copy(alertDialog = value, message = message) }
     }
+
     //dumb i know but i am not touching it :) if it works it works:))))
-    fun removeDialog(){
-        _signInState.update { it.copy(alertDialog = false,message = "") }
+    fun removeDialog() {
+        _signInState.update { it.copy(alertDialog = false, message = "") }
     }
+
     fun onUserNameChange(userName: String) {
         _signInState.update { it.copy(userName = userName) }
     }
@@ -142,7 +149,7 @@ class AppViewModel(private val context: Context) : ViewModel() {
         _signInState.update { it.copy(isPasswordVisible = !it.isPasswordVisible) }
     }
 
-    fun notifyMessage(context: Context, message: String) {
+    private fun notifyMessage(context: Context, message: String) {
         val builder = AlertDialog.Builder(context)
             .setMessage(message)
             .setPositiveButton(android.R.string.ok, null)
@@ -160,14 +167,12 @@ class AppViewModel(private val context: Context) : ViewModel() {
             else {
 
                 val studentFirstName = studentResponse.value!!.student!!.studentFirstName
-                onDialog(true,"Wrong Password for \'$studentFirstName\' !!")
-                //notifyMessage(context, "Wrong Password for \'$studentFirstName\' !!")
+                onDialog(true, "Wrong Password for \'$studentFirstName\' !!")
                 return false
             }
         }
         //username exist and != to an actual student
         else {
-
             notifyMessage(context, "Wrong Username!!")
             return false
         }

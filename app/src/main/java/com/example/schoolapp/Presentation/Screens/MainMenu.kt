@@ -62,10 +62,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainMenu(viewModel: MainViewModel, navController: NavController) {
     //=======================================================
-    // initializing variables data                          =
-    //=======================================================
-
-    //=======================================================
     //variables: local & states                             =
     //=======================================================
     //states                                                =
@@ -281,7 +277,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                 }
                                 Spacer(modifier = Modifier.width(15.dp))
                                 Text(
-                                    text = "Welcome, $studentName",
+                                    text = "Welcome, $studentFirstName",
                                     style = TextStyle(fontSize = 36.sp),
                                     modifier = Modifier.padding(top = 58.dp),
                                     overflow = TextOverflow.Visible,

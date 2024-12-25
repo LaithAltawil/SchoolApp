@@ -3,9 +3,11 @@ package com.example.schoolapp.datasource.repository
 import android.util.Log
 import com.example.schoolapp.datasource.local.database.StudentDatabase
 import com.example.schoolapp.datasource.local.entity.Homework
+import com.example.schoolapp.datasource.local.entity.Parent
 import com.example.schoolapp.datasource.local.entity.Student
 import com.example.schoolapp.datasource.online.api.StudentDatabaseApi
 import com.example.schoolapp.datasource.online.response.HomeworkListResponse
+import com.example.schoolapp.datasource.online.response.ParentResponse
 import com.example.schoolapp.datasource.online.response.StudentResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
@@ -65,7 +67,9 @@ class StudentRepository(
         }
     }
 
-    //homework dao's fun
+    //===============================================
+    //homework dao's fun                            =
+    //===============================================
     //insert homework from the online database
     suspend fun insertHomework(homework: Homework) {
         withContext(Dispatchers.IO) {
@@ -124,7 +128,30 @@ class StudentRepository(
             studentDatabase.deleteAllHomework()
         }
     }
+    //===============================================
+    //parent dao's fun                              =
+    //===============================================
+    //insert parent
+    suspend fun insertParent(parent: Parent){
+        withContext(Dispatchers.IO){
+            studentDatabase.insertParent(parent)
+        }
+    }
 
+    //set parent
+    suspend fun setParent(): Parent? {
+        val parent = withContext(Dispatchers.IO){
+            return@withContext studentDatabase.setParent()
+        }
+    return parent
+    }
+
+    //delete parent
+    suspend fun deleteParent(){
+        withContext(Dispatchers.IO){
+            studentDatabase.deleteParent()
+        }
+    }
     //==========================================
     //API                                      =
     //==========================================
@@ -160,5 +187,13 @@ class StudentRepository(
         withContext(Dispatchers.IO) {
             studentApi.updateHomework(isCompleted,filePath,id)
         }
+    }
+
+    //parent Api
+    suspend fun getParentFromApi(studentId: Int): Response<ParentResponse> {
+        val parentResponse = withContext(Dispatchers.IO) {
+            return@withContext studentApi.parent(studentId)
+        }
+        return parentResponse
     }
 }

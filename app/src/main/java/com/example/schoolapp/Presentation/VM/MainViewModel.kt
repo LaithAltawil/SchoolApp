@@ -9,6 +9,7 @@ import com.example.schoolapp.Presentation.VM.States.HomeworkLoadingState
 import com.example.schoolapp.Presentation.VM.States.MainDataClass
 import com.example.schoolapp.datasource.local.database.StudentDatabase
 import com.example.schoolapp.datasource.local.entity.Homework
+import com.example.schoolapp.datasource.local.entity.Parent
 import com.example.schoolapp.datasource.local.entity.Student
 import com.example.schoolapp.datasource.repository.StudentRepository
 import com.google.firebase.storage.FirebaseStorage
@@ -21,16 +22,16 @@ import kotlinx.coroutines.launch
 //Main viewModel
 class MainViewModel(private val context: Context) : ViewModel() {
 
-    //=======================================================
-    //Repository: Student                                   =
-    //=======================================================
+    //===========================================================================================
+    //Repository: Student                                                                       =
+    //===========================================================================================
     private val studentRepository = StudentRepository(
         StudentDatabase.getInstance(context)
     )
 
-    //=======================================================
-    //variables: states                                     =
-    //=======================================================
+    //============================================================================================
+    //variables: states                                                                          =
+    //============================================================================================
     // student                                              =
     //=======================================================
     //handles ROOM operations for student
@@ -61,6 +62,13 @@ class MainViewModel(private val context: Context) : ViewModel() {
     private val _loadingState = MutableStateFlow<HomeworkLoadingState>(HomeworkLoadingState.Initial)
     val loadingState: StateFlow<HomeworkLoadingState> = _loadingState.asStateFlow()
 
+    //=======================================================
+    //profile                                               =
+    //=======================================================
+    //handle parent operations
+    private val _parent = MutableStateFlow<Parent?>(null) // Initialize with null
+    val parent: StateFlow<Parent?> = _parent.asStateFlow()
+
     //Exam Page
     private val _Examstate = MutableStateFlow(MainDataClass.ExamPageState1())
     val Examstate: StateFlow<MainDataClass.ExamPageState1> = _Examstate.asStateFlow()
@@ -89,19 +97,13 @@ class MainViewModel(private val context: Context) : ViewModel() {
     // Local variables                                      =
     //=======================================================
 
-    //=======================================================
-    // ROOM side                                            =
-    //=======================================================
+    //===========================================================================================
+    // ROOM side                                                                                =
+    //===========================================================================================
     // student                                              =
     //=======================================================
-    private fun setStudent() {
-        viewModelScope.launch {
+    private suspend fun setStudent() {
             _student.value = studentRepository.setStudent()
-        }
-    }
-
-    init {
-        setStudent()
     }
 
     //=======================================================
@@ -110,6 +112,11 @@ class MainViewModel(private val context: Context) : ViewModel() {
     //insert homework from the API list
     private suspend fun insertHomework(homework: Homework) {
         studentRepository.insertHomework(homework)
+    }
+
+    //delete all homework
+    private suspend fun deleteAllHomework() {
+        studentRepository.deleteAllHomework()
     }
 
     //get all the homework list from the local ROOM
@@ -135,15 +142,27 @@ class MainViewModel(private val context: Context) : ViewModel() {
     }
 
     //=======================================================
-    // Api side                                             =
+    //profile                                               =
     //=======================================================
-    // main menu                                            =
-    //=======================================================
-    //delete all homework
-    private suspend fun deleteAllHomework() {
-        studentRepository.deleteAllHomework()
+    private suspend fun insertParent(parent: Parent) {
+            studentRepository.insertParent(parent)
     }
 
+    private suspend fun setParent() {
+            _parent.value = studentRepository.setParent()
+    }
+
+    private fun deleteParent() {
+        viewModelScope.launch {
+            studentRepository.deleteParent()
+        }
+    }
+
+    //===========================================================================================
+    // Api side                                                                                 =
+    //===========================================================================================
+    // main menu                                            =
+    //=======================================================
     //getting only the homework that are not in the local database
     private fun getHomeworkByIdListFromApi() {
         viewModelScope.launch {
@@ -279,8 +298,41 @@ class MainViewModel(private val context: Context) : ViewModel() {
     }
 
     //=======================================================
-    //functions: public & private                           =
+    // profile page                                         =
     //=======================================================
+    private suspend fun getParentFromApi() {
+            //delete existing parent in case the parent doesn't represent the student
+            deleteParent()
+            val parent: Parent
+            //assign the parent
+            studentRepository.getParentFromApi(student.value!!.studentNationalId)
+                .body()
+                ?.parent
+                .let {
+                    parent = Parent(
+                        parentId = 0,
+                        parentPhoneNumber = it?.parentPhoneNumber ?: 0,
+                        parentJob = it?.parentJob ?: "",
+                        parentNationality = it?.parentNationality ?: "",
+                        parentAddress = it?.parentAddress ?: ""
+                    )
+                }
+            //insert in local database
+            insertParent(parent)
+    }
+
+    init {
+        viewModelScope.launch {
+            setStudent()
+            getParentFromApi()
+            setParent()
+        }
+
+    }
+
+    //===========================================================================================
+    //functions: public & private                                                               =
+    //===========================================================================================
     // main menu                                            =
     //=======================================================
     fun uploadFileToFirebase(fileUri: Uri) {
@@ -348,7 +400,7 @@ class MainViewModel(private val context: Context) : ViewModel() {
         }
     }
 
-    fun isTopappbarVisible5() {
+    fun isTopAppbarVisible5() {
         _Classesstate.value =
             MainDataClass.ClassesPageState(isTopAppBarVisible = !_Classesstate.value.isTopAppBarVisible)
     }

@@ -5,15 +5,24 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.schoolapp.datasource.local.dao.HomeworkDao
+import com.example.schoolapp.datasource.local.dao.ParentDao
 import com.example.schoolapp.datasource.local.dao.StudentDao
 import com.example.schoolapp.datasource.local.entity.Homework
+import com.example.schoolapp.datasource.local.entity.Parent
 import com.example.schoolapp.datasource.local.entity.Student
 
-@Database(entities = [Student::class, Homework::class], version = 3, exportSchema = false)
+@Database(
+    entities = [Student::class,
+        Homework::class,
+        Parent::class],
+    version = 5,
+    exportSchema = false
+)
 abstract class StudentDatabase : RoomDatabase() {
 
     abstract val studentDao: StudentDao
     abstract val homeworkDao: HomeworkDao
+    abstract val parentDao: ParentDao
 
     companion object {
 
@@ -43,6 +52,7 @@ abstract class StudentDatabase : RoomDatabase() {
     //= Dao functions                                       =
     //= Student function's                                  =
     //= Homework function's                                 =
+    //= Parent function's                                   =
     //=======================================================
     // Student function's
     suspend fun insert(student: Student) = studentDao.insert(student)
@@ -61,5 +71,10 @@ abstract class StudentDatabase : RoomDatabase() {
     suspend fun getLastHomeworkClass() = homeworkDao.getLastHomeworkClass()
     suspend fun deleteHomework(id: Int) = homeworkDao.deleteHomework(id)
     suspend fun deleteAllHomework() = homeworkDao.deleteAllHomework()
+
+    // Parent function's
+    suspend fun insertParent(parent: Parent) = parentDao.insert(parent)
+    suspend fun setParent() = parentDao.setParent()
+    suspend fun deleteParent() = parentDao.deleteParent()
 
 }

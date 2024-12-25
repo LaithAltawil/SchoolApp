@@ -150,11 +150,8 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
                             if (state.value.userName.isEmpty() || state.value.password.isEmpty()) {
                                 //New Alert dialog
                                 viewModel.onDialog(true,"Please enter both username and password")
-                                //viewModel.notifyMessage(context, "Please enter both username and password")
                                 return@Button
                             }
-
-
                             viewModel.signInFromApi(object : SignInCallBack {
                                 override fun onSuccess(message: String) {
                                     // Handle success
@@ -163,19 +160,12 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
                                         viewModel.startStudentFlagCheck(onClick)
                                     }
                                 }
-
-
                                 override fun onFailure(error: String) {
                                     // Handle failure
-                                    //viewModel.notifyMessage(context, error)
                                     viewModel.onDialog(true, error)
-
-
                                 }
-
                             })
                         }
-
                     ) {
                         //pop up to appear when something wrong in sign in
                         if (viewModel.signInState.value.alertDialog) {

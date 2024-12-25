@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import java.util.Date
 
 data class NotificationProblemsModel(
-    @SerializedName("problemNotes") val problemNotes: String,
+    @SerializedName("problemType") val problemType: String,
     @SerializedName("problemDate") val problemDate: Date,
     @SerializedName("problemStatus") val problemStatus: String,
     @SerializedName("problemDiscussionDate") val problemDiscussionDate: Date?,
