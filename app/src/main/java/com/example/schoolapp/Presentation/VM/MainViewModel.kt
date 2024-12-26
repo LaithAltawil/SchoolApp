@@ -103,7 +103,7 @@ class MainViewModel(private val context: Context) : ViewModel() {
     // student                                              =
     //=======================================================
     private suspend fun setStudent() {
-            _student.value = studentRepository.setStudent()
+        _student.value = studentRepository.setStudent()
     }
 
     //=======================================================
@@ -145,11 +145,11 @@ class MainViewModel(private val context: Context) : ViewModel() {
     //profile                                               =
     //=======================================================
     private suspend fun insertParent(parent: Parent) {
-            studentRepository.insertParent(parent)
+        studentRepository.insertParent(parent)
     }
 
     private suspend fun setParent() {
-            _parent.value = studentRepository.setParent()
+        _parent.value = studentRepository.setParent()
     }
 
     private fun deleteParent() {
@@ -301,24 +301,24 @@ class MainViewModel(private val context: Context) : ViewModel() {
     // profile page                                         =
     //=======================================================
     private suspend fun getParentFromApi() {
-            //delete existing parent in case the parent doesn't represent the student
-            deleteParent()
-            val parent: Parent
-            //assign the parent
-            studentRepository.getParentFromApi(student.value!!.studentNationalId)
-                .body()
-                ?.parent
-                .let {
-                    parent = Parent(
-                        parentId = 0,
-                        parentPhoneNumber = it?.parentPhoneNumber ?: 0,
-                        parentJob = it?.parentJob ?: "",
-                        parentNationality = it?.parentNationality ?: "",
-                        parentAddress = it?.parentAddress ?: ""
-                    )
-                }
-            //insert in local database
-            insertParent(parent)
+        //delete existing parent in case the parent doesn't represent the student
+        deleteParent()
+        val theParent: Parent
+        //assign the parent
+        studentRepository.getParentFromApi(student.value!!.studentId)
+            .body()!!
+            .parent
+            .let {
+                theParent = Parent(
+                    parentId = 0,
+                    parentPhoneNumber = it.parentPhoneNumber,
+                    parentJob = it.parentJob,
+                    parentNationality = it.parentNationality,
+                    parentAddress = it.parentAddress
+                )
+            }
+        //insert in local database
+        insertParent(theParent)
     }
 
     init {

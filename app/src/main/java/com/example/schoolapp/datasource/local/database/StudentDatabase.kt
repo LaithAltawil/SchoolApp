@@ -4,9 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.schoolapp.datasource.local.dao.CalenderDao
 import com.example.schoolapp.datasource.local.dao.HomeworkDao
 import com.example.schoolapp.datasource.local.dao.ParentDao
 import com.example.schoolapp.datasource.local.dao.StudentDao
+import com.example.schoolapp.datasource.local.entity.CalenderEvent
+import com.example.schoolapp.datasource.local.entity.Event
 import com.example.schoolapp.datasource.local.entity.Homework
 import com.example.schoolapp.datasource.local.entity.Parent
 import com.example.schoolapp.datasource.local.entity.Student
@@ -14,8 +17,9 @@ import com.example.schoolapp.datasource.local.entity.Student
 @Database(
     entities = [Student::class,
         Homework::class,
-        Parent::class],
-    version = 5,
+        Parent::class,
+        Event::class],
+    version = 6,
     exportSchema = false
 )
 abstract class StudentDatabase : RoomDatabase() {
@@ -23,6 +27,7 @@ abstract class StudentDatabase : RoomDatabase() {
     abstract val studentDao: StudentDao
     abstract val homeworkDao: HomeworkDao
     abstract val parentDao: ParentDao
+    abstract val calenderDao: CalenderDao
 
     companion object {
 
@@ -53,6 +58,7 @@ abstract class StudentDatabase : RoomDatabase() {
     //= Student function's                                  =
     //= Homework function's                                 =
     //= Parent function's                                   =
+    //= Calender function's                                 =
     //=======================================================
     // Student function's
     suspend fun insert(student: Student) = studentDao.insert(student)
@@ -76,5 +82,15 @@ abstract class StudentDatabase : RoomDatabase() {
     suspend fun insertParent(parent: Parent) = parentDao.insert(parent)
     suspend fun setParent() = parentDao.setParent()
     suspend fun deleteParent() = parentDao.deleteParent()
+
+    // Calender function's
+    suspend fun insertCalenderEvent(calenderEvent: CalenderEvent) =
+        calenderDao.insertCalenderEvent(calenderEvent)
+    suspend fun getCalenderEvent(id: Int) = calenderDao.getCalenderEvent(id)
+    suspend fun getCalenderEvents() = calenderDao.getCalenderEvents()
+    suspend fun deleteAllCalenderEvents() = calenderDao.deleteAllCalenderEvents()
+    suspend fun insertEvent(event: Event) = calenderDao.insert(event)
+    suspend fun getEvent(id: Int) = calenderDao.getEvent(id)
+    suspend fun getAllEvents() = calenderDao.getAllEvents()
 
 }

@@ -11,7 +11,7 @@ data class Parent(
     var parentId: Int,
 
     @ColumnInfo(name = "parent_phone_number")
-    var parentPhoneNumber: Int,
+    var parentPhoneNumber: Long,
 
     @ColumnInfo(name = "parent_job")
     var parentJob: String,

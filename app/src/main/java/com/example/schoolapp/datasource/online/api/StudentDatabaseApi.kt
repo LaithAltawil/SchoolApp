@@ -2,6 +2,7 @@ package com.example.schoolapp.datasource.online.api
 
 import com.example.schoolapp.datasource.online.response.CalenderSemesterListResponse
 import com.example.schoolapp.datasource.online.response.CounselorCalenderListResponse
+import com.example.schoolapp.datasource.online.response.EventListResponse
 import com.example.schoolapp.datasource.online.response.ExamListResponse
 import com.example.schoolapp.datasource.online.response.HomeworkListResponse
 import com.example.schoolapp.datasource.online.response.MarksListResponse
@@ -52,13 +53,12 @@ interface StudentDatabaseApi {
         @Query("endApiCall") endApiCall: String = "notification_exams"
     ): Response<NotificationExamsListResponse>
 
-    //notification events API
+    // In StudentDatabaseApi.kt
     @GET(studentApi)
-    suspend fun notificationEvents(
-        @Query("studentId") studentId: Int,
+    suspend fun calenderEvents(
         @Query("studentClass") studentClass: String,
-        @Query("endApiCall") endApiCall: String = "notification_event"
-    ): Response<NotificationEventResponse>
+        @Query("endApiCall") endApiCall: String = "calender_event"
+    ): Response<EventListResponse>
 
     //homework API
     @GET(studentApi)

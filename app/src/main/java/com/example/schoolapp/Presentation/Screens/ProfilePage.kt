@@ -79,7 +79,7 @@ fun Profile_page(viewModel: MainViewModel, navController: NavController) {
     val studentDetails: MutableList<MutableList<String>> = mutableListOf(
         mutableListOf("Class", studentState.value?.studentClass.toString()),
         mutableListOf("Gender", studentState.value?.studentGender.toString()),
-        mutableListOf("Nationality", studentState.value?.studentNationality.toString()),
+        mutableListOf("Nationality:", studentState.value?.studentNationality.toString()),
         mutableListOf(
             "Date of Birth",
             convertDateString(studentState.value?.studentDateOfBirth.toString())
@@ -89,15 +89,15 @@ fun Profile_page(viewModel: MainViewModel, navController: NavController) {
     val parentsDetails: MutableList<MutableList<String>> = mutableListOf(
         mutableListOf("Name", studentSecondName.toString()),
         mutableListOf("Phone Number", parentState.value?.parentPhoneNumber.toString()),
-        mutableListOf("Job", parentState.value?.parentJob.toString()),
+        mutableListOf("Job:", parentState.value?.parentJob.toString()),
         mutableListOf("Nationality", parentState.value?.parentNationality.toString()),
-        mutableListOf("Address", parentState.value?.parentAddress.toString())
+        mutableListOf("Address: ", parentState.value?.parentAddress.toString())
 
     )
     val otherDetails: MutableList<MutableList<String>> = mutableListOf(
         mutableListOf("National Id", studentState.value?.studentNationalId.toString()),
-        mutableListOf("Place of Birth", studentState.value?.studentPlaceOfBirth.toString()),
-        mutableListOf("City of residence", studentState.value?.studentCity.toString()),
+        mutableListOf("Birth", studentState.value?.studentPlaceOfBirth.toString()),
+        mutableListOf("Residence:", studentState.value?.studentCity.toString()),
         mutableListOf("Residential area", studentState.value?.studentResidence.toString()),
         mutableListOf("", "")
     )

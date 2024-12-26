@@ -1,16 +1,18 @@
 package com.example.schoolapp.datasource.repository
 
-import android.util.Log
 import com.example.schoolapp.datasource.local.database.StudentDatabase
+import com.example.schoolapp.datasource.local.entity.CalenderEvent
+import com.example.schoolapp.datasource.local.entity.Event
 import com.example.schoolapp.datasource.local.entity.Homework
 import com.example.schoolapp.datasource.local.entity.Parent
 import com.example.schoolapp.datasource.local.entity.Student
 import com.example.schoolapp.datasource.online.api.StudentDatabaseApi
+import com.example.schoolapp.datasource.online.response.CalenderSemesterListResponse
+import com.example.schoolapp.datasource.online.response.EventListResponse
 import com.example.schoolapp.datasource.online.response.HomeworkListResponse
 import com.example.schoolapp.datasource.online.response.ParentResponse
 import com.example.schoolapp.datasource.online.response.StudentResponse
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 
@@ -128,34 +130,84 @@ class StudentRepository(
             studentDatabase.deleteAllHomework()
         }
     }
+
     //===============================================
     //parent dao's fun                              =
     //===============================================
     //insert parent
-    suspend fun insertParent(parent: Parent){
-        withContext(Dispatchers.IO){
+    suspend fun insertParent(parent: Parent) {
+        withContext(Dispatchers.IO) {
             studentDatabase.insertParent(parent)
         }
     }
 
     //set parent
     suspend fun setParent(): Parent? {
-        val parent = withContext(Dispatchers.IO){
+        val parent = withContext(Dispatchers.IO) {
             return@withContext studentDatabase.setParent()
         }
-    return parent
+        return parent
     }
 
     //delete parent
-    suspend fun deleteParent(){
-        withContext(Dispatchers.IO){
+    suspend fun deleteParent() {
+        withContext(Dispatchers.IO) {
             studentDatabase.deleteParent()
         }
     }
+
+    //===============================================
+    //calender                                      =
+    //===============================================
+    // Calendar Semester functions
+    suspend fun insertCalenderEvent(calenderEvent: CalenderEvent) {
+        withContext(Dispatchers.IO) {
+            studentDatabase.insertCalenderEvent(calenderEvent)
+        }
+    }
+
+    suspend fun getCalenderEvent(id: Int): CalenderEvent? {
+        return withContext(Dispatchers.IO) {
+            studentDatabase.getCalenderEvent(id)
+        }
+    }
+
+    suspend fun getCalenderEvents(): List<CalenderEvent> {
+        return withContext(Dispatchers.IO) {
+            studentDatabase.getCalenderEvents()
+        }
+    }
+
+    suspend fun deleteAllCalenderEvents() {
+        withContext(Dispatchers.IO) {
+            studentDatabase.deleteAllCalenderEvents()
+        }
+    }
+
+    // Event functions
+    suspend fun insertEvent(event: Event) {
+        withContext(Dispatchers.IO) {
+            studentDatabase.insertEvent(event)
+        }
+    }
+
+    suspend fun getEvent(id: Int): Event? {
+        return withContext(Dispatchers.IO) {
+            studentDatabase.getEvent(id)
+        }
+    }
+
+    suspend fun getAllEvents(): List<Event> {
+        return withContext(Dispatchers.IO) {
+            studentDatabase.getAllEvents()
+        }
+    }
+
     //==========================================
     //API                                      =
     //==========================================
-    //student sign-in API
+    //student sign-in API                      =
+    //==========================================
     suspend fun getStudentFromApi(studentUsername: String): Response<StudentResponse> {
         val studentResponse = withContext(Dispatchers.IO) {
             return@withContext studentApi.studentSignIn(studentUsername)
@@ -163,7 +215,9 @@ class StudentRepository(
         return studentResponse
     }
 
-    //Homework API
+    //==========================================
+    //Homework API                             =
+    //==========================================
     suspend fun getHomeworkFromApi(studentClass: String): Response<HomeworkListResponse> {
         val homeworkResponse = withContext(Dispatchers.IO) {
             return@withContext studentApi.homeworks(studentClass)
@@ -183,17 +237,39 @@ class StudentRepository(
     }
 
     //update homework
-    suspend fun updateHomework(isCompleted: Boolean,filePath: String, id: Int) {
+    suspend fun updateHomework(isCompleted: Boolean, filePath: String, id: Int) {
         withContext(Dispatchers.IO) {
-            studentApi.updateHomework(isCompleted,filePath,id)
+            studentApi.updateHomework(isCompleted, filePath, id)
         }
     }
 
-    //parent Api
+    //==========================================
+    //parent Api                               =
+    //==========================================
     suspend fun getParentFromApi(studentId: Int): Response<ParentResponse> {
         val parentResponse = withContext(Dispatchers.IO) {
             return@withContext studentApi.parent(studentId)
         }
         return parentResponse
+    }
+
+    //==========================================
+    // calender api                            =
+    //==========================================
+    suspend fun getCalenderFromApi(): Response<CalenderSemesterListResponse> {
+        val calenderResponse = withContext(Dispatchers.IO) {
+            return@withContext studentApi.calenderSemester()
+        }
+        return calenderResponse
+    }
+
+    //==========================================
+    //calender event api                       =
+    //==========================================
+    // API function for Event
+    suspend fun getCalenderEventsFromApi(studentClass: String): Response<EventListResponse> {
+        return withContext(Dispatchers.IO) {
+            studentApi.calenderEvents(studentClass)
+        }
     }
 }
