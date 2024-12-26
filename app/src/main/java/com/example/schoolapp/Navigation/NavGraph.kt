@@ -22,6 +22,7 @@ import com.example.schoolapp.Presentation.Screens.HomeworkPage
 import com.example.schoolapp.Presentation.Screens.MainMenu
 import com.example.schoolapp.Presentation.Screens.MarksPage
 import com.example.schoolapp.Presentation.Screens.Profile_page
+import com.example.schoolapp.Presentation.Screens.Requests
 import com.example.schoolapp.Presentation.Screens.ResourcesPage
 import com.example.schoolapp.Presentation.Screens.SettingPage
 import com.example.schoolapp.Presentation.Screens.SignIn
@@ -147,6 +148,14 @@ fun Navigation() {
                 StudentClass(
                     mainViewModel = viewModel,
                     navController = navController
+                )
+            }
+            composable(Screen.RequestsPage.route) {
+                val context = LocalContext.current
+                val viewModel = it.MainViewModel<MainViewModel>(navController, context)
+                Requests(
+                    navController = navController,
+                    mainViewModel = viewModel
                 )
             }
         }

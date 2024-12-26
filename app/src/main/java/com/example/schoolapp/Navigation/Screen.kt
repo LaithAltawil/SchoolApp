@@ -18,4 +18,5 @@ sealed class Screen(val route: String) {
     object MarksPage : Screen("marks_page")
     object ExamsPage : Screen("exams_page")
     object ClassesPage : Screen("classes_page")
+    object RequestsPage : Screen("requests_page")
 }

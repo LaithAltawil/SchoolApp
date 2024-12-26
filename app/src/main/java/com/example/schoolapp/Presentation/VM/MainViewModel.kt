@@ -3,6 +3,11 @@ package com.example.schoolapp.Presentation.VM
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.schoolapp.Presentation.VM.States.HomeworkLoadingState
@@ -18,6 +23,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 //Main viewModel
 class MainViewModel(private val context: Context) : ViewModel() {
@@ -368,27 +374,29 @@ class MainViewModel(private val context: Context) : ViewModel() {
         }
     }
 
-    /*    //counselor Page
-    //    private val _Counselorstate = MutableStateFlow(MainDataClass.CounselorsPageState1())
-    //    val Counselorstate: StateFlow<MainDataClass.CounselorsPageState1> =
-    //        _Counselorstate.asStateFlow()
-    //
-    //    fun isTopappbarVisible3() {
-    //        _Counselorstate.value =
-    //            MainDataClass.CounselorsPageState1(isTopAppBarVisible = !_Counselorstate.value.isTopAppBarVisible)
-    //    }
-    //
-    //    fun openDialog() {
-    //        _Counselorstate.value = MainDataClass.CounselorsPageState1(openDialog = true)
-    //    }
-    //
-    //    fun closeDialog() {
-    //        _Counselorstate.value = MainDataClass.CounselorsPageState1(openDialog = false)
-    //    }
-    //
-    //    fun savedate(s: String) {
-    //        _Counselorstate.value = MainDataClass.CounselorsPageState1(selectedDate = s)
-    //    }*/
+    private val _Counselorstate = MutableStateFlow(MainDataClass.CounselorState())
+    val Counselorstate: StateFlow<MainDataClass.CounselorState> = _Counselorstate.asStateFlow()
+
+    fun updateName(name: String) {
+        _Counselorstate.value = _Counselorstate.value.copy(name = name)
+    }
+
+    fun updateDate(date: LocalDate) {
+        _Counselorstate.value = _Counselorstate.value.copy(selectedDate = date)
+    }
+
+    fun updateTime(time: String) {
+        _Counselorstate.value = _Counselorstate.value.copy(time = time)
+    }
+    fun toggleContactDialog() {
+        _Counselorstate.value = _Counselorstate.value.copy(showContactDialog = !_Counselorstate.value.showContactDialog)
+    }
+
+    fun submitRequest() {
+        // Implement submission logic here
+        _Counselorstate.value = _Counselorstate.value.copy(isLoading = true)
+    }
+
 
     //ResourcesPage
     private val _Resourcesstate = MutableStateFlow(MainDataClass.ResourcesPageState())

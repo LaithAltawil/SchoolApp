@@ -21,8 +21,9 @@ import com.example.schoolapp.datasource.local.entity.Student
         Homework::class,
         Parent::class,
         Event::class,
-        Exam::class],
-    version = 6,
+        Exam::class,
+        CalenderEvent::class],
+    version = 8,
     exportSchema = false
 )
 abstract class StudentDatabase : RoomDatabase() {

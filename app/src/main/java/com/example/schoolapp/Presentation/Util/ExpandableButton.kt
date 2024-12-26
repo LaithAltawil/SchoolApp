@@ -86,7 +86,7 @@ fun ExpandableButton(name: String, text: String) {
             exit = fadeOut() + shrinkVertically()
         ) {
             Card(modifier = Modifier
-                .width(500.dp)
+                .width(500.dp).padding(10.dp)
                 ,
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.primary,

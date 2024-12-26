@@ -1,9 +1,8 @@
 package com.example.schoolapp.Presentation.Screens
 
 import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,44 +14,50 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.compose.AppTheme
 import com.example.schoolapp.Navigation.Screen
-import com.example.schoolapp.Presentation.Util.CounselorCard
-import com.example.schoolapp.Presentation.Util.DatePickerModal
 import com.example.schoolapp.Presentation.VM.MainViewModel
-import com.example.schoolapp.R
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 //=======================================================
 //Counselor page: UI & logic                            =
 //=======================================================
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnrememberedMutableState")
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CounselorPage(
     navController: NavController,
@@ -62,7 +67,17 @@ fun CounselorPage(
     //=======================================================
     //variables: local & states                             =
     //=======================================================
-    val state = mainViewModel.state.collectAsStateWithLifecycle()
+    val state = mainViewModel.Counselorstate.collectAsStateWithLifecycle()
+    var text by remember { mutableStateOf("") }
+
+
+    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+    val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy")
+    val context = LocalContext.current
+    val options = listOf("with student", "with teacher", "with management", "with family", "other")
+    var expanded by remember { mutableStateOf(false) }
+    var selectedOptionText by remember { mutableStateOf(options[0]) }
+
 
     //=======================================================
     //UI & page logic                                       =
@@ -102,7 +117,7 @@ fun CounselorPage(
                                     tint = MaterialTheme.colorScheme.onPrimary
                                 )
                             }
-                            Spacer(modifier = Modifier.width(20.dp))
+                            Spacer(modifier = Modifier.width(5.dp))
                             Text(
                                 text = "Counselor", fontSize = 70.sp,
                                 fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
@@ -122,51 +137,11 @@ fun CounselorPage(
                         .fillMaxSize(),
                     horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
                 ) {
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        LazyRow {
-                            items(3) {
-                                Card(
-                                    modifier = Modifier
-                                        .width(420.dp)
-                                        .height(230.dp)
-                                        .padding(10.dp),
-                                    colors = CardDefaults.cardColors(
-                                        containerColor = MaterialTheme.colorScheme.primary
-                                    )
-                                ) {
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(10.dp),
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Text("Date here")
-                                        Text("Status here")
-
-                                    }
-                                    Column(
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .padding(10.dp),
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Text(text = "Last meeting feedback:-")
-                                        Text(
-                                            text = "Today, we learned alot about learniung alot Today," +
-                                                    " we learned alot about learniung alot Today," +
-                                                    " we learned alot about learniung alot" +
-                                                    "Today, we learned alot about learniung alot" +
-                                                    "Today, we learned alot about learniung alot"
-                                        )
-
-
-                                    }
-                                }
-
-                            }
-                        }
-                        Divider(modifier = Modifier.padding(10.dp).height(3.dp))
+                    Column(
+                        modifier = Modifier,
+                        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -174,27 +149,179 @@ fun CounselorPage(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Button(modifier = Modifier.padding(10.dp).width(150.dp), onClick = {}) {
-                                Text(text = "Add Meeting")
+                            Button(modifier = Modifier
+                                .padding(10.dp)
+                                .width(150.dp), onClick = {
+                                mainViewModel.toggleContactDialog()
+                            }) {
+                                Text(text = "Contact")
                             }
-                            Button(modifier = Modifier.padding(10.dp).width(150.dp), onClick = {}) {
-                                Text(text = "Add Feedback")
+                            Button(modifier = Modifier
+                                .padding(10.dp)
+                                .width(150.dp), onClick = {
+                                navController.navigate(Screen.RequestsPage.route)
+
+
+                            }) {
+                                Text(text = "Requests")
+                            }
+                        }
+                        Divider(
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .height(3.dp)
+                        )
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(10.dp),
+                            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 10.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(text = "Name: ")
+                                ExposedDropdownMenuBox(
+                                    expanded = expanded,
+                                    onExpandedChange = { expanded = !expanded }
+                                ) {
+                                    TextField(
+                                        readOnly = true,
+                                        value = selectedOptionText,
+                                        onValueChange = { },
+                                        label = { Text("Select an option") },
+                                        trailingIcon = {
+                                            ExposedDropdownMenuDefaults.TrailingIcon(
+                                                expanded = expanded
+                                            )
+                                        },
+                                        colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                                        modifier = Modifier.clickable {
+                                            expanded = !expanded
+                                        }
+                                    )
+                                    ExposedDropdownMenu(
+                                        expanded = expanded,
+                                        onDismissRequest = { expanded = false }
+                                    ) {
+                                        options.forEach { selectionOption ->
+                                            DropdownMenuItem(
+                                                text = { Text(selectionOption) },
+                                                onClick = {
+                                                    selectedOptionText = selectionOption
+                                                    expanded = false
+                                                }
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(text = "Date: ")
+                                //Problem with date picker
+                                TextField(
+                                    value = state.value.selectedDate.format(formatter),
+                                    readOnly = true,
+                                    onValueChange = {
+                                        selectedDate = LocalDate.parse(it, formatter)
+
+                                    },
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(20.dp))
+                                        .clickable {
+                                            android.app
+                                                .DatePickerDialog(
+                                                    context,
+                                                    { _, year, month, dayOfMonth ->
+                                                        selectedDate =
+                                                            LocalDate.of(
+                                                                year,
+                                                                month + 1,
+                                                                dayOfMonth
+                                                            )
+                                                    },
+                                                    selectedDate.year,
+                                                    selectedDate.monthValue - 1,
+                                                    selectedDate.dayOfMonth
+                                                )
+                                                .show()
+                                        })
+                            }
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 10.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(text = "Details: ")
+                                TextField(
+                                    value = state.value.time,
+                                    onValueChange = {
+                                        mainViewModel.updateTime(it)
+                                    },
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(20.dp))
+                                        .fillMaxWidth()
+                                        .height(200.dp),
+                                    maxLines = 10,
+                                    label = { Text("Enter your text here") },
+                                    textStyle = TextStyle(fontSize = 16.sp)
+                                )
+                            }
+
+                            Button(modifier = Modifier
+                                .padding(10.dp)
+                                .width(150.dp), onClick = {
+                                mainViewModel.submitRequest()
+                            }) {
+                                Text(text = if (state.value.isLoading) "Submitting..." else "Submit")
                             }
 
                         }
-                        Divider(modifier = Modifier.padding(10.dp).height(3.dp))
-                        CounselorCard()
 
 
 
 
                     }
-
-
                 }
-            }
-            //data picker logic
+                if (state.value.showContactDialog) {
+                    ContactDialog(onDismiss = { mainViewModel.toggleContactDialog() })
+                }
 
+            }
         }
     }
 }
+
+@Composable
+fun ContactDialog(onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Contact Information") },
+        text = {
+            Column {
+                Text("School Counselor: John Doe")
+                Text("Email: counselor@school.edu")
+                Text("Phone: (555) 123-4567")
+                Text("Office: Room 101")
+                Text("Hours: Mon-Fri 8:00 AM - 4:00 PM")
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Close")
+            }
+        }
+    )
+}
+
+

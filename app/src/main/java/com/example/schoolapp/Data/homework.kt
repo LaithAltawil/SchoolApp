@@ -50,6 +50,11 @@ data class CalenderDays(
     val event: String,
     val onClick: () -> Unit
 )
+data class Counselorevents(
+    val day: String,
+    val event: String,
+    val onClick: () -> Unit
+)
 /*LT:this is the main menu item data class, where you use it to give a name and an icon to each item in the main menu
 LT: for the main memory*/
 data class MainMenuItem(

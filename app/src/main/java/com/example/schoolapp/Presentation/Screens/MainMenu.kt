@@ -267,11 +267,10 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                 .background(MaterialTheme.colorScheme.primary)
                         ) {
                             Row(
-                                modifier = Modifier.fillMaxSize(),
-                                horizontalArrangement = Arrangement.Center
+                                modifier = Modifier.fillMaxSize()
                             ) {
                                 IconButton(
-                                    modifier = Modifier.padding(top = 50.dp, start = 5.dp),
+                                    modifier = Modifier.padding(top = 50.dp),
                                     onClick = { scope.launch { drawerState.open() } }
                                 ) {
                                     Icon(

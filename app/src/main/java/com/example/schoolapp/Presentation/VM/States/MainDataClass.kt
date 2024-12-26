@@ -3,17 +3,20 @@ package com.example.schoolapp.Presentation.VM.States
 import androidx.compose.runtime.mutableStateListOf
 import com.example.schoolapp.Data.Subjects
 import com.example.schoolapp.Data.Homework
+import java.time.LocalDate
 
 //Data source
 sealed class MainDataClass{
 
     //todo @LT #simple|| "Id" [13:13] must start with small latter
     //todo @LT #simple|| add usage
-    data class CounselorsPageState1(
-        val isTopAppBarVisible: Boolean = false,
-        var selectedDate: String = "",
-        var Id: String = "",
-        val openDialog: Boolean = false
+    data class CounselorState(
+        val name: String = "",
+        val selectedDate: LocalDate = LocalDate.now(),
+        val time: String = "",
+        val isLoading: Boolean = false,
+        val error: String? = null,
+        val showContactDialog: Boolean = false
     ) :MainDataClass()
 
     //todo @LT #simple|| "subjects" [22:21] must start with small latter
