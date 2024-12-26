@@ -5,11 +5,13 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.schoolapp.datasource.local.dao.CalenderDao
+import com.example.schoolapp.datasource.local.dao.ExamDao
 import com.example.schoolapp.datasource.local.dao.HomeworkDao
 import com.example.schoolapp.datasource.local.dao.ParentDao
 import com.example.schoolapp.datasource.local.dao.StudentDao
 import com.example.schoolapp.datasource.local.entity.CalenderEvent
 import com.example.schoolapp.datasource.local.entity.Event
+import com.example.schoolapp.datasource.local.entity.Exam
 import com.example.schoolapp.datasource.local.entity.Homework
 import com.example.schoolapp.datasource.local.entity.Parent
 import com.example.schoolapp.datasource.local.entity.Student
@@ -18,7 +20,8 @@ import com.example.schoolapp.datasource.local.entity.Student
     entities = [Student::class,
         Homework::class,
         Parent::class,
-        Event::class],
+        Event::class,
+        Exam::class],
     version = 6,
     exportSchema = false
 )
@@ -28,6 +31,7 @@ abstract class StudentDatabase : RoomDatabase() {
     abstract val homeworkDao: HomeworkDao
     abstract val parentDao: ParentDao
     abstract val calenderDao: CalenderDao
+    abstract val examDao: ExamDao
 
     companion object {
 
@@ -59,6 +63,7 @@ abstract class StudentDatabase : RoomDatabase() {
     //= Homework function's                                 =
     //= Parent function's                                   =
     //= Calender function's                                 =
+    //= Exam's function                                     =
     //=======================================================
     // Student function's
     suspend fun insert(student: Student) = studentDao.insert(student)
@@ -92,5 +97,13 @@ abstract class StudentDatabase : RoomDatabase() {
     suspend fun insertEvent(event: Event) = calenderDao.insert(event)
     suspend fun getEvent(id: Int) = calenderDao.getEvent(id)
     suspend fun getAllEvents() = calenderDao.getAllEvents()
+
+    //  Exam's functions
+    suspend fun insertExam(exam: Exam) = examDao.insertExam(exam)
+    suspend fun getExams() = examDao.getExams()
+    suspend fun getExam(id: Int) = examDao.getExam(id)
+    suspend fun getNewExams() = examDao.getNewExams()
+    suspend fun getExamsByClass(studentClass: String) = examDao.getExamsByClass(studentClass)
+    suspend fun deleteAllExams() = examDao.deleteAllExams()
 
 }

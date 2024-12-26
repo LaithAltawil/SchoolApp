@@ -3,12 +3,14 @@ package com.example.schoolapp.datasource.repository
 import com.example.schoolapp.datasource.local.database.StudentDatabase
 import com.example.schoolapp.datasource.local.entity.CalenderEvent
 import com.example.schoolapp.datasource.local.entity.Event
+import com.example.schoolapp.datasource.local.entity.Exam
 import com.example.schoolapp.datasource.local.entity.Homework
 import com.example.schoolapp.datasource.local.entity.Parent
 import com.example.schoolapp.datasource.local.entity.Student
 import com.example.schoolapp.datasource.online.api.StudentDatabaseApi
 import com.example.schoolapp.datasource.online.response.CalenderSemesterListResponse
 import com.example.schoolapp.datasource.online.response.EventListResponse
+import com.example.schoolapp.datasource.online.response.ExamListResponse
 import com.example.schoolapp.datasource.online.response.HomeworkListResponse
 import com.example.schoolapp.datasource.online.response.ParentResponse
 import com.example.schoolapp.datasource.online.response.StudentResponse
@@ -204,8 +206,47 @@ class StudentRepository(
     }
 
     //==========================================
-    //API                                      =
+    // ROOM - Exam Functions                  =
     //==========================================
+    suspend fun insertExam(exam: Exam) {
+        withContext(Dispatchers.IO) {
+            studentDatabase.insertExam(exam)
+        }
+    }
+
+    suspend fun getExams(): List<Exam> {
+        return withContext(Dispatchers.IO) {
+            studentDatabase.getExams()
+        }
+    }
+
+    suspend fun getExam(id: Int): Exam? {
+        return withContext(Dispatchers.IO) {
+            studentDatabase.getExam(id)
+        }
+    }
+
+    suspend fun getNewExams(): List<Exam> {
+        return withContext(Dispatchers.IO) {
+            studentDatabase.getNewExams()
+        }
+    }
+
+    suspend fun deleteAllExams() {
+        withContext(Dispatchers.IO) {
+            studentDatabase.deleteAllExams()
+        }
+    }
+
+    suspend fun getExamsByClass(studentClass: String): List<Exam> {
+        return withContext(Dispatchers.IO) {
+            studentDatabase.getExamsByClass(studentClass)
+        }
+    }
+
+    //===========================================================================================
+    //API                                                                                       =
+    //===========================================================================================
     //student sign-in API                      =
     //==========================================
     suspend fun getStudentFromApi(studentUsername: String): Response<StudentResponse> {
@@ -270,6 +311,15 @@ class StudentRepository(
     suspend fun getCalenderEventsFromApi(studentClass: String): Response<EventListResponse> {
         return withContext(Dispatchers.IO) {
             studentApi.calenderEvents(studentClass)
+        }
+    }
+
+    //==========================================
+    // API - Exam Functions                   =
+    //==========================================
+    suspend fun getExamCalenderFromApi(studentClass: String): Response<ExamListResponse> {
+        return withContext(Dispatchers.IO) {
+            studentApi.exams(studentClass)
         }
     }
 }
