@@ -10,15 +10,20 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.schoolapp.Presentation.VM.States.CalenderLoadingState
+import com.example.schoolapp.Presentation.VM.States.CalenderState
 import com.example.schoolapp.Presentation.VM.States.HomeworkLoadingState
 import com.example.schoolapp.Presentation.VM.States.MainDataClass
 import com.example.schoolapp.datasource.local.database.StudentDatabase
+import com.example.schoolapp.datasource.local.entity.CalenderEvent
+import com.example.schoolapp.datasource.local.entity.Event
+import com.example.schoolapp.datasource.local.entity.Exam
 import com.example.schoolapp.datasource.local.entity.Homework
 import com.example.schoolapp.datasource.local.entity.Parent
 import com.example.schoolapp.datasource.local.entity.Student
+import com.example.schoolapp.datasource.online.response.CalenderSemesterListResponse
 import com.example.schoolapp.datasource.repository.StudentRepository
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,7 +32,6 @@ import java.time.LocalDate
 
 //Main viewModel
 class MainViewModel(private val context: Context) : ViewModel() {
-
     //===========================================================================================
     //Repository: Student                                                                       =
     //===========================================================================================
@@ -74,6 +78,41 @@ class MainViewModel(private val context: Context) : ViewModel() {
     //handle parent operations
     private val _parent = MutableStateFlow<Parent?>(null) // Initialize with null
     val parent: StateFlow<Parent?> = _parent.asStateFlow()
+
+    //=======================================================
+    // calender page                                        =
+    //=======================================================
+    //calender object handles ROOM operations for Calender
+    private val _calenderEventList =
+        MutableStateFlow<List<CalenderEvent>?>(null) // Initialize with null
+    val calenderEventList: StateFlow<List<CalenderEvent>?> = _calenderEventList.asStateFlow()
+
+    //event object handles ROOM operations for Calender
+    private val _eventList = MutableStateFlow<List<Event>?>(null) // Initialize with null
+    val eventList: StateFlow<List<Event>?> = _eventList.asStateFlow()
+
+    //calender object handles operations for Calender
+    private val _calenderState = MutableStateFlow<CalenderState?>(null) // Initialize with null
+    val calenderState: StateFlow<CalenderState?> = _calenderState.asStateFlow()
+
+    //event object handles ROOM operations for Calender
+    private val _event = MutableStateFlow<Event?>(null) // Initialize with null
+    val event: StateFlow<Event?> = _event.asStateFlow()
+
+    //calender event object handles ROOM operations for Calender
+    private val _calenderEvent = MutableStateFlow<CalenderEvent?>(null) // Initialize with null
+    val calenderEvent: StateFlow<CalenderEvent?> = _calenderEvent.asStateFlow()
+
+    private val _calenderLoadingState =
+        MutableStateFlow<CalenderLoadingState>(CalenderLoadingState.Initial)
+    val calenderLoadingState: StateFlow<CalenderLoadingState> = _calenderLoadingState.asStateFlow()
+
+    //=======================================================
+    // Exam page                                            =
+    //=======================================================
+    //exam object handles ROOM operations for Calender
+    private val _examList = MutableStateFlow<List<Exam>?>(null) // Initialize with null
+    val examList: StateFlow<List<Exam>?> = _examList.asStateFlow()
 
     //Exam Page
     private val _Examstate = MutableStateFlow(MainDataClass.ExamPageState1())
@@ -162,6 +201,68 @@ class MainViewModel(private val context: Context) : ViewModel() {
         viewModelScope.launch {
             studentRepository.deleteParent()
         }
+    }
+
+    //=======================================================
+    // Event ROOM functions                                  =
+    //=======================================================
+    private suspend fun insertEvent(event: Event) {
+        studentRepository.insertEvent(event)
+    }
+
+    private suspend fun deleteAllEvents() {
+        studentRepository.deleteAllEvents()
+    }
+
+    private suspend fun getAllEventList() {
+        _eventList.value = studentRepository.getAllEvents()
+    }
+
+    private suspend fun getEvent(id: Int) {
+        _event.value = studentRepository.getEvent(id)
+    }
+
+    //=======================================================
+    // Calendar Event ROOM functions                        =
+    //=======================================================
+    private suspend fun insertCalenderEvent(calenderEvent: CalenderEvent) {
+        studentRepository.insertCalenderEvent(calenderEvent)
+    }
+
+    private suspend fun deleteAllCalenderEvents() {
+        studentRepository.deleteAllCalenderEvents()
+    }
+
+    private suspend fun getAllCalenderEvents() {
+        _calenderEventList.value = studentRepository.getCalenderEvents()
+    }
+
+    private suspend fun getCalenderEvent(id: Int) {
+        _calenderEvent.value = studentRepository.getCalenderEvent(id)
+    }
+
+    //=======================================================
+    // Exam ROOM functions                                  =
+    //=======================================================
+    private suspend fun insertExam(exam: Exam) {
+        studentRepository.insertExam(exam)
+    }
+
+    private suspend fun deleteAllExams() {
+        studentRepository.deleteAllExams()
+    }
+
+    private suspend fun getAllExamList() {
+        _examList.value = studentRepository.getExams()
+    }
+
+    private suspend fun getExamsByClass(studentClass: String) {
+        _examList.value = studentRepository.getExamsByClass(studentClass)
+    }
+
+    private suspend fun getNewExamList() {
+        // Get exams with dates after current date
+        _examList.value = studentRepository.getNewExams()
     }
 
     //===========================================================================================
@@ -333,7 +434,82 @@ class MainViewModel(private val context: Context) : ViewModel() {
             getParentFromApi()
             setParent()
         }
+    }
 
+    //=======================================================
+    // calender page                                        =
+    //=======================================================
+    //calender Event
+    private suspend fun getCalenderEventsFromApi() {
+        var calenderEvent: CalenderEvent
+        // Getting the list of events from the API
+        val calenderEvents = studentRepository.getCalenderFromApi()
+            .body()
+            ?.calenderSemesterEvents
+            ?: emptyList() // Ensure the list is not null
+
+        // Iterate through the list in reverse order
+        for (index in calenderEvents.indices.reversed()) {
+            calenderEvents[index].let {
+                calenderEvent = CalenderEvent(
+                    eventId = it.eventId,
+                    eventDescription = it.eventDescription,
+                    eventStartDate = it.eventStartDate.toString(),
+                    eventEndDate = it.eventEndDate.toString(),
+                    eventStartDay = it.eventStartDay
+                )
+            }
+            // Insert into local database
+            insertCalenderEvent(calenderEvent)
+        }
+
+        getAllCalenderEvents()
+    }
+
+    fun compareCalender() {
+        viewModelScope.launch {
+            // Start loading state
+            _calenderLoadingState.value = CalenderLoadingState.CheckingCalender
+
+            val onlineEvent = studentRepository.getCalenderFromApi()
+                .body()!!
+                .calenderSemesterEvents
+
+            getAllCalenderEvents() // Get current local events
+            val localEventNum = calenderEventList.value?.count() ?: 0
+
+            if (localEventNum == 0) {
+                // If no local events, fetch all
+                _calenderLoadingState.value = CalenderLoadingState.FetchingCalender
+                getCalenderEventsFromApi()
+                _calenderLoadingState.value = CalenderLoadingState.Completed
+            } else {
+                // Check if we need to update
+                _calenderLoadingState.value = CalenderLoadingState.CheckingNewCalender
+
+                val localEvent = studentRepository.getCalenderEvent(onlineEvent[0].eventId)
+                val isSameDescription =
+                    onlineEvent[0].eventDescription == localEvent?.eventDescription
+                val isSameStartDate =
+                    onlineEvent[0].eventStartDate.toString() == localEvent?.eventStartDate
+                val isSameEndDate =
+                    onlineEvent[0].eventEndDate.toString() == localEvent?.eventEndDate
+                val isSameStartDay = onlineEvent[0].eventStartDay == localEvent?.eventStartDay
+
+                if (!isSameDescription || !isSameStartDate || !isSameEndDate || !isSameStartDay) {
+                    // Data is different, update required
+                    _calenderLoadingState.value = CalenderLoadingState.FetchingCalender
+                    deleteAllCalenderEvents()
+                    getCalenderEventsFromApi()
+                } else if (onlineEvent.count() != localEventNum) {
+                    // Number of events different, update required
+                    _calenderLoadingState.value = CalenderLoadingState.FetchingCalender
+                    getCalenderEventsFromApi()
+                }
+
+                _calenderLoadingState.value = CalenderLoadingState.Completed
+            }
+        }
     }
 
     //===========================================================================================
@@ -388,8 +564,10 @@ class MainViewModel(private val context: Context) : ViewModel() {
     fun updateTime(time: String) {
         _Counselorstate.value = _Counselorstate.value.copy(time = time)
     }
+
     fun toggleContactDialog() {
-        _Counselorstate.value = _Counselorstate.value.copy(showContactDialog = !_Counselorstate.value.showContactDialog)
+        _Counselorstate.value =
+            _Counselorstate.value.copy(showContactDialog = !_Counselorstate.value.showContactDialog)
     }
 
     fun submitRequest() {
@@ -400,7 +578,9 @@ class MainViewModel(private val context: Context) : ViewModel() {
 
     //ResourcesPage
     private val _Resourcesstate = MutableStateFlow(MainDataClass.ResourcesPageState())
-    val Resourcesstate: StateFlow<MainDataClass.ResourcesPageState> = _Resourcesstate.asStateFlow()
+    val Resourcesstate: StateFlow<MainDataClass.ResourcesPageState> =
+        _Resourcesstate.asStateFlow()
+
     fun updateBottomSheetState2(index: Int, newState: Boolean) {
         // Ensure index is within bounds
         if (index in _Resourcesstate.value.BottomSheet1.indices) {

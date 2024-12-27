@@ -1,7 +1,5 @@
 package com.example.schoolapp.Presentation.Screens
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -39,24 +37,9 @@ import androidx.navigation.NavController
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.MockData.Mock.Titles
 import com.example.schoolapp.Presentation.Screens.ScreensPieces.ProfilePageBox
+import com.example.schoolapp.Presentation.Util.convertDateString
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Locale
-
-//handle the time format
-fun convertDateString(dateFromApi: String): String {
-    // Define the input date format
-    val inputFormatter =
-        DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
-    // Parse the input date string to a LocalDateTime
-    val parsedDate = LocalDateTime.parse(dateFromApi, inputFormatter)
-    // Define the output date format
-    val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    // Format the parsed date to the desired format
-    return parsedDate.format(outputFormatter)
-}
 
 //=======================================================
 //profile page                                          =

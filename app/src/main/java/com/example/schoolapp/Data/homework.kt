@@ -1,6 +1,7 @@
 package com.example.schoolapp.Data
 
 import androidx.compose.ui.graphics.painter.Painter
+import com.example.schoolapp.Presentation.VM.States.CalenderState
 
 //=======================================================
 //Declaring data classes                               =
@@ -48,6 +49,7 @@ MAS: I think we won't need it but I'll leave it until its time 👍*/
 data class CalenderDays(
     val day: String,
     val event: String,
+    val calenderState: CalenderState,
     val onClick: () -> Unit
 )
 data class Counselorevents(

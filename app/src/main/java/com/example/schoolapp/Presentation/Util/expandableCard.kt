@@ -68,23 +68,6 @@ fun ExpandableCard(
     //=======================================================
     //Logic & UI                                            =
     //=======================================================
-    //handle the time format
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun convertDateString(dateFromApi: String): String {
-        // Define the input date format
-        val inputFormatter =
-            DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
-
-        // Parse the input date string to a LocalDateTime
-        val parsedDate = LocalDateTime.parse(dateFromApi, inputFormatter)
-
-        // Define the output date format
-        val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-
-        // Format the parsed date to the desired format
-        return parsedDate.format(outputFormatter)
-    }
-
     Card(
         modifier = Modifier
             .fillMaxWidth()

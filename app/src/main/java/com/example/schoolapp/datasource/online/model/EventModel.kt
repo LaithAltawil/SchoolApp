@@ -9,5 +9,4 @@ data class EventModel(
     @SerializedName("eventStartDate") val eventStartDate: String,
     @SerializedName("eventStartDay") val eventStartDay: String,
     @SerializedName("eventEndDate") val eventEndDate: String,
-    @SerializedName("eventEndDay") val eventEndDay: String
 )

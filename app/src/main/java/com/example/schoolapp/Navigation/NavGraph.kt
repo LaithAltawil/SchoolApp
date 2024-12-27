@@ -90,7 +90,7 @@ fun Navigation() {
                 val context = LocalContext.current
                 val viewModel = it.MainViewModel<MainViewModel>(navController, context)
                 CalenderPage(
-                    mainViewModel = viewModel,
+                    viewModel = viewModel,
                     navController = navController
                 )
             }

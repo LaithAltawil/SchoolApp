@@ -23,7 +23,7 @@ import com.example.schoolapp.datasource.local.entity.Student
         Event::class,
         Exam::class,
         CalenderEvent::class],
-    version = 8,
+    version = 10,
     exportSchema = false
 )
 abstract class StudentDatabase : RoomDatabase() {
@@ -92,12 +92,14 @@ abstract class StudentDatabase : RoomDatabase() {
     // Calender function's
     suspend fun insertCalenderEvent(calenderEvent: CalenderEvent) =
         calenderDao.insertCalenderEvent(calenderEvent)
+
     suspend fun getCalenderEvent(id: Int) = calenderDao.getCalenderEvent(id)
     suspend fun getCalenderEvents() = calenderDao.getCalenderEvents()
     suspend fun deleteAllCalenderEvents() = calenderDao.deleteAllCalenderEvents()
     suspend fun insertEvent(event: Event) = calenderDao.insert(event)
     suspend fun getEvent(id: Int) = calenderDao.getEvent(id)
     suspend fun getAllEvents() = calenderDao.getAllEvents()
+    suspend fun deleteAllEvents() = calenderDao.deleteAllEvents()
 
     //  Exam's functions
     suspend fun insertExam(exam: Exam) = examDao.insertExam(exam)

@@ -205,6 +205,12 @@ class StudentRepository(
         }
     }
 
+    suspend fun deleteAllEvents() {
+        withContext(Dispatchers.IO) {
+            studentDatabase.deleteAllEvents()
+        }
+    }
+
     //==========================================
     // ROOM - Exam Functions                  =
     //==========================================

@@ -51,7 +51,7 @@ fun homeworkCard(
     viewModel: MainViewModel,
     context: Context,
 
-) {
+    ) {
     //=======================================================
     //variables: local & states                             =
     //=======================================================
@@ -62,9 +62,9 @@ fun homeworkCard(
     //=======================================================
     //Local variables                                      =
     //=======================================================
-        if(opened==homework.homeworkId){
-            isExpanded = true
-        }
+    if (opened == homework.homeworkId) {
+        isExpanded = true
+    }
 
     val filePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
@@ -78,22 +78,6 @@ fun homeworkCard(
     //=======================================================
     //Logic & UI                                            =
     //=======================================================
-    //handle the time format
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun convertDateString(dateFromApi: String): String {
-        // Define the input date format
-        val inputFormatter =
-            DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
-
-        // Parse the input date string to a LocalDateTime
-        val parsedDate = LocalDateTime.parse(dateFromApi, inputFormatter)
-
-        // Define the output date format
-        val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-
-        // Format the parsed date to the desired format
-        return parsedDate.format(outputFormatter)
-    }
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -136,9 +120,13 @@ fun homeworkCard(
             if (isExpanded) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Card(
-                    modifier = Modifier.fillMaxWidth().height(90.dp).padding(10.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(90.dp)
+                        .padding(10.dp)
                 ) {
-                    Text(modifier = Modifier.padding(10.dp),
+                    Text(
+                        modifier = Modifier.padding(10.dp),
                         text = homework.homeworkDetails,
                         style = MaterialTheme.typography.titleMedium
                     )

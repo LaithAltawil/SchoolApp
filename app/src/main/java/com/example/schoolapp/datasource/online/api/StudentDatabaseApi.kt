@@ -6,17 +6,16 @@ import com.example.schoolapp.datasource.online.response.EventListResponse
 import com.example.schoolapp.datasource.online.response.ExamListResponse
 import com.example.schoolapp.datasource.online.response.HomeworkListResponse
 import com.example.schoolapp.datasource.online.response.MarksListResponse
-import com.example.schoolapp.datasource.online.response.NotificationEventResponse
 import com.example.schoolapp.datasource.online.response.NotificationExamsListResponse
-import com.example.schoolapp.datasource.online.response.StudentResponse
 import com.example.schoolapp.datasource.online.response.NotificationProblemsListResponse
 import com.example.schoolapp.datasource.online.response.ParentResponse
 import com.example.schoolapp.datasource.online.response.SessionListResponse
-import retrofit2.http.GET
-import retrofit2.http.Query
+import com.example.schoolapp.datasource.online.response.StudentResponse
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
+import retrofit2.http.Query
 
 //PHP file name
 const val studentApi = "api.php?"

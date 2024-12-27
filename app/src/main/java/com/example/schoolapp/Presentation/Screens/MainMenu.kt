@@ -146,7 +146,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
             onClick = { /*TODO*/ }
         )
     )
-    val menuCard=listOf(
+    val menuCard = listOf(
         MainCards(),
         MainCards(),
         MainCards()
@@ -177,7 +177,6 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                 bottomStart = 25.dp
                             )
                         )
-
                         .width(300.dp),
                     color = MaterialTheme.colorScheme.primary
                 ) {

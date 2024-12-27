@@ -33,6 +33,7 @@ import com.example.schoolapp.Data.CalenderDays
 import com.example.schoolapp.Data.Counselorevents
 import com.example.schoolapp.Presentation.Util.ExpandableButton
 import com.example.schoolapp.Presentation.VM.MainViewModel
+import com.example.schoolapp.Presentation.VM.States.CalenderState
 
 @Composable
 fun Requests(
@@ -73,7 +74,7 @@ fun Requests(
                     ) {
                         Row(
                             modifier = Modifier.fillMaxSize(),
-                            ) {
+                        ) {
                             IconButton(
                                 modifier = Modifier.padding(top = 50.dp, start = 5.dp),
                                 onClick = {
@@ -89,21 +90,21 @@ fun Requests(
                             }
                             Column(
                                 modifier = Modifier.fillMaxSize(),
-                            ) { Text(
-                                text = "Counselor ", fontSize = 40.sp,
-                                fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
-                                modifier = Modifier.padding(top = 40.dp),
-                                color = MaterialTheme.colorScheme.onPrimary
-                            )
+                            ) {
+                                Text(
+                                    text = "Counselor ", fontSize = 40.sp,
+                                    fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+                                    modifier = Modifier.padding(top = 40.dp),
+                                    color = MaterialTheme.colorScheme.onPrimary
+                                )
                                 Text(
                                     text = " Requests", fontSize = 60.sp,
-                                overflow = androidx.compose.ui.text.style.TextOverflow.Visible,
-                                fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
-                                modifier = Modifier,
-                                color = MaterialTheme.colorScheme.onPrimary
-                                ) }
-
-
+                                    overflow = androidx.compose.ui.text.style.TextOverflow.Visible,
+                                    fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+                                    modifier = Modifier,
+                                    color = MaterialTheme.colorScheme.onPrimary
+                                )
+                            }
 
 
                         }
@@ -120,13 +121,16 @@ fun Requests(
                     LazyColumn {
                         items(calendarItems) { item ->
                             // ExpandableButton composable
-                            ExpandableButton(name = item.day, text = item.event)
+                            ExpandableButton(
+                                name = item.day,
+                                text = item.event,
+                                calenderState = CalenderState.EVENT_STATE,
+                                viewModel = mainViewModel
+                            )
                         }
                     }
                 }
             }
         }
     }
-
-
 }
