@@ -3,11 +3,6 @@ package com.example.schoolapp.Presentation.VM
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.schoolapp.Presentation.VM.States.CalenderLoadingState
@@ -21,7 +16,6 @@ import com.example.schoolapp.datasource.local.entity.Exam
 import com.example.schoolapp.datasource.local.entity.Homework
 import com.example.schoolapp.datasource.local.entity.Parent
 import com.example.schoolapp.datasource.local.entity.Student
-import com.example.schoolapp.datasource.online.response.CalenderSemesterListResponse
 import com.example.schoolapp.datasource.repository.StudentRepository
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -505,6 +499,94 @@ class MainViewModel(private val context: Context) : ViewModel() {
                     // Number of events different, update required
                     _calenderLoadingState.value = CalenderLoadingState.FetchingCalender
                     getCalenderEventsFromApi()
+                }
+
+                _calenderLoadingState.value = CalenderLoadingState.Completed
+            }
+        }
+    }
+
+    //events
+    private suspend fun getEventsFromApi() {
+        var event: Event
+        // Getting the list of events from the API for the student's class
+        val events = studentRepository.getCalenderEventsFromApi(student.value!!.studentClass)
+            .body()
+            ?.calenderEvents
+            ?: emptyList() // Ensure the list is not null
+
+        // Iterate through the list in reverse order (similar to calendar events)
+        for (index in events.indices.reversed()) {
+            events[index].let {
+                event = Event(
+                    eventId = it.eventId,
+                    eventName = it.eventName,
+                    eventDetails = it.eventDetails,
+                    eventStartDate = it.eventStartDate,
+                    eventStartDay = it.eventStartDay,
+                    eventEndDate = it.eventEndDate,
+                    eventEndDay = it.eventEndDay,
+                    eventClass = it.eventClass
+                )
+            }
+            // Insert into local database
+            insertEvent(event)
+        }
+
+        // Update the event list in the ViewModel
+        getAllEventList()
+    }
+
+    fun compareEvents() {
+        viewModelScope.launch {
+            // Start loading state
+            _calenderLoadingState.value = CalenderLoadingState.CheckingCalender
+
+            // Get local events first
+            getAllEventList()
+
+            // Get online events
+            val onlineEvents =
+                studentRepository.getCalenderEventsFromApi(student.value!!.studentClass)
+                    .body()
+                    ?.calenderEvents
+                    ?: emptyList()
+            val localEventNum = eventList.value?.count() ?: 0
+
+            if (localEventNum == 0) {
+                // If no local events, fetch all
+                _calenderLoadingState.value = CalenderLoadingState.FetchingCalender
+                getEventsFromApi()
+                _calenderLoadingState.value = CalenderLoadingState.Completed
+            }
+            else {
+                // Check if we need to update
+                _calenderLoadingState.value = CalenderLoadingState.CheckingNewCalender
+
+                // Get the first event to compare class
+                val localEvent = eventList.value?.firstOrNull()
+
+                // Check if the event class matches student class
+                if (localEvent?.eventClass != student.value?.studentClass) {
+                    // Class mismatch - need to refresh all events
+                    _calenderLoadingState.value = CalenderLoadingState.FetchingCalender
+                    deleteAllEvents()
+                    getEventsFromApi()
+                } else if (onlineEvents.isNotEmpty()) {
+                    // Class matches, check if we need to update based on content
+                    val firstOnlineEvent = onlineEvents[0]
+                    val isSameDetails = firstOnlineEvent.eventDetails == localEvent?.eventDetails
+                    val isSameStartDate =
+                        firstOnlineEvent.eventStartDate.toString() == localEvent?.eventStartDate
+                    val isSameEndDate =
+                        firstOnlineEvent.eventEndDate.toString() == localEvent?.eventEndDate
+
+                    if (!isSameDetails || !isSameStartDate || !isSameEndDate || onlineEvents.size != localEventNum) {
+                        // Data is different or number of events different, update required
+                        _calenderLoadingState.value = CalenderLoadingState.FetchingCalender
+                        deleteAllEvents()
+                        getEventsFromApi()
+                    }
                 }
 
                 _calenderLoadingState.value = CalenderLoadingState.Completed

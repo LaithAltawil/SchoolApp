@@ -17,6 +17,9 @@ data class Event(
     @ColumnInfo(name = "event_details")
     var eventDetails: String,
 
+    @ColumnInfo(name = "event_class")
+    var eventClass: String,
+
     @ColumnInfo(name = "event_start_date")
     var eventStartDate: String,
 

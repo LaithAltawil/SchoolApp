@@ -6,7 +6,9 @@ data class EventModel(
     @SerializedName("eventId") val eventId: Int,
     @SerializedName("eventName") val eventName: String,
     @SerializedName("eventDetails") val eventDetails: String,
+    @SerializedName("eventClass") val eventClass: String,
     @SerializedName("eventStartDate") val eventStartDate: String,
     @SerializedName("eventStartDay") val eventStartDay: String,
     @SerializedName("eventEndDate") val eventEndDate: String,
+    @SerializedName("eventEndDay") val eventEndDay: String,
 )

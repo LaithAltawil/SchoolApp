@@ -103,6 +103,7 @@ dependencies {
     //retrofit
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
+    implementation(libs.logging.interceptor)
 
     //room
     ksp(libs.androidx.room.compiler)

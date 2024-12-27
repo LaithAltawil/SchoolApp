@@ -11,6 +11,8 @@ import com.example.schoolapp.datasource.online.response.NotificationProblemsList
 import com.example.schoolapp.datasource.online.response.ParentResponse
 import com.example.schoolapp.datasource.online.response.SessionListResponse
 import com.example.schoolapp.datasource.online.response.StudentResponse
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -118,10 +120,18 @@ interface StudentDatabaseApi {
     ): Response<SessionListResponse>
 
     companion object {
-        //logic for invoke the api
         operator fun invoke(): StudentDatabaseApi {
+            val loggingInterceptor = HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            }
+
+            val client = OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .build()
+
             return Retrofit.Builder()
                 .baseUrl("http://16.24.157.106/mohammed99Ali/student_api/api/")
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(StudentDatabaseApi::class.java)

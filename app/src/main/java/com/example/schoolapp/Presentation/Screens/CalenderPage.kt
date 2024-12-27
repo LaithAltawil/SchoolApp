@@ -1,6 +1,7 @@
 package com.example.schoolapp.Presentation.Screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -83,6 +85,7 @@ fun CalenderPage(viewModel: MainViewModel, navController: NavController) {
     //=======================================================
     LaunchedEffect(Unit) {
         viewModel.compareCalender()
+        viewModel.compareEvents()
     }
     AppTheme {
         Surface(
@@ -182,21 +185,62 @@ fun CalenderPage(viewModel: MainViewModel, navController: NavController) {
                                 )
                             }
                         }
+
                         CalenderLoadingState.Completed -> {
                             LazyColumn(
-                                modifier = Modifier.fillMaxSize(),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(innerPadding),
                                 contentPadding = PaddingValues(vertical = 8.dp)
                             ) {
-                                items(calendarItems) { item ->
-                                    ExpandableButton(
-                                        name = item.day,
-                                        text = item.event,
-                                        item.calenderState,
-                                        viewModel = viewModel,
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(horizontal = 16.dp, vertical = 4.dp)
-                                    )
+                                if (calendarItems.isEmpty()) {
+                                    item {
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(32.dp),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Column(
+                                                horizontalAlignment = Alignment.CenterHorizontally,
+                                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                                            ) {
+                                                Icon(
+                                                    imageVector = Icons.Outlined.Warning,
+                                                    contentDescription = null,
+                                                    modifier = Modifier.size(64.dp),
+                                                    tint = MaterialTheme.colorScheme.primary
+                                                )
+                                                Text(
+                                                    text = when (calendarItems.elementAt(0).calenderState) {
+                                                        CalenderState.EVENT_STATE -> "No events available"
+                                                        CalenderState.EXAM_STATE -> "No exams scheduled"
+                                                        CalenderState.CALENDER_STATE -> "No calendar events"
+                                                        else -> "No items available"
+                                                    },
+                                                    style = MaterialTheme.typography.titleMedium,
+                                                    color = MaterialTheme.colorScheme.primary
+                                                )
+                                                Text(
+                                                    text = "Check back later for updates",
+                                                    style = MaterialTheme.typography.bodyMedium,
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                )
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    items(calendarItems) { item ->
+                                        ExpandableButton(
+                                            name = item.day,
+                                            text = item.event,
+                                            item.calenderState,
+                                            viewModel = viewModel,
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(horizontal = 16.dp, vertical = 4.dp)
+                                        )
+                                    }
                                 }
                             }
                         }

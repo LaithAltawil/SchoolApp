@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.schoolapp.Presentation.Util.convertDateString
 import com.example.schoolapp.datasource.local.entity.Event
 
 @Composable
@@ -59,7 +58,7 @@ fun EventCard(event: Event, modifier: Modifier) {
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(
-                        text = "${event.eventStartDay}, ${convertDateString(event.eventStartDate)}",
+                        text = "${event.eventStartDay}, ${event.eventStartDate}",
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
@@ -75,7 +74,7 @@ fun EventCard(event: Event, modifier: Modifier) {
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(
-                        text = "${event.eventEndDay}, ${convertDateString(event.eventEndDate)}",
+                        text = "${event.eventEndDay}, ${event.eventEndDate}",
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
