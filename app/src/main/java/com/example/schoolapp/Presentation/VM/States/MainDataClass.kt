@@ -1,6 +1,7 @@
 package com.example.schoolapp.Presentation.VM.States
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.ui.graphics.painter.Painter
 import com.example.schoolapp.Data.Subjects
 import com.example.schoolapp.Data.Homework
 import java.time.LocalDate
@@ -36,6 +37,13 @@ sealed class MainDataClass{
         var BottomSheet: MutableList<Boolean>
         = mutableStateListOf(false, false, false, false, false, false, false)
         ) :MainDataClass()
+
+    data class setting(
+        val name: String,
+        val imagePath: Painter?,
+        val description: String,
+        val onAction: () -> Unit
+    ):MainDataClass()
 
     //todo @LT #simple|| add usage
     data class HomeworkPageState1(

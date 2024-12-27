@@ -34,7 +34,9 @@ data class Subjects(
 data class setting(
     val name: String,
     val imagePath: Painter? = null,
-    val details:String
+    val details:String,
+    val onClick: () -> Unit,
+    val showAlertDialog: List<Boolean> = List(4) { false }
 )
 data class MarksSubjects(
     val name: String,
@@ -42,6 +44,14 @@ data class MarksSubjects(
     val onClick: () -> Unit,
     val Marks: Marks? = null
 
+)
+data class classInfo(
+    val subjectName: String,
+    val teacher: String,
+    val time: String,
+    val roomNumber: String? = null,  // Optional room number
+    val dayOfWeek: Int,             // Index of the day (0-6 for Sunday-Saturday)
+    val colorAccent: Long? = null    // Optional color for UI customization
 )
 /*LT: to add dates and events from the database to the Calender page
 MAS: I think we won't need it but I'll leave it until its time 👍*/

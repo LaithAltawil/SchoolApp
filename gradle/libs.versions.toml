@@ -32,6 +32,7 @@ googleGmsGoogleServices = "4.4.2"
 googleFirebaseCrashlytics = "3.0.2"
 firebaseStorage = "21.0.1"
 firebaseStorageKtx = "21.0.1"
+perfPlugin = "1.4.2"
 
 [libraries]
 androidx-animation = { module = "androidx.compose.animation:animation" }
@@ -75,6 +76,7 @@ androidx-material3-android = { group = "androidx.compose.material3", name = "mat
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
+perf-plugin = { group = "com.google.firebase", name = "perf-plugin", version.ref = "perfPlugin" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

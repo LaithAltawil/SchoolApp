@@ -5,6 +5,7 @@ import com.example.schoolapp.Data.Event
 import com.example.schoolapp.Data.Exam
 import com.example.schoolapp.Data.Homework
 import com.example.schoolapp.Data.Marks
+import com.example.schoolapp.Data.classInfo
 
 //=======================================================
 //Object class for mock data                            =
@@ -66,13 +67,13 @@ object Mock {
         listOf("language :- ", "English"),
         listOf("religion :- ", "Christian"),
     )
-    val daysOfWeek = listOf(
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday"
-    )
+//    val daysOfWeek = listOf(
+//        "Sunday",
+//        "Monday",
+//        "Tuesday",
+//        "Wednesday",
+//        "Thursday"
+//    )
     //todo @MAS #medium || insert the complete classList mock data after the related task is finished
     val classList = listOf(
         Class("Math", "Mr.Smith", "9:00 AM"),
@@ -97,12 +98,12 @@ object Mock {
                 Class("Science", "Ms.Johnson", "10:30 AM")
 
     )
-    val ClassesList = listOf(
-        classList,
-        classList1,
-        classList2
-
-    )
+//    val ClassesList = listOf(
+//        classList,
+//        classList1,
+//        classList2
+//
+//    )
     val mockExamList = listOf(
         Exam("Mathematics", "2023-12-15", "10:00 AM", "Room A101"),
         Exam("Physics", "2023-12-16", "02:00 PM", "Room B202"),
@@ -173,5 +174,179 @@ object Mock {
         ,Marks(
             22,22,59)
 
+    )
+    val daysOfWeek = listOf("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
+
+    // Sample class schedules for each day
+    private val sundayClasses = listOf(
+        classInfo(
+            subjectName = "Mathematics",
+            teacher = "Dr. Sarah Johnson",
+            time = "8:30 AM - 10:00 AM",
+            roomNumber = "201",
+            dayOfWeek = 0
+        ),
+        classInfo(
+            subjectName = "Physics",
+            teacher = "Prof. Michael Chen",
+            time = "10:15 AM - 11:45 AM",
+            roomNumber = "Lab 3",
+            dayOfWeek = 0
+        ),
+        classInfo(
+            subjectName = "English Literature",
+            teacher = "Ms. Emily Brown",
+            time = "12:30 PM - 2:00 PM",
+            roomNumber = "304",
+            dayOfWeek = 0
+        )
+    )
+
+    private val mondayClasses = listOf(
+        classInfo(
+            subjectName = "Chemistry",
+            teacher = "Dr. Robert Wilson",
+            time = "9:00 AM - 10:30 AM",
+            roomNumber = "Lab 2",
+            dayOfWeek = 1
+        ),
+        classInfo(
+            subjectName = "History",
+            teacher = "Prof. Amanda Martinez",
+            time = "11:00 AM - 12:30 PM",
+            roomNumber = "105",
+            dayOfWeek = 1
+        ),
+        classInfo(
+            subjectName = "Computer Science",
+            teacher = "Mr. James Lee",
+            time = "2:00 PM - 3:30 PM",
+            roomNumber = "Lab 5",
+            dayOfWeek = 1
+        )
+    )
+
+    private val tuesdayClasses = listOf(
+        classInfo(
+            subjectName = "Biology",
+            teacher = "Dr. Lisa Thompson",
+            time = "8:30 AM - 10:00 AM",
+            roomNumber = "Lab 1",
+            dayOfWeek = 2
+        ),
+        classInfo(
+            subjectName = "Mathematics",
+            teacher = "Dr. Sarah Johnson",
+            time = "10:15 AM - 11:45 AM",
+            roomNumber = "201",
+            dayOfWeek = 2
+        ),
+        classInfo(
+            subjectName = "Art",
+            teacher = "Ms. Sofia Garcia",
+            time = "1:00 PM - 2:30 PM",
+            roomNumber = "Art Studio",
+            dayOfWeek = 2
+        )
+    )
+
+    private val wednesdayClasses = listOf(
+        classInfo(
+            subjectName = "Physics Lab",
+            teacher = "Prof. Michael Chen",
+            time = "9:00 AM - 11:00 AM",
+            roomNumber = "Lab 3",
+            dayOfWeek = 3
+        ),
+        classInfo(
+            subjectName = "Geography",
+            teacher = "Mr. David Kim",
+            time = "11:30 AM - 1:00 PM",
+            roomNumber = "202",
+            dayOfWeek = 3
+        ),
+        classInfo(
+            subjectName = "Programming",
+            teacher = "Mr. James Lee",
+            time = "2:00 PM - 3:30 PM",
+            roomNumber = "Lab 5",
+            dayOfWeek = 3
+        )
+    )
+
+    private val thursdayClasses = listOf(
+        classInfo(
+            subjectName = "Chemistry Lab",
+            teacher = "Dr. Robert Wilson",
+            time = "8:30 AM - 10:30 AM",
+            roomNumber = "Lab 2",
+            dayOfWeek = 4
+        ),
+        classInfo(
+            subjectName = "Literature",
+            teacher = "Ms. Emily Brown",
+            time = "11:00 AM - 12:30 PM",
+            roomNumber = "304",
+            dayOfWeek = 4
+        ),
+        classInfo(
+            subjectName = "Physical Education",
+            teacher = "Mr. Thomas Anderson",
+            time = "2:00 PM - 3:30 PM",
+            roomNumber = "Gym",
+            dayOfWeek = 4
+        )
+    )
+
+    private val fridayClasses = listOf(
+        classInfo(
+            subjectName = "Mathematics",
+            teacher = "Dr. Sarah Johnson",
+            time = "9:00 AM - 10:30 AM",
+            roomNumber = "201",
+            dayOfWeek = 5
+        ),
+        classInfo(
+            subjectName = "Music",
+            teacher = "Ms. Rachel White",
+            time = "11:00 AM - 12:30 PM",
+            roomNumber = "Music Room",
+            dayOfWeek = 5
+        ),
+        classInfo(
+            subjectName = "Study Hall",
+            teacher = "Various Teachers",
+            time = "1:30 PM - 3:00 PM",
+            roomNumber = "Library",
+            dayOfWeek = 5
+        )
+    )
+
+    private val saturdayClasses = listOf(
+        classInfo(
+            subjectName = "Extra Mathematics",
+            teacher = "Dr. Sarah Johnson",
+            time = "9:00 AM - 10:30 AM",
+            roomNumber = "201",
+            dayOfWeek = 6
+        ),
+        classInfo(
+            subjectName = "Science Club",
+            teacher = "Dr. Robert Wilson",
+            time = "11:00 AM - 12:30 PM",
+            roomNumber = "Lab 1",
+            dayOfWeek = 6
+        )
+    )
+
+    // Combine all days into one list
+    val ClassesList = listOf(
+        sundayClasses,
+        mondayClasses,
+        tuesdayClasses,
+        wednesdayClasses,
+        thursdayClasses,
+        fridayClasses,
+        saturdayClasses
     )
 }

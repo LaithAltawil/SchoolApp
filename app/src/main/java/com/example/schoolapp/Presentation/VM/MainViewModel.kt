@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.schoolapp.Data.setting
 import com.example.schoolapp.Presentation.VM.States.CalenderLoadingState
 import com.example.schoolapp.Presentation.VM.States.CalenderState
 import com.example.schoolapp.Presentation.VM.States.HomeworkLoadingState
@@ -21,6 +22,7 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -117,8 +119,34 @@ class MainViewModel(private val context: Context) : ViewModel() {
     val Marksstate: StateFlow<MainDataClass.MarkspageState1> = _Marksstate.asStateFlow()
 
     //setting page
-    private val _Settingstate = MutableStateFlow(MainDataClass.SettingsPageState1())
-    val Settingstate: StateFlow<MainDataClass.SettingsPageState1> = _Settingstate.asStateFlow()
+//    private val _settingstate = MutableStateFlow<setting?>(null) // Initialize with null
+//    val settingstate: StateFlow<setting?> = _settingstate.asStateFlow()
+//    fun showAlertDialog(index: Int, show: Boolean) {
+//        _settingstate.update { currentState ->
+//            val newDialogStates = currentState.showAlertDialog.toMutableList()
+//            newDialogStates[index] = show
+//            currentState.copy(showAlertDialog = newDialogStates)
+//        }
+//    }
+    data class SettingsState(
+        val showAlertDialog: List<Boolean> = List(4) { false }  // Initialize with 4 false values
+    )
+    private val _settingState = MutableStateFlow(SettingsState())
+
+    // Public immutable state
+    val Settingstate = _settingState.asStateFlow()
+
+    fun showAlertDialog(index: Int, show: Boolean) {
+        _settingState.update { currentState ->
+            val newDialogStates = currentState.showAlertDialog.toMutableList()
+            if (index in newDialogStates.indices) {  // Add bounds check
+                newDialogStates[index] = show
+            }
+            currentState.copy(showAlertDialog = newDialogStates)
+        }
+    }
+
+
 
     //ClassesPage
     private val _Classesstate = MutableStateFlow(MainDataClass.ClassesPageState())
@@ -704,11 +732,7 @@ class MainViewModel(private val context: Context) : ViewModel() {
         }
     }
 
-    fun showAlertDialog(index: Int, newState: Boolean) {
-        if (index in _Settingstate.value.showAlertDialog.indices) {
-            _Settingstate.value.showAlertDialog[index] = newState
-        }
-    }
+
 
     private val _Counselorstate = MutableStateFlow(MainDataClass.CounselorState())
     val Counselorstate: StateFlow<MainDataClass.CounselorState> = _Counselorstate.asStateFlow()
