@@ -288,6 +288,7 @@ class MainViewModel(private val context: Context) : ViewModel() {
                 ).body()!!
                     .homeworks[numOfHomework - 1]
                     .let {
+
                         apiHomework = Homework(
                             homeworkId = it.homeworkId,
                             homeworkTeacherId = it.homeworkTeacherId,
@@ -558,8 +559,7 @@ class MainViewModel(private val context: Context) : ViewModel() {
                 _calenderLoadingState.value = CalenderLoadingState.FetchingCalender
                 getEventsFromApi()
                 _calenderLoadingState.value = CalenderLoadingState.Completed
-            }
-            else {
+            } else {
                 // Check if we need to update
                 _calenderLoadingState.value = CalenderLoadingState.CheckingNewCalender
 
@@ -590,6 +590,84 @@ class MainViewModel(private val context: Context) : ViewModel() {
                 }
 
                 _calenderLoadingState.value = CalenderLoadingState.Completed
+            }
+        }
+    }
+
+    //=======================================================
+    //exam page                                             =
+    //=======================================================
+    private suspend fun getExamsFromApi() {
+        var exam: Exam
+        // Getting the list of exams from the API for the student's class
+        val exams = studentRepository.getExamCalenderFromApi(student.value!!.studentClass)
+            .body()
+            ?.exams
+            ?: emptyList()
+
+        // Iterate through the list in reverse order
+        for (index in exams.indices.reversed()) {
+            exams[index].let {
+                exam = Exam(
+                    examId = it.examId,
+                    examTeacherId = it.examTeacherId,
+                    examTeacherSubject = it.examTeacherSubject,
+                    examTeacherClass = it.examTeacherClass,
+                    examDate = it.examDate.toString(),
+                    examDay = it.examDay,
+                    examMaterial = it.examMaterial,
+                    examNotes = it.examNotes
+                )
+            }
+            // Insert into local database
+            insertExam(exam)
+        }
+        // Update the exam list in the ViewModel
+        getNewExamList()
+    }
+
+    fun compareExams() {
+        viewModelScope.launch {
+            // Start loading state
+            _loadingState.value = HomeworkLoadingState.CheckingHomework
+
+            // Get local exams first
+            getAllExamList()
+
+            // Get online exams
+            val onlineExams = studentRepository.getExamCalenderFromApi(student.value!!.studentClass)
+                .body()
+                ?.exams
+                ?: emptyList()
+
+            val localExamNum = examList.value?.count() ?: 0
+
+            if (localExamNum == 0) {
+                // If no local exams, fetch all
+                _loadingState.value = HomeworkLoadingState.FetchingHomework
+                getExamsFromApi()
+                _loadingState.value = HomeworkLoadingState.Completed
+            } else {
+                // Check if we need to update
+                _loadingState.value = HomeworkLoadingState.CheckingNewHomework
+                // Get the first exam to compare class
+                val localExam = examList.value?.firstOrNull()
+                // Check if the exam class matches student class
+                if (localExam?.examTeacherClass != student.value?.studentClass) {
+                    // Class mismatch - need to refresh all exams
+                    _loadingState.value = HomeworkLoadingState.FetchingHomework
+                    deleteAllExams()
+                    getExamsFromApi()
+                } else if (onlineExams.isNotEmpty()) {
+                    // Class matches, check if we need to update based on content
+                    if (onlineExams.size != localExamNum) {
+                        // Number of exams different, update required
+                        _loadingState.value = HomeworkLoadingState.FetchingHomework
+                        deleteAllExams()
+                        getExamsFromApi()
+                    }
+                }
+                _loadingState.value = HomeworkLoadingState.Completed
             }
         }
     }

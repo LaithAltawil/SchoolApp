@@ -23,7 +23,7 @@ import com.example.schoolapp.datasource.local.entity.Student
         Event::class,
         Exam::class,
         CalenderEvent::class],
-    version = 11,
+    version = 12,
     exportSchema = false
 )
 abstract class StudentDatabase : RoomDatabase() {
@@ -83,6 +83,7 @@ abstract class StudentDatabase : RoomDatabase() {
     suspend fun getLastHomeworkClass() = homeworkDao.getLastHomeworkClass()
     suspend fun deleteHomework(id: Int) = homeworkDao.deleteHomework(id)
     suspend fun deleteAllHomework() = homeworkDao.deleteAllHomework()
+    suspend fun debugHomeworkDates() = homeworkDao.debugHomeworkDates()
 
     // Parent function's
     suspend fun insertParent(parent: Parent) = parentDao.insert(parent)

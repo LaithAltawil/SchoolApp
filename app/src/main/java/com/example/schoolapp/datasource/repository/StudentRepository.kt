@@ -1,5 +1,7 @@
 package com.example.schoolapp.datasource.repository
 
+import com.example.schoolapp.datasource.local.dao.ExamDao
+import com.example.schoolapp.datasource.local.dao.HomeworkDao
 import com.example.schoolapp.datasource.local.database.StudentDatabase
 import com.example.schoolapp.datasource.local.entity.CalenderEvent
 import com.example.schoolapp.datasource.local.entity.Event
@@ -131,6 +133,13 @@ class StudentRepository(
         withContext(Dispatchers.IO) {
             studentDatabase.deleteAllHomework()
         }
+    }
+
+    suspend fun debugHomeworkDates(): List<HomeworkDao.DebugHomework> {
+        val homeworkList = withContext(Dispatchers.IO) {
+            return@withContext studentDatabase.debugHomeworkDates()
+        }
+        return homeworkList
     }
 
     //===============================================

@@ -98,7 +98,7 @@ fun ExpandableCard(
                         Text(homework.homeworkEndDay)
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = convertDateString(homework.homeworkEndDate),
+                            text = homework.homeworkEndDate,
                             style = MaterialTheme.typography.labelLarge
                         )
 

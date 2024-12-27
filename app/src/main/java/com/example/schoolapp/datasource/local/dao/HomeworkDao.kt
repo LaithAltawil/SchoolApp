@@ -22,7 +22,7 @@ interface HomeworkDao {
     suspend fun getListOfHomework(): List<Homework>
 
     //get list of homework based on date
-    @Query("SELECT * from homework_table where homework_start_date >= DATE('now') and homework_is_complete = 0")
+    @Query("SELECT * from homework_table where homework_end_date >= DATE('now') and homework_is_complete = 0")
     suspend fun getListOfHomeworkBasedOnDate(): List<Homework>
 
     //get the last homework Id
@@ -40,5 +40,14 @@ interface HomeworkDao {
     //delete all homework
     @Query("DELETE FROM homework_table")
     suspend fun deleteAllHomework()
+
+    @Query("SELECT homework_id, homework_start_date, DATE('now') as 'current_date' FROM homework_table")
+    suspend fun debugHomeworkDates(): List<DebugHomework>
+
+    data class DebugHomework(
+        val homework_id: Int,
+        val homework_start_date: String,
+        val current_date: String
+    )
 
 }

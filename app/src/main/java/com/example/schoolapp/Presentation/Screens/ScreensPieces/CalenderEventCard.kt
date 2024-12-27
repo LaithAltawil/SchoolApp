@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.schoolapp.Presentation.Util.convertDateString
 import com.example.schoolapp.datasource.local.entity.CalenderEvent
 
 @Composable
@@ -50,7 +49,7 @@ fun CalenderEventCard(calenderEvent: CalenderEvent, modifier: Modifier) {
                         color = MaterialTheme.colorScheme.outline
                     )
                     Text(
-                        text = convertDateString(calenderEvent.eventStartDate),
+                        text = calenderEvent.eventStartDate,
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
@@ -67,7 +66,7 @@ fun CalenderEventCard(calenderEvent: CalenderEvent, modifier: Modifier) {
                         color = MaterialTheme.colorScheme.outline
                     )
                     Text(
-                        text = convertDateString(calenderEvent.eventEndDate),
+                        text = calenderEvent.eventEndDate,
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }

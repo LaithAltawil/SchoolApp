@@ -15,7 +15,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.schoolapp.datasource.local.entity.Exam
 import androidx.compose.foundation.layout.Arrangement
-import com.example.schoolapp.Presentation.Util.convertDateString
 
 @Composable
 fun ExamCard(exam: Exam, modifier: Modifier) {
@@ -48,7 +47,7 @@ fun ExamCard(exam: Exam, modifier: Modifier) {
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
-                    text = convertDateString(exam.examDate),
+                    text = exam.examDate,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.outline
                 )

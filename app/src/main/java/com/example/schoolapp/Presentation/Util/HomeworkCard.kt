@@ -104,11 +104,11 @@ fun homeworkCard(
                 Column {
                     Row {
                         Text("date start ")
-                        Text(convertDateString(homework.homeworkStartDate))
+                        Text(homework.homeworkStartDate)
                     }
                     Row {
                         Text("Submit By ")
-                        Text(convertDateString(homework.homeworkEndDate))
+                        Text(homework.homeworkEndDate)
                     }
 
                     //Text(homework.homeworkEndDay)

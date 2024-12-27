@@ -37,7 +37,6 @@ import androidx.navigation.NavController
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.MockData.Mock.Titles
 import com.example.schoolapp.Presentation.Screens.ScreensPieces.ProfilePageBox
-import com.example.schoolapp.Presentation.Util.convertDateString
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.R
 
@@ -65,7 +64,7 @@ fun Profile_page(viewModel: MainViewModel, navController: NavController) {
         mutableListOf("Nationality:", studentState.value?.studentNationality.toString()),
         mutableListOf(
             "Date of Birth",
-            convertDateString(studentState.value?.studentDateOfBirth.toString())
+            studentState.value?.studentDateOfBirth.toString()
         ),
         mutableListOf("", "")
     )

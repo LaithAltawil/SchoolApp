@@ -15,7 +15,7 @@ interface ExamDao {
     @Query("SELECT * FROM exam_table")
     suspend fun getExams(): List<Exam>
 
-    @Query("SELECT * FROM exam_table where exam_date > date('now')")
+    @Query("SELECT * FROM exam_table where exam_date >= DATE('now')")
     suspend fun getNewExams(): List<Exam>
 
     @Query("SELECT * FROM exam_table WHERE exam_id = :id")

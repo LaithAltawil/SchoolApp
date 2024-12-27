@@ -6,7 +6,7 @@ import java.util.Date
 data class CalenderSemesterEventModel(
     @SerializedName("eventId") val eventId: Int,
     @SerializedName("eventDescription") val eventDescription: String,
-    @SerializedName("eventStartDate") val eventStartDate: Date,
-    @SerializedName("eventEndDate") val eventEndDate: Date,
+    @SerializedName("eventStartDate") val eventStartDate: String,
+    @SerializedName("eventEndDate") val eventEndDate: String,
     @SerializedName("eventStartDay") val eventStartDay: String
 )

@@ -86,6 +86,7 @@ fun CalenderPage(viewModel: MainViewModel, navController: NavController) {
     LaunchedEffect(Unit) {
         viewModel.compareCalender()
         viewModel.compareEvents()
+        viewModel.compareExams()
     }
     AppTheme {
         Surface(
@@ -131,7 +132,6 @@ fun CalenderPage(viewModel: MainViewModel, navController: NavController) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(innerPadding)
                 ) {
                     when (calenderLoadingState.value) {
                         CalenderLoadingState.Initial -> {

@@ -1,6 +1,7 @@
 package com.example.schoolapp.datasource.online.model
 
 import com.google.gson.annotations.SerializedName
+import java.util.Date
 
 data class ExamModel(
     @SerializedName("examId") val examId: Int,
