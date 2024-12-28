@@ -8,6 +8,7 @@ import com.example.schoolapp.datasource.local.entity.Event
 import com.example.schoolapp.datasource.local.entity.Exam
 import com.example.schoolapp.datasource.local.entity.Homework
 import com.example.schoolapp.datasource.local.entity.Parent
+import com.example.schoolapp.datasource.local.entity.Session
 import com.example.schoolapp.datasource.local.entity.Student
 import com.example.schoolapp.datasource.online.api.StudentDatabaseApi
 import com.example.schoolapp.datasource.online.response.CalenderSemesterListResponse
@@ -15,7 +16,9 @@ import com.example.schoolapp.datasource.online.response.EventListResponse
 import com.example.schoolapp.datasource.online.response.ExamListResponse
 import com.example.schoolapp.datasource.online.response.HomeworkListResponse
 import com.example.schoolapp.datasource.online.response.ParentResponse
+import com.example.schoolapp.datasource.online.response.SessionListResponse
 import com.example.schoolapp.datasource.online.response.StudentResponse
+import com.example.schoolapp.datasource.online.response.TeacherResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
@@ -259,6 +262,45 @@ class StudentRepository(
         }
     }
 
+    //==========================================
+    //Sessions ROOM                            =
+    //==========================================
+    suspend fun insertSession(session: Session) {
+        withContext(Dispatchers.IO) {
+            studentDatabase.insertSession(session)
+        }
+    }
+
+    suspend fun insertAllSessions(sessions: List<Session>) {
+        withContext(Dispatchers.IO) {
+            studentDatabase.insertAllSessions(sessions)
+        }
+    }
+
+    suspend fun getSessionsByClass(classId: String): List<Session> {
+        return withContext(Dispatchers.IO) {
+            studentDatabase.getSessionsByClass(classId)
+        }
+    }
+
+    suspend fun getSessionsByDay(day: String): List<Session> {
+        return withContext(Dispatchers.IO) {
+            studentDatabase.getSessionsByDay(day)
+        }
+    }
+
+    suspend fun deleteAllSessions() {
+        withContext(Dispatchers.IO) {
+            studentDatabase.deleteAllSessions()
+        }
+    }
+
+    suspend fun deleteSessionsByClass(classId: String) {
+        withContext(Dispatchers.IO) {
+            studentDatabase.deleteSessionsByClass(classId)
+        }
+    }
+
     //===========================================================================================
     //API                                                                                       =
     //===========================================================================================
@@ -337,4 +379,53 @@ class StudentRepository(
             studentApi.exams(studentClass)
         }
     }
+
+    //==========================================
+    // session api                             =
+    //==========================================
+    suspend fun getSessionsFromApi(studentClass: String): Response<SessionListResponse> {
+        return withContext(Dispatchers.IO) {
+            studentApi.sessions(studentClass)
+        }
+    }
+
+    // Function to fetch and store sessions
+    suspend fun refreshSessions(studentClass: String) {
+        withContext(Dispatchers.IO) {
+            try {
+                val response = getSessionsFromApi(studentClass)
+                if (response.isSuccessful && response.body() != null && !response.body()!!.error) {
+                    // Clear existing sessions for this class
+                    deleteSessionsByClass(studentClass)
+
+                    // Convert API models to local entities and insert
+                    val sessions = response.body()!!.sessions.map { sessionModel ->
+                        Session(
+                            sessionId = 0,
+                            sessionTeacherClass = sessionModel.sessionTeacherClass,
+                            day = sessionModel.day,
+                            session = sessionModel.session,
+                            sessionTeacherSubject = sessionModel.sessionTeacherSubject,
+                            sessionTeacherId = sessionModel.sessionTeacherId
+                        )
+                    }
+                    insertAllSessions(sessions)
+                }
+            } catch (e: Exception) {
+                // Handle network errors or other exceptions
+                e.printStackTrace()
+            }
+        }
+    }
+
+    //===========================================
+    //teacher                                   =
+    //===========================================
+    //teacher Api
+    suspend fun getTeacherFromApi(teacherId: Int): Response<TeacherResponse> {
+        return withContext(Dispatchers.IO) {
+            studentApi.teacher(teacherId)
+        }
+    }
+
 }

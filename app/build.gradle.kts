@@ -50,12 +50,27 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/DEPENDENCIES"
+            excludes += "META-INF/LICENSE"
+            excludes += "META-INF/LICENSE.txt"
+            excludes += "META-INF/license.txt"
+            excludes += "META-INF/NOTICE"
+            excludes += "META-INF/NOTICE.txt"
+            excludes += "META-INF/notice.txt"
+            excludes += "META-INF/ASL2.0"
+            excludes += "META-INF/*.kotlin_module"
+            excludes += "org/xmlpull/**"
         }
     }
+
+    configurations.all {
+        exclude(group = "xpp3", module = "xpp3")
+        exclude(group = "xmlpull", module = "xmlpull")
+    }
+
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -63,17 +78,19 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
+    implementation(libs.androidx.material3)  // Keep only this Material3 dependency
     implementation(libs.material)
     implementation(libs.androidx.ui.text.google.fonts)
     implementation(libs.protolite.well.known.types)
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.material3.android)
+    // Removed material3-android
+    // Removed material3-jvmstubs
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.storage)
     implementation(libs.firebase.storage.ktx)
     implementation(libs.perf.plugin)
+    implementation(libs.androidx.navigation.safe.args.generator)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -82,31 +99,37 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.browser)
+
     // Coroutines
-    implementation(libs.kotlinx.coroutines.android) // Or latest version
+    implementation(libs.kotlinx.coroutines.android)
 
     // ViewModel
-    implementation(libs.androidx.lifecycle.viewmodel.ktx) // Or latest version
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     // Lifecycle
-    implementation(libs.androidx.lifecycle.runtime.ktx.v262) // Or latest version
+    implementation(libs.androidx.lifecycle.runtime.ktx.v262)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.ui)            // Jetpack Compose UI
-    implementation(libs.androidx.material)    // Material Design
-    implementation(libs.ui.tooling.preview) // Preview support
-    debugImplementation(libs.ui.tooling)       // UI Toolkit
-    debugImplementation(libs.ui.test.manifest) // Test Manifest
+    implementation(libs.ui)
+    implementation(libs.androidx.material)
+    implementation(libs.ui.tooling.preview)
+    debugImplementation(libs.ui.tooling)
+    debugImplementation(libs.ui.test.manifest)
     implementation(libs.androidx.animation)
     implementation(libs.androidx.runtime)
 
     //retrofit
-    implementation (libs.retrofit)
-    implementation (libs.converter.gson)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
 
     //room
     ksp(libs.androidx.room.compiler)
 
+    // For any dependency that might be pulling in these XML libraries, add exclusions
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0") {
+        exclude(group = "xpp3", module = "xpp3")
+        exclude(group = "xmlpull", module = "xmlpull")
+    }
 }

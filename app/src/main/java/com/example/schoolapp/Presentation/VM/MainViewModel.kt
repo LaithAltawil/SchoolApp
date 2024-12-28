@@ -5,11 +5,12 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.schoolapp.Data.setting
 import com.example.schoolapp.Presentation.VM.States.CalenderLoadingState
 import com.example.schoolapp.Presentation.VM.States.CalenderState
 import com.example.schoolapp.Presentation.VM.States.HomeworkLoadingState
 import com.example.schoolapp.Presentation.VM.States.MainDataClass
+import com.example.schoolapp.Presentation.VM.States.SessionLoadingState
+import com.example.schoolapp.Presentation.VM.States.SessionState
 import com.example.schoolapp.datasource.local.database.StudentDatabase
 import com.example.schoolapp.datasource.local.entity.CalenderEvent
 import com.example.schoolapp.datasource.local.entity.Event
@@ -17,6 +18,7 @@ import com.example.schoolapp.datasource.local.entity.Exam
 import com.example.schoolapp.datasource.local.entity.Homework
 import com.example.schoolapp.datasource.local.entity.Parent
 import com.example.schoolapp.datasource.local.entity.Student
+import com.example.schoolapp.datasource.online.model.SessionModel
 import com.example.schoolapp.datasource.repository.StudentRepository
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -110,6 +112,24 @@ class MainViewModel(private val context: Context) : ViewModel() {
     private val _examList = MutableStateFlow<List<Exam>?>(null) // Initialize with null
     val examList: StateFlow<List<Exam>?> = _examList.asStateFlow()
 
+    //exam object handles ROOM operations for Calender
+    private val _examCompareList = MutableStateFlow<List<Exam>?>(null) // Initialize with null
+    val examCompareList: StateFlow<List<Exam>?> = _examCompareList.asStateFlow()
+
+    //=======================================================
+    // sessions page                                        =
+    //=======================================================
+    private val _sessionState = MutableStateFlow(SessionState())
+    val sessionState: StateFlow<SessionState> = _sessionState.asStateFlow()
+
+    private val _sessionLoadingState =
+        MutableStateFlow<SessionLoadingState>(SessionLoadingState.Initial)
+    val sessionLoadingState: StateFlow<SessionLoadingState> = _sessionLoadingState.asStateFlow()
+
+    //handle teacher name for sessions
+    private val _teacherName = MutableStateFlow<String?>(null)
+    val teacherName: StateFlow<String?> = _teacherName.asStateFlow()
+
     //Exam Page
     private val _Examstate = MutableStateFlow(MainDataClass.ExamPageState1())
     val Examstate: StateFlow<MainDataClass.ExamPageState1> = _Examstate.asStateFlow()
@@ -131,6 +151,7 @@ class MainViewModel(private val context: Context) : ViewModel() {
     data class SettingsState(
         val showAlertDialog: List<Boolean> = List(4) { false }  // Initialize with 4 false values
     )
+
     private val _settingState = MutableStateFlow(SettingsState())
 
     // Public immutable state
@@ -145,7 +166,6 @@ class MainViewModel(private val context: Context) : ViewModel() {
             currentState.copy(showAlertDialog = newDialogStates)
         }
     }
-
 
 
     //ClassesPage
@@ -275,7 +295,7 @@ class MainViewModel(private val context: Context) : ViewModel() {
     }
 
     private suspend fun getAllExamList() {
-        _examList.value = studentRepository.getExams()
+        _examCompareList.value = studentRepository.getExams()
     }
 
     private suspend fun getExamsByClass(studentClass: String) {
@@ -668,7 +688,7 @@ class MainViewModel(private val context: Context) : ViewModel() {
                 ?.exams
                 ?: emptyList()
 
-            val localExamNum = examList.value?.count() ?: 0
+            val localExamNum = examCompareList.value?.count() ?: 0
 
             if (localExamNum == 0) {
                 // If no local exams, fetch all
@@ -679,7 +699,7 @@ class MainViewModel(private val context: Context) : ViewModel() {
                 // Check if we need to update
                 _loadingState.value = HomeworkLoadingState.CheckingNewHomework
                 // Get the first exam to compare class
-                val localExam = examList.value?.firstOrNull()
+                val localExam = examCompareList.value?.firstOrNull()
                 // Check if the exam class matches student class
                 if (localExam?.examTeacherClass != student.value?.studentClass) {
                     // Class mismatch - need to refresh all exams
@@ -697,6 +717,134 @@ class MainViewModel(private val context: Context) : ViewModel() {
                 }
                 _loadingState.value = HomeworkLoadingState.Completed
             }
+        }
+    }
+
+    //=======================================================
+    // session page api                                     =
+    //=======================================================
+    /*// Function to fetch and organize sessions by day
+    fun fetchSessions() {
+        viewModelScope.launch {
+            _sessionLoadingState.value = SessionLoadingState.LoadingData
+            try {
+                val response =
+                    studentRepository.getSessionsFromApi(student.value?.studentClass ?: "")
+                if (response.isSuccessful && response.body() != null) {
+                    val sessions = response.body()!!.sessions
+                    // Group and sort sessions by day
+                    val sessionsByDay = sessions
+                        .groupBy { it.day }
+                        .mapValues { (_, daySessions) ->
+                            daySessions.sortedBy { it.session.toIntOrNull() ?: 0 }
+                        }
+
+                    _sessionState.value = _sessionState.value.copy(
+                        sessions = sessionsByDay,
+                        currentDay = sessionsByDay.keys.minOrNull() ?: ""
+                    )
+                    _sessionLoadingState.value = SessionLoadingState.Completed
+                } else {
+                    _sessionLoadingState.value =
+                        SessionLoadingState.Error("Failed to fetch sessions")
+                }
+            } catch (e: Exception) {
+                _sessionLoadingState.value = SessionLoadingState.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
+
+    // Function to get sessions for current day
+    fun getCurrentDaySessions(): List<SessionModel> {
+        return _sessionState.value.sessions[_sessionState.value.currentDay] ?: emptyList()
+    }
+
+    private suspend fun loadSessionsForCurrentDay(day: String) {
+        try {
+            val response = studentRepository.getSessionsFromApi(student.value?.studentClass ?: "")
+            if (response.isSuccessful && response.body() != null) {
+                val allSessions = response.body()!!.sessions
+                // Filter sessions for the current day and sort them
+                val daySessions = allSessions
+                    .filter { it.day == day }
+                    .sortedBy { it.session.toIntOrNull() ?: 0 }
+
+                _sessionState.value = _sessionState.value.copy(
+                    sessions = mapOf(day to daySessions)
+                )
+            }
+        } catch (e: Exception) {
+            _sessionLoadingState.value = SessionLoadingState.Error(e.message ?: "Unknown error")
+        }
+    }*/
+
+    fun setCurrentDay(day: String) {
+        viewModelScope.launch {
+            _sessionLoadingState.value = SessionLoadingState.LoadingData
+            _sessionState.value = _sessionState.value.copy(currentDay = day)
+            fetchSessionsForDay(day)
+        }
+    }
+
+    private suspend fun fetchSessionsForDay(day: String) {
+        try {
+            val response = studentRepository.getSessionsFromApi(student.value?.studentClass ?: "")
+            Log.d("SessionDebug", "API Response: ${response.body()}")
+
+            if (response.isSuccessful && response.body() != null) {
+                val daySessions = response.body()!!.sessions
+                    .also { Log.d("SessionDebug", "All sessions: $it") }
+                    .filter { it.day.lowercase() == day.lowercase() }  // Make case-insensitive comparison
+                    .also { Log.d("SessionDebug", "Filtered sessions for $day: $it") }
+                    .sortedBy {
+                        when (it.session.lowercase()) {
+                            "first" -> 1
+                            "second" -> 2
+                            "third" -> 3
+                            "fourth" -> 4
+                            "fifth" -> 5
+                            "sixth" -> 6
+                            "seventh" -> 7
+                            else -> 8
+                        }
+                    }
+
+                _sessionState.value = _sessionState.value.copy(
+                    sessions = daySessions
+                )
+                Log.d("SessionDebug", "Final state sessions: ${_sessionState.value.sessions}")
+                _sessionLoadingState.value = SessionLoadingState.Completed
+            } else {
+                Log.e("SessionDebug", "API Error: ${response.errorBody()?.string()}")
+                _sessionLoadingState.value = SessionLoadingState.Error("Failed to fetch sessions")
+            }
+        } catch (e: Exception) {
+            Log.e("SessionDebug", "Exception: ${e.message}", e)
+            _sessionLoadingState.value = SessionLoadingState.Error(e.message ?: "Unknown error")
+        }
+    }
+
+    // Initial fetch - can be called when screen is first loaded
+    fun initializeSessions() {
+        viewModelScope.launch {
+            val initialDay = "Sunday" // Or whatever day you want to start with
+            _sessionState.value = _sessionState.value.copy(currentDay = initialDay)
+            fetchSessionsForDay(initialDay)
+        }
+    }
+
+    //get teacher name from API
+    private suspend fun getTeacherNameFromApi(teacherId: Int) {
+        studentRepository.getTeacherFromApi(teacherId)
+            .body()?.teacher?.let { teacher ->
+                _teacherName.value = teacher.teacherFirstName
+            }
+    }
+
+    //function to fetch teacher name that can be called from UI
+    fun fetchTeacherName(teacherId: Int) {
+        viewModelScope.launch {
+            getTeacherNameFromApi(teacherId)
         }
     }
 
@@ -731,8 +879,6 @@ class MainViewModel(private val context: Context) : ViewModel() {
             _Marksstate.value.BottomSheet[index] = newState
         }
     }
-
-
 
     private val _Counselorstate = MutableStateFlow(MainDataClass.CounselorState())
     val Counselorstate: StateFlow<MainDataClass.CounselorState> = _Counselorstate.asStateFlow()

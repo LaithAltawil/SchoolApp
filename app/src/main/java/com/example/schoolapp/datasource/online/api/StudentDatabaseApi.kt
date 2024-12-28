@@ -11,6 +11,7 @@ import com.example.schoolapp.datasource.online.response.NotificationProblemsList
 import com.example.schoolapp.datasource.online.response.ParentResponse
 import com.example.schoolapp.datasource.online.response.SessionListResponse
 import com.example.schoolapp.datasource.online.response.StudentResponse
+import com.example.schoolapp.datasource.online.response.TeacherResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -118,6 +119,13 @@ interface StudentDatabaseApi {
         @Query("studentClass") studentClass: String,
         @Query("endApiCall") endApiCall: String = "sessions"
     ): Response<SessionListResponse>
+
+    //teacher API
+    @GET(studentApi)
+    suspend fun teacher(
+        @Query("teacherId") teacherId: Int,
+        @Query("endApiCall") endApiCall: String = "teacher",
+    ): Response<TeacherResponse>
 
     companion object {
         operator fun invoke(): StudentDatabaseApi {

@@ -33,6 +33,8 @@ googleFirebaseCrashlytics = "3.0.2"
 firebaseStorage = "21.0.1"
 firebaseStorageKtx = "21.0.1"
 perfPlugin = "1.4.2"
+material3Jvmstubs = "1.4.0-alpha05"
+navigationSafeArgsGenerator = "2.8.5"
 
 [libraries]
 androidx-animation = { module = "androidx.compose.animation:animation" }
@@ -77,6 +79,8 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
 perf-plugin = { group = "com.google.firebase", name = "perf-plugin", version.ref = "perfPlugin" }
+androidx-material3-jvmstubs = { group = "androidx.compose.material3", name = "material3-jvmstubs", version.ref = "material3Jvmstubs" }
+androidx-navigation-safe-args-generator = { group = "androidx.navigation", name = "navigation-safe-args-generator", version.ref = "navigationSafeArgsGenerator" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

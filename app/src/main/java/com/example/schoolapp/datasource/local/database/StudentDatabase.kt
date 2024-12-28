@@ -8,12 +8,14 @@ import com.example.schoolapp.datasource.local.dao.CalenderDao
 import com.example.schoolapp.datasource.local.dao.ExamDao
 import com.example.schoolapp.datasource.local.dao.HomeworkDao
 import com.example.schoolapp.datasource.local.dao.ParentDao
+import com.example.schoolapp.datasource.local.dao.SessionDao
 import com.example.schoolapp.datasource.local.dao.StudentDao
 import com.example.schoolapp.datasource.local.entity.CalenderEvent
 import com.example.schoolapp.datasource.local.entity.Event
 import com.example.schoolapp.datasource.local.entity.Exam
 import com.example.schoolapp.datasource.local.entity.Homework
 import com.example.schoolapp.datasource.local.entity.Parent
+import com.example.schoolapp.datasource.local.entity.Session
 import com.example.schoolapp.datasource.local.entity.Student
 
 @Database(
@@ -22,8 +24,9 @@ import com.example.schoolapp.datasource.local.entity.Student
         Parent::class,
         Event::class,
         Exam::class,
-        CalenderEvent::class],
-    version = 12,
+        CalenderEvent::class,
+        Session::class],
+    version = 13,
     exportSchema = false
 )
 abstract class StudentDatabase : RoomDatabase() {
@@ -33,6 +36,7 @@ abstract class StudentDatabase : RoomDatabase() {
     abstract val parentDao: ParentDao
     abstract val calenderDao: CalenderDao
     abstract val examDao: ExamDao
+    abstract val sessionDao: SessionDao
 
     companion object {
 
@@ -109,5 +113,13 @@ abstract class StudentDatabase : RoomDatabase() {
     suspend fun getNewExams() = examDao.getNewExams()
     suspend fun getExamsByClass(studentClass: String) = examDao.getExamsByClass(studentClass)
     suspend fun deleteAllExams() = examDao.deleteAllExams()
+
+    // session's functions
+    suspend fun insertSession(session: Session) = sessionDao.insertSession(session)
+    suspend fun insertAllSessions(sessions: List<Session>) = sessionDao.insertAllSessions(sessions)
+    suspend fun getSessionsByClass(classId: String) = sessionDao.getSessionsByClass(classId)
+    suspend fun getSessionsByDay(day: String) = sessionDao.getSessionsByDay(day)
+    suspend fun deleteAllSessions() = sessionDao.deleteAllSessions()
+    suspend fun deleteSessionsByClass(classId: String) = sessionDao.deleteSessionsByClass(classId)
 
 }
