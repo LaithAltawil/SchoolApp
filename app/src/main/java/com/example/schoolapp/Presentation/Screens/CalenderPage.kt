@@ -231,11 +231,13 @@ fun CalenderPage(viewModel: MainViewModel, navController: NavController) {
                                     }
                                 } else {
                                     items(calendarItems) { item ->
+                                        // In CalenderPage.kt
                                         ExpandableButton(
                                             name = item.day,
                                             text = item.event,
                                             item.calenderState,
                                             viewModel = viewModel,
+                                            navController = navController,  // Add this parameter
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .padding(horizontal = 16.dp, vertical = 4.dp)

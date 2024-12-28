@@ -21,11 +21,13 @@ import com.example.schoolapp.datasource.local.entity.Parent
 import com.example.schoolapp.datasource.local.entity.Student
 import com.example.schoolapp.datasource.repository.StudentRepository
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 
 //Main viewModel
@@ -119,6 +121,10 @@ class MainViewModel(private val context: Context) : ViewModel() {
     //exam object handles ROOM operations for Calender
     private val _examCompareList = MutableStateFlow<List<Exam>?>(null) // Initialize with null
     val examCompareList: StateFlow<List<Exam>?> = _examCompareList.asStateFlow()
+
+    // Add a new state to track initial data load
+    private val _isInitialLoad = MutableStateFlow(true)
+    val isInitialLoad: StateFlow<Boolean> = _isInitialLoad.asStateFlow()
 
     //=======================================================
     // sessions page                                        =
@@ -655,78 +661,92 @@ class MainViewModel(private val context: Context) : ViewModel() {
         Log.d("ExamsDebug", "Starting getExamsFromApi")
         try {
             // Getting the list of exams from the API for the student's class
-            val exams = studentRepository.getExamCalenderFromApi(student.value!!.studentClass)
-                .body()?.exams.also {
-                    Log.d("ExamsDebug", "API returned ${it?.size} exams")
-                } ?: emptyList()
+            val exams = withContext(Dispatchers.IO) {
+                studentRepository.getExamCalenderFromApi(student.value!!.studentClass)
+                    .body()?.exams ?: emptyList()
+            }
 
-            Log.d("ExamsDebug", "Inserting exams into local database")
-            // Iterate through the list in reverse order
-            for (index in exams.indices.reversed()) {
-                exams[index].let {
-                    val exam = Exam(
-                        examId = it.examId,
-                        examTeacherId = it.examTeacherId,
-                        examTeacherSubject = it.examTeacherSubject,
-                        examTeacherClass = it.examTeacherClass,
-                        examDate = it.examDate.toString(),
-                        examDay = it.examDay,
-                        examMaterial = it.examMaterial,
-                        examNotes = it.examNotes
+            Log.d("ExamsDebug", "API returned ${exams.size} exams")
+
+            // Process exams in background
+            withContext(Dispatchers.IO) {
+                // Delete existing exams first to avoid duplicates
+                deleteAllExams()
+
+                // Insert all exams
+                exams.forEach { exam ->
+                    insertExam(
+                        Exam(
+                            examId = exam.examId,
+                            examTeacherId = exam.examTeacherId,
+                            examTeacherSubject = exam.examTeacherSubject,
+                            examTeacherClass = exam.examTeacherClass,
+                            examDate = exam.examDate.toString(),
+                            examDay = exam.examDay,
+                            examMaterial = exam.examMaterial,
+                            examNotes = exam.examNotes
+                        )
                     )
-                    insertExam(exam)
                 }
             }
+
             // Update the exam list in the ViewModel
             getNewExamList()
             Log.d("ExamsDebug", "Final exam list size: ${_examList.value?.size}")
         } catch (e: Exception) {
             Log.e("ExamsDebug", "Error in getExamsFromApi", e)
-            _examLoadingState.value = ExamLoadingState.Error(e.message ?: "Unknown error")
+            throw e
         }
     }
 
     fun compareExams() {
         viewModelScope.launch {
-            _examLoadingState.value = ExamLoadingState.Checking
+            // Don't show loading state if we already have data
+            if (_examList.value == null) {
+                _examLoadingState.value = ExamLoadingState.Checking
+            }
 
-            // Get local exams first
-            getAllExamList()
+            try {
+                // First try to load cached data immediately
+                getAllExamList()
+                if (!_examList.value.isNullOrEmpty()) {
+                    _examLoadingState.value = ExamLoadingState.Completed
+                }
 
-            // Get online exams
-            val onlineExams = studentRepository.getExamCalenderFromApi(student.value!!.studentClass)
-                .body()
-                ?.exams
-                ?: emptyList()
+                // Then check for updates
+                val onlineExams = studentRepository.getExamCalenderFromApi(student.value!!.studentClass)
+                    .body()
+                    ?.exams
+                    ?: emptyList()
 
-            val localExamNum = examCompareList.value?.count() ?: 0
+                val localExamNum = examCompareList.value?.count() ?: 0
 
-            if (localExamNum == 0) {
-                // If no local exams, fetch all
-                _examLoadingState.value = ExamLoadingState.Fetching
-                getExamsFromApi()
-                _examLoadingState.value = ExamLoadingState.Completed
-            } else {
-                // Check if we need to update
-                _examLoadingState.value = ExamLoadingState.CheckingNew
-                // Get the first exam to compare class
-                val localExam = examCompareList.value?.firstOrNull()
-                // Check if the exam class matches student class
-                if (localExam?.examTeacherClass != student.value?.studentClass) {
-                    // Class mismatch - need to refresh all exams
+                if (localExamNum == 0 || _isInitialLoad.value) {
                     _examLoadingState.value = ExamLoadingState.Fetching
-                    deleteAllExams()
                     getExamsFromApi()
-                } else if (onlineExams.isNotEmpty()) {
-                    // Class matches, check if we need to update based on content
-                    if (onlineExams.size != localExamNum) {
-                        // Number of exams different, update required
+                    _isInitialLoad.value = false
+                } else {
+                    // Check if we need to update
+                    _examLoadingState.value = ExamLoadingState.CheckingNew
+                    // Get the first exam to compare class
+                    val localExam = examCompareList.value?.firstOrNull()
+                    // Check if the exam class matches student class
+                    if (localExam?.examTeacherClass != student.value?.studentClass) {
                         _examLoadingState.value = ExamLoadingState.Fetching
                         deleteAllExams()
                         getExamsFromApi()
+                    } else if (onlineExams.isNotEmpty()) {
+                        if (onlineExams.size != localExamNum) {
+                            _examLoadingState.value = ExamLoadingState.Fetching
+                            deleteAllExams()
+                            getExamsFromApi()
+                        }
                     }
                 }
                 _examLoadingState.value = ExamLoadingState.Completed
+            } catch (e: Exception) {
+                Log.e("ExamsDebug", "Error in compareExams", e)
+                _examLoadingState.value = ExamLoadingState.Error(e.message ?: "Unknown error")
             }
         }
     }

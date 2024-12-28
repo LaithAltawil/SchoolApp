@@ -33,8 +33,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.schoolapp.Presentation.Screens.ScreensPieces.CalenderEventCard
 import com.example.schoolapp.Presentation.Screens.ScreensPieces.EventCard
+import com.example.schoolapp.Presentation.Screens.ScreensPieces.ExamCalendarItem
 import com.example.schoolapp.Presentation.Screens.ScreensPieces.ExamCard
 import com.example.schoolapp.Presentation.VM.MainViewModel
 import com.example.schoolapp.Presentation.VM.States.CalenderState
@@ -48,12 +50,38 @@ fun ExpandableButton(
     text: String,
     calenderState: CalenderState,
     viewModel: MainViewModel,
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
     val eventList = viewModel.eventList.collectAsState()
     val examList = viewModel.examList.collectAsState()
     val calenderEventList = viewModel.calenderEventList.collectAsState()
+    val student = viewModel.student.collectAsState()
     var expanded by remember { mutableStateOf(false) }
+
+    // Get subjects based on class
+    val subjects = when (student.value?.studentClass?.lowercase()) {
+        "first" -> listOf(
+            "عربي", "انجليزي", "رياضة", "رياضيات",
+            "تربية اسلامية", "تربية مهنية", "علوم", "اجتماعيات"
+        )
+        "second", "third" -> listOf(
+            "عربي", "انجليزي", "رياضة", "رياضيات",
+            "تربية اسلامية", "تربية مهنية", "علوم", "اجتماعيات"
+        )
+        "fourth", "fifth", "sixth", "seventh", "eighth" -> listOf(
+            "عربي", "انجليزي", "رياضة", "رياضيات",
+            "تربية اسلامية", "تربية مهنية", "ثقافة مالية", "علوم",
+            "تربية وطنية", "جغرافيا", "تاريخ"
+        )
+        "ninth", "tenth" -> listOf(
+            "عربي", "انجليزي", "رياضة", "رياضيات",
+            "تربية اسلامية", "تربية مهنية", "ثقافة مالية",
+            "فيزياء", "احياء", "كيمياء", "علوم الأرض",
+            "تربية وطنية", "جغرافيا", "تاريخ"
+        )
+        else -> emptyList()
+    }
 
     Card(
         modifier = modifier,
@@ -115,8 +143,10 @@ fun ExpandableButton(
                             )
                         } else {
                             examList.value?.forEach { exam ->
-                                ExamCard(
+                                ExamCalendarItem(
                                     exam = exam,
+                                    subjects = subjects,
+                                    navController = navController,
                                     modifier = Modifier.padding(vertical = 4.dp)
                                 )
                             }
@@ -143,7 +173,6 @@ fun ExpandableButton(
         }
     }
 }
-
 @Composable
 private fun EmptyStateMessage(
     title: String,

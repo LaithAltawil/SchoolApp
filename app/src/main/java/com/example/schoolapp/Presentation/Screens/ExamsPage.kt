@@ -37,6 +37,8 @@ fun ExamsPage(mainViewModel: MainViewModel, navController: NavController) {
     val student = mainViewModel.student.collectAsState()
     val examList = mainViewModel.examList.collectAsState()
     val loadingState = mainViewModel.examLoadingState.collectAsState()
+    val isInitialLoad = mainViewModel.isInitialLoad.collectAsState()
+
 
     // Initialize exam data when screen is first loaded
     LaunchedEffect(Unit) {
@@ -168,7 +170,8 @@ fun ExamsPage(mainViewModel: MainViewModel, navController: NavController) {
                                         } ?: emptyList(),
                                         onClick = {
                                             mainViewModel.updateBottomSheetState(index, true)
-                                        }
+                                        },
+                                        isLoading = examList.value == null || isInitialLoad.value
                                     )
 
                                     // Bottom Sheet for each subject
@@ -201,7 +204,8 @@ fun ExamsPage(mainViewModel: MainViewModel, navController: NavController) {
 private fun SubjectCard(
     subject: String,
     exams: List<com.example.schoolapp.datasource.local.entity.Exam>,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    isLoading: Boolean = true
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -219,7 +223,7 @@ private fun SubjectCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Subject Icon - you would need to map subjects to specific icons
+            // Subject Icon
             Icon(
                 painter = painterResource(
                     id = when (subject) {
@@ -257,11 +261,18 @@ private fun SubjectCard(
                 overflow = TextOverflow.Ellipsis
             )
 
-            Text(
-                text = if (exams.isNotEmpty()) "${exams.size} امتحان" else "لا توجد امتحانات",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.White.copy(alpha = 0.7f)
-            )
+            if (isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(24.dp),
+                    color = Color.White
+                )
+            } else {
+                Text(
+                    text = if (exams.isNotEmpty()) "${exams.size} امتحان" else "لا توجد امتحانات",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White.copy(alpha = 0.7f)
+                )
+            }
         }
     }
 }

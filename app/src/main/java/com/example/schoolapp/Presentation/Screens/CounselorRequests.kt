@@ -121,11 +121,16 @@ fun Requests(
                     LazyColumn {
                         items(calendarItems) { item ->
                             // ExpandableButton composable
+                            // In CalenderPage.kt
                             ExpandableButton(
                                 name = item.day,
                                 text = item.event,
-                                calenderState = CalenderState.EVENT_STATE,
-                                viewModel = mainViewModel
+                                CalenderState.EVENT_STATE,
+                                viewModel = mainViewModel,
+                                navController = navController,  // Add this parameter
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp, vertical = 4.dp)
                             )
                         }
                     }
