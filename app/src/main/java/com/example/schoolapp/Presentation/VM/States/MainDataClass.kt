@@ -34,9 +34,11 @@ sealed class MainDataClass{
             "Computer Science"
         ),
 
-        var BottomSheet: MutableList<Boolean>
-        = mutableStateListOf(false, false, false, false, false, false, false)
-        ) :MainDataClass()
+        var bottomSheet: MutableList<Boolean> = mutableStateListOf(
+            false, false, false, false, false, false, false,
+            false, false, false, false, false, false, false
+        )
+    ) : MainDataClass()
 
     data class setting(
         val name: String,

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.schoolapp.Presentation.VM.States.CalenderLoadingState
 import com.example.schoolapp.Presentation.VM.States.CalenderState
+import com.example.schoolapp.Presentation.VM.States.ExamLoadingState
 import com.example.schoolapp.Presentation.VM.States.HomeworkLoadingState
 import com.example.schoolapp.Presentation.VM.States.MainDataClass
 import com.example.schoolapp.Presentation.VM.States.SessionLoadingState
@@ -18,7 +19,6 @@ import com.example.schoolapp.datasource.local.entity.Exam
 import com.example.schoolapp.datasource.local.entity.Homework
 import com.example.schoolapp.datasource.local.entity.Parent
 import com.example.schoolapp.datasource.local.entity.Student
-import com.example.schoolapp.datasource.online.model.SessionModel
 import com.example.schoolapp.datasource.repository.StudentRepository
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -111,6 +111,10 @@ class MainViewModel(private val context: Context) : ViewModel() {
     //exam object handles ROOM operations for Calender
     private val _examList = MutableStateFlow<List<Exam>?>(null) // Initialize with null
     val examList: StateFlow<List<Exam>?> = _examList.asStateFlow()
+
+    //exam loading state
+    private val _examLoadingState = MutableStateFlow<ExamLoadingState>(ExamLoadingState.Initial)
+    val examLoadingState: StateFlow<ExamLoadingState> = _examLoadingState.asStateFlow()
 
     //exam object handles ROOM operations for Calender
     private val _examCompareList = MutableStateFlow<List<Exam>?>(null) // Initialize with null
@@ -303,8 +307,10 @@ class MainViewModel(private val context: Context) : ViewModel() {
     }
 
     private suspend fun getNewExamList() {
+        Log.d("ExamsDebug", "Getting new exam list")
         // Get exams with dates after current date
         _examList.value = studentRepository.getNewExams()
+        Log.d("ExamsDebug", "Updated exam list size: ${_examList.value?.size}")
     }
 
     //===========================================================================================
@@ -646,38 +652,43 @@ class MainViewModel(private val context: Context) : ViewModel() {
     //exam page                                             =
     //=======================================================
     private suspend fun getExamsFromApi() {
-        var exam: Exam
-        // Getting the list of exams from the API for the student's class
-        val exams = studentRepository.getExamCalenderFromApi(student.value!!.studentClass)
-            .body()
-            ?.exams
-            ?: emptyList()
+        Log.d("ExamsDebug", "Starting getExamsFromApi")
+        try {
+            // Getting the list of exams from the API for the student's class
+            val exams = studentRepository.getExamCalenderFromApi(student.value!!.studentClass)
+                .body()?.exams.also {
+                    Log.d("ExamsDebug", "API returned ${it?.size} exams")
+                } ?: emptyList()
 
-        // Iterate through the list in reverse order
-        for (index in exams.indices.reversed()) {
-            exams[index].let {
-                exam = Exam(
-                    examId = it.examId,
-                    examTeacherId = it.examTeacherId,
-                    examTeacherSubject = it.examTeacherSubject,
-                    examTeacherClass = it.examTeacherClass,
-                    examDate = it.examDate.toString(),
-                    examDay = it.examDay,
-                    examMaterial = it.examMaterial,
-                    examNotes = it.examNotes
-                )
+            Log.d("ExamsDebug", "Inserting exams into local database")
+            // Iterate through the list in reverse order
+            for (index in exams.indices.reversed()) {
+                exams[index].let {
+                    val exam = Exam(
+                        examId = it.examId,
+                        examTeacherId = it.examTeacherId,
+                        examTeacherSubject = it.examTeacherSubject,
+                        examTeacherClass = it.examTeacherClass,
+                        examDate = it.examDate.toString(),
+                        examDay = it.examDay,
+                        examMaterial = it.examMaterial,
+                        examNotes = it.examNotes
+                    )
+                    insertExam(exam)
+                }
             }
-            // Insert into local database
-            insertExam(exam)
+            // Update the exam list in the ViewModel
+            getNewExamList()
+            Log.d("ExamsDebug", "Final exam list size: ${_examList.value?.size}")
+        } catch (e: Exception) {
+            Log.e("ExamsDebug", "Error in getExamsFromApi", e)
+            _examLoadingState.value = ExamLoadingState.Error(e.message ?: "Unknown error")
         }
-        // Update the exam list in the ViewModel
-        getNewExamList()
     }
 
     fun compareExams() {
         viewModelScope.launch {
-            // Start loading state
-            _loadingState.value = HomeworkLoadingState.CheckingHomework
+            _examLoadingState.value = ExamLoadingState.Checking
 
             // Get local exams first
             getAllExamList()
@@ -692,30 +703,30 @@ class MainViewModel(private val context: Context) : ViewModel() {
 
             if (localExamNum == 0) {
                 // If no local exams, fetch all
-                _loadingState.value = HomeworkLoadingState.FetchingHomework
+                _examLoadingState.value = ExamLoadingState.Fetching
                 getExamsFromApi()
-                _loadingState.value = HomeworkLoadingState.Completed
+                _examLoadingState.value = ExamLoadingState.Completed
             } else {
                 // Check if we need to update
-                _loadingState.value = HomeworkLoadingState.CheckingNewHomework
+                _examLoadingState.value = ExamLoadingState.CheckingNew
                 // Get the first exam to compare class
                 val localExam = examCompareList.value?.firstOrNull()
                 // Check if the exam class matches student class
                 if (localExam?.examTeacherClass != student.value?.studentClass) {
                     // Class mismatch - need to refresh all exams
-                    _loadingState.value = HomeworkLoadingState.FetchingHomework
+                    _examLoadingState.value = ExamLoadingState.Fetching
                     deleteAllExams()
                     getExamsFromApi()
                 } else if (onlineExams.isNotEmpty()) {
                     // Class matches, check if we need to update based on content
                     if (onlineExams.size != localExamNum) {
                         // Number of exams different, update required
-                        _loadingState.value = HomeworkLoadingState.FetchingHomework
+                        _examLoadingState.value = ExamLoadingState.Fetching
                         deleteAllExams()
                         getExamsFromApi()
                     }
                 }
-                _loadingState.value = HomeworkLoadingState.Completed
+                _examLoadingState.value = ExamLoadingState.Completed
             }
         }
     }
@@ -867,9 +878,15 @@ class MainViewModel(private val context: Context) : ViewModel() {
     }
 
     fun updateBottomSheetState(index: Int, newState: Boolean) {
-        // Ensure index is within bounds
-        if (index in _Examstate.value.BottomSheet.indices) {
-            _Examstate.value.BottomSheet[index] = newState
+        try {
+            // Ensure we have enough space in the array
+            while (index >= _Examstate.value.bottomSheet.size) {
+                _Examstate.value.bottomSheet.add(false)
+            }
+            // Now safely update the state
+            _Examstate.value.bottomSheet[index] = newState
+        } catch (e: Exception) {
+            Log.e("ExamsDebug", "Error updating bottom sheet state", e)
         }
     }
 

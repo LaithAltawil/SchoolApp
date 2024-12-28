@@ -1,38 +1,19 @@
 package com.example.schoolapp.Presentation.Screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,208 +26,164 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.compose.AppTheme
-import com.example.schoolapp.Data.Exam
-import com.example.schoolapp.Data.Subjects
 import com.example.schoolapp.Presentation.VM.MainViewModel
+import com.example.schoolapp.Presentation.VM.States.ExamLoadingState
 import com.example.schoolapp.R
 
-//=======================================================
-//Exam Page: UI & logic                                 =
-//=======================================================
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExamsPage(mainViewModel: MainViewModel , navController: NavController) {
-    //=======================================================
-    //variables: local & states                             =
-    //=======================================================
-    val state = mainViewModel.Examstate.collectAsStateWithLifecycle()
+fun ExamsPage(mainViewModel: MainViewModel, navController: NavController) {
+    val examState = mainViewModel.Examstate.collectAsStateWithLifecycle()
+    val student = mainViewModel.student.collectAsState()
+    val examList = mainViewModel.examList.collectAsState()
+    val loadingState = mainViewModel.examLoadingState.collectAsState()
 
-    //todo @MAS #medium|| put the right data here form the database
-    val mainMenuItem = listOf(
-        Subjects("Maths", painterResource(id = R.drawable.math),
-            exam = Exam("Mathematics", "2023-12-15", "10:00 AM", "Room A101"),
-            onClick = {}
-        ),
-        Subjects("Science", painterResource(id = R.drawable.science),
-            exam = Exam("Mathematics", "2023-12-15", "10:00 AM", "Room A101"),
-            onClick = {}),
-        Subjects("English", painterResource(id = R.drawable.english),
-            exam = Exam("Mathematics", "2023-12-15", "10:00 AM", "Room A101"),
-            onClick = {}),
-        Subjects(
-            "History",
-            painterResource(id = R.drawable.history),
-            exam = Exam("History", "2023-12-20", "11:00 AM", "Room F606"),
-            onClick = {}
-        ),
-        Subjects(
-            "Arabic",
-            painterResource(id = R.drawable.arabic),
-            exam = Exam("Arabic", "2023-12-21", "03:00 PM", "Room G707"),
-            onClick = {}
-        ),
-        Subjects(
-            "Computer Science",
-            painterResource(id = R.drawable.science),
-            exam = Exam("Computer Science", "2023-12-22", "09:00 AM", "Lab H808"),
-            onClick = {}
-        ),
-        Subjects(
-            "Geography",
-            painterResource(id = R.drawable.geography),
-            exam = Exam("Geography", "2023-12-23", "02:00 PM", "Hall I909"),
-            onClick = {}
+    // Initialize exam data when screen is first loaded
+    LaunchedEffect(Unit) {
+        Log.d("ExamsDebug", "Starting exam initialization")
+        mainViewModel.compareExams()
+    }
+
+    // Get class number and define subjects based on class level
+    val classNumber = when (student.value?.studentClass?.lowercase()) {
+        "first" -> 1
+        "second" -> 2
+        "third" -> 3
+        "fourth" -> 4
+        "fifth" -> 5
+        "sixth" -> 6
+        "seventh" -> 7
+        "eighth" -> 8
+        "ninth" -> 9
+        "tenth" -> 10
+        else -> 0
+    }
+    Log.d("ExamsDebug", "Raw Class: ${student.value?.studentClass}")
+    Log.d("ExamsDebug", "Mapped Class Number: $classNumber")
+    Log.d("ExamsDebug", "Class Number: $classNumber")
+    Log.d("ExamsDebug", "Loading State: ${loadingState.value}")
+    Log.d("ExamsDebug", "Exam List Size: ${examList.value?.size}")
+    Log.d("ExamsDebug", "Student Class: ${student.value?.studentClass}")
+    val subjects = when (classNumber) {
+        in 1..3 -> listOf(
+            "عربي", "انجليزي", "رياضة", "رياضيات",
+            "تربية اسلامية", "تربية مهنية", "علوم", "اجتماعيات"
         )
-    )
+        in 4..8 -> listOf(
+            "عربي", "انجليزي", "رياضة", "رياضيات",
+            "تربية اسلامية", "تربية مهنية", "ثقافة مالية", "علوم",
+            "تربية وطنية", "جغرافيا", "تاريخ"
+        )
+        in 9..10 -> listOf(
+            "عربي", "انجليزي", "رياضة", "رياضيات",
+            "تربية اسلامية", "تربية مهنية", "ثقافة مالية",
+            "فيزياء", "احياء", "كيمياء", "علوم الأرض",
+            "تربية وطنية", "جغرافيا", "تاريخ"
+        )
+        else -> emptyList()
+    }
 
-    //=======================================================
-    //UI & logic                                            =
-    //=======================================================
     AppTheme {
         Surface(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.primaryContainer
         ) {
-            //Main page UI: Scaffold
-            Scaffold(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                //TAB
-                topBar = {
+            when (val currentState = loadingState.value) {
+                is ExamLoadingState.Initial,
+                is ExamLoadingState.Loading,
+                is ExamLoadingState.Checking,
+                is ExamLoadingState.CheckingNew,
+                is ExamLoadingState.Fetching -> {
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
-                            .height(170.dp)
-                            .background(MaterialTheme.colorScheme.primary)
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Row(
-                            modifier = Modifier.fillMaxSize(),
-
-                            ) {
-                            IconButton(
-                                modifier = Modifier.padding(top = 50.dp, start = 5.dp),
-                                onClick = {
-                                    navController?.popBackStack()
-                                }
-                            ) {
-                                Icon(
-                                    Icons.Outlined.ArrowBack,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(50.dp),
-                                    tint = MaterialTheme.colorScheme.onPrimary
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(20.dp))
-                            Text(
-                                text = "Exams", fontSize = 70.sp,
-                                fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
-                                modifier = Modifier.padding(top=40.dp),
-                                color = MaterialTheme.colorScheme.onPrimary
-                            )
-                        }
+                        CircularProgressIndicator()
                     }
+                }
 
-                },
-                // Add content padding
-            ) { innerPadding ->
-                //subjects
-                Column(
-                    modifier = Modifier.padding(innerPadding),
-                    horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
-                ) {
-                    //lazy grid to hold the data logic & UI design
-                    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+                is ExamLoadingState.Error -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = currentState.message,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
 
-                        //controls the lazy size
-                        itemsIndexed(mainMenuItem) { index,item ->
-                            //hold the subject details
-                            Card(
-                                colors = CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.primary
-                                ),
+                else -> {
+                    Scaffold(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        topBar = {
+                            Box(
                                 modifier = Modifier
-                                    .padding(16.dp)
-                                    .wrapContentHeight()
-                                    .size(200.dp)
-                                    .width(100.dp)
-                                    .clickable {
-                                        mainViewModel.updateBottomSheetState(index, true)
-                                    },
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
+                                    .height(120.dp)
+                                    .background(MaterialTheme.colorScheme.primary)
                             ) {
-                                //main card UI
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(16.dp)
-                                        .wrapContentSize(Alignment.Center),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.Center
+                                Row(
+                                    modifier = Modifier.fillMaxSize(),
                                 ) {
-                                    //solved @LT:Icon will be changed when we find all the required icons
-                                    //they will be in a list with the subject names
-                                    mainMenuItem[index].imagePath?.let {
+                                    IconButton(
+                                        modifier = Modifier.padding(top = 50.dp, start = 5.dp),
+                                        onClick = { navController.popBackStack() }
+                                    ) {
                                         Icon(
-                                            painter =
-                                            it,
-                                            contentDescription = null
+                                            Icons.Outlined.ArrowBack,
+                                            contentDescription = "Back",
+                                            modifier = Modifier.size(32.dp),
+                                            tint = MaterialTheme.colorScheme.onPrimary
                                         )
                                     }
-                                    //subject name
+                                    Spacer(modifier = Modifier.width(20.dp))
                                     Text(
-                                        modifier = Modifier.padding(10.dp),
-                                        text = mainMenuItem[index].name,
-                                        fontSize = 24.sp,
-                                        color = Color.White,
-                                        textAlign = TextAlign.Center,
-                                        overflow = TextOverflow.Visible
+                                        text = "الامتحانات",
+                                        fontSize = 40.sp,
+                                        modifier = Modifier.padding(top = 40.dp),
+                                        color = MaterialTheme.colorScheme.onPrimary
                                     )
                                 }
                             }
-                            //this is an if statement which by using the state showBottomSheet
-                            //it will either show or hide the bottom sheet
-                            if (state.value.BottomSheet[index]) {
-                                ModalBottomSheet(containerColor = MaterialTheme.colorScheme.primary,
-                                    onDismissRequest = {
-                                        mainViewModel.updateBottomSheetState(index,false)
-                                    }
-                                ) {
-                                    Text(modifier = Modifier.padding(8.dp),
-                                        text=mainMenuItem[index].name,fontSize = 44.sp )
-                                    Divider()
-                                    // Bottom sheet content
-                                    Column(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(16.dp)
-                                    ) {
-                                        Text(text = mainMenuItem[index].exam!!.subject+" First Exam",
-                                            fontSize = 26.sp)
-                                        //todo @LT #qustion[not answered] || what to do here?
-                                        Row(modifier = Modifier.fillMaxWidth(),
-                                            horizontalArrangement = Arrangement.SpaceBetween){
-                                            Card(modifier = Modifier.padding(10.dp).width(100.dp)) {
-                                                Text(text = "Date:",modifier = Modifier.padding(6.dp),
-                                                    fontSize =23.sp )
-                                                Spacer(modifier = Modifier.width(8.dp))
-                                                Text(text = mainMenuItem[index].exam!!.date,modifier = Modifier.padding(6.dp))
-                                            }
-                                            Spacer(modifier = Modifier.width(10.dp))
-                                            Card(modifier = Modifier.padding(10.dp).width(100.dp)){
-                                                Text(text = "time:",modifier = Modifier.padding(6.dp),fontSize =23.sp )
-                                                Spacer(modifier = Modifier.width(8.dp))
-                                                Text(text = mainMenuItem[index].exam!!.time,modifier = Modifier.padding(6.dp),)
-                                            }
-
+                        }
+                    ) { innerPadding ->
+                        Column(
+                            modifier = Modifier.padding(innerPadding),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            LazyVerticalGrid(
+                                columns = GridCells.Fixed(2),
+                                modifier = Modifier.fillMaxSize()
+                            ) {
+                                itemsIndexed(subjects) { index, subject ->
+                                    SubjectCard(
+                                        subject = subject,
+                                        exams = examList.value?.filter {
+                                            it.examTeacherSubject == subject
+                                        } ?: emptyList(),
+                                        onClick = {
+                                            mainViewModel.updateBottomSheetState(index, true)
                                         }
-                                        Row(modifier = Modifier.fillMaxWidth()) {
+                                    )
 
-                                        }
-                                        Row(modifier = Modifier.fillMaxWidth()) {
-                                            Text(text = "Location:",fontSize =23.sp )
-                                            Spacer(modifier = Modifier.width(8.dp))
-                                            Text(text = mainMenuItem[index].exam!!.location,fontSize =23.sp )
+                                    // Bottom Sheet for each subject
+                                    if (examState.value.bottomSheet[index]) {
+                                        ModalBottomSheet(
+                                            containerColor = MaterialTheme.colorScheme.surface,
+                                            onDismissRequest = {
+                                                mainViewModel.updateBottomSheetState(index, false)
+                                            }
+                                        ) {
+                                            ExamDetailSheet(
+                                                subject = subject,
+                                                exams = examList.value?.filter {
+                                                    it.examTeacherSubject == subject
+                                                } ?: emptyList()
+                                            )
                                         }
                                     }
                                 }
@@ -258,23 +195,143 @@ fun ExamsPage(mainViewModel: MainViewModel , navController: NavController) {
         }
     }
 }
-//Trial and error work to display
-//working will be moving it to relative file in the next days
+
 @Composable
-fun ExamDetailsColumn(subject: String, date: String, time: String, location: String) {
-    Column(
+private fun SubjectCard(
+    subject: String,
+    exams: List<com.example.schoolapp.datasource.local.entity.Exam>,
+    onClick: () -> Unit
+) {
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primary
+        ),
         modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth()
+            .padding(8.dp)
+            .aspectRatio(1f)
+            .clickable(onClick = onClick),
     ) {
-        Text("Subject: ${subject}", style = MaterialTheme.typography.displayMedium)
-        Text("Date: ${date}", style = MaterialTheme.typography.displayMedium)
-        Text("Time: ${time}", style = MaterialTheme.typography.displayMedium)
-        Text("Location: ${location}", style = MaterialTheme.typography.displayMedium)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            // Subject Icon - you would need to map subjects to specific icons
+            Icon(
+                painter = painterResource(
+                    id = when (subject) {
+                        "عربي" -> R.drawable.arabic
+                        "انجليزي" -> R.drawable.english
+                        "رياضة" -> R.drawable.sport
+                        "رياضيات" -> R.drawable.math
+                        "تربية اسلامية" -> R.drawable.baseline_broken
+                        "تربية مهنية" -> R.drawable.baseline_broken
+                        "علوم" -> R.drawable.science
+                        "اجتماعيات" -> R.drawable.baseline_broken
+                        "ثقافة مالية" -> R.drawable.baseline_broken
+                        "تربية وطنية" -> R.drawable.baseline_broken
+                        "جغرافيا" -> R.drawable.geography
+                        "تاريخ" -> R.drawable.history
+                        "فيزياء" -> R.drawable.baseline_broken
+                        "احياء" -> R.drawable.baseline_broken
+                        "كيمياء" -> R.drawable.baseline_broken
+                        "علوم الأرض" -> R.drawable.baseline_broken
+                        else -> R.drawable.baseline_broken
+                    }
+                ),
+                contentDescription = subject,
+                modifier = Modifier.size(48.dp),
+                tint = Color.White
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = subject,
+                style = MaterialTheme.typography.titleLarge,
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            Text(
+                text = if (exams.isNotEmpty()) "${exams.size} امتحان" else "لا توجد امتحانات",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.White.copy(alpha = 0.7f)
+            )
+        }
     }
 }
-//@Composable
-//@Preview
-//fun ExamsPagePreview() {
-//    ExamsPage()
-//}
+
+@Composable
+private fun ExamDetailSheet(
+    subject: String,
+    exams: List<com.example.schoolapp.datasource.local.entity.Exam>
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Text(
+            text = subject,
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        if (exams.isEmpty()) {
+            Text(
+                text = "لا توجد امتحانات مجدولة",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        } else {
+            exams.forEach { exam ->
+                ExamItem(exam = exam)
+                Divider(modifier = Modifier.padding(vertical = 8.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun ExamItem(exam: com.example.schoolapp.datasource.local.entity.Exam) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "التاريخ: ${exam.examDate}",
+                style = MaterialTheme.typography.bodyLarge
+            )
+            Text(
+                text = exam.examDay,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        if (!exam.examMaterial.isNullOrBlank()) {
+            Text(
+                text = "المواد المطلوبة: ${exam.examMaterial}",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
+
+        if (!exam.examNotes.isNullOrBlank()) {
+            Text(
+                text = "ملاحظات: ${exam.examNotes}",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
+    }
+}
