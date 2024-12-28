@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -35,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.compose.AppTheme
 import com.example.schoolapp.Data.classInfo
@@ -101,7 +103,7 @@ private fun ClassesScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
+                .padding(padding).background(MaterialTheme.colorScheme.primaryContainer)
         ) {
             DaySelector(
                 currentDay = sessionState.currentDay,
@@ -140,29 +142,30 @@ private fun ClassesTopBar(onBackClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
-            .height(120.dp)
+            .height(170.dp)
             .background(MaterialTheme.colorScheme.primary)
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxSize(),
         ) {
-            IconButton(onClick = onBackClick) {
+            IconButton(
+                modifier = Modifier.padding(top = 50.dp, start = 5.dp),
+                onClick = { onBackClick() }
+            ) {
                 Icon(
                     Icons.Outlined.ArrowBack,
                     contentDescription = "Back",
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier.size(50.dp),
                     tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
-
+            Spacer(modifier = Modifier.width(20.dp))
             Text(
                 text = "Classes",
-                style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.padding(start = 16.dp)
+                fontSize = 70.sp,
+                fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+                modifier = Modifier.padding(top = 40.dp),
+                color = MaterialTheme.colorScheme.onPrimary
             )
         }
     }
@@ -177,7 +180,8 @@ private fun DaySelector(
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp).background(MaterialTheme.colorScheme.primaryContainer)
+        ,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(availableDays) { day ->
@@ -259,6 +263,10 @@ private fun SessionCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
+        colors = androidx.compose.material3.CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
+        ),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
@@ -275,12 +283,12 @@ private fun SessionCard(
                 Text(
                     text = "Session ${session.session}",
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
                 Text(
                     text = session.day,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
 
@@ -299,7 +307,7 @@ private fun SessionCard(
                     else -> "Loading teacher..."
                 },
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.background
             )
         }
     }
