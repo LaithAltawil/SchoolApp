@@ -27,10 +27,12 @@ fun CalenderEventCard(calenderEvent: CalenderEvent, modifier: Modifier) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.End
         ) {
             // Event Description
             Text(
+
                 text = calenderEvent.eventDescription,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
@@ -44,7 +46,20 @@ fun CalenderEventCard(calenderEvent: CalenderEvent, modifier: Modifier) {
                 // Start Date Column
                 Column {
                     Text(
-                        text = "From",
+                        text = "\t\t\t\t\t\t\t\tإلى",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                    Text(
+                        text = calenderEvent.eventEndDate,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+
+                }
+                // End Date Column
+                Column(horizontalAlignment = Alignment.End) {
+                    Text(
+                        text = "من",
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.outline
                     )
@@ -56,18 +71,6 @@ fun CalenderEventCard(calenderEvent: CalenderEvent, modifier: Modifier) {
                         text = calenderEvent.eventStartDay,
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.SemiBold
-                    )
-                }
-                // End Date Column
-                Column(horizontalAlignment = Alignment.End) {
-                    Text(
-                        text = "To\t\t\t\t\t\t\t\t",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.outline
-                    )
-                    Text(
-                        text = calenderEvent.eventEndDate,
-                        style = MaterialTheme.typography.bodyMedium
                     )
                 }
             }

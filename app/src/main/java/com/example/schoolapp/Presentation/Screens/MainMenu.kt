@@ -86,7 +86,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
     )
     val menuItems = listOf(
         MainMenuItem(
-            title = "Calender",
+            title = "الرزنامة",
             icon = painterResource(id = R.drawable.calendar),
             onClick = {
                 navController.navigate(Screen.CalenderPage.route)
@@ -94,7 +94,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
             }
         ),
         MainMenuItem(
-            title = "Classes",
+            title = "حصصي",
             icon = painterResource(id = R.drawable.training),
             onClick = {
                 navController.navigate(Screen.ClassesPage.route)
@@ -102,7 +102,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
             }
         ),
         MainMenuItem(
-            title = "Exams",
+            title = "امتحناتي",
             icon = painterResource(id = R.drawable.exam__1_),
             onClick = {
                 navController.navigate(Screen.ExamsPage.route)
@@ -110,7 +110,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
             }
         ),
         MainMenuItem(
-            title = "Marks",
+            title = "درجاتي",
             icon = painterResource(id = R.drawable.grade),
             onClick = {
                 navController.navigate(Screen.MarksPage.route)
@@ -118,7 +118,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
             }
         ),
         MainMenuItem(
-            title = "Homeworks",
+            title = "واجباتي",
             icon = painterResource(id = R.drawable.baseline_class_24),
             onClick = {
                 navController.navigate(Screen.HomeworkPage.route)
@@ -127,7 +127,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
             }
         ),
         MainMenuItem(
-            title = "Settings",
+            title = "تواصلوا معنا",
             icon = painterResource(id = R.drawable.baseline_settings_24),
             onClick = {
                 navController.navigate(Screen.SettingsPage.route)
@@ -135,13 +135,13 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
             }
         ),
         MainMenuItem(
-            title = "Counsellor",
+            title = "المرشد المدرسي",
             icon = painterResource(id = R.drawable.help),
             onClick = {
                 navController.navigate(Screen.CounselorPage.route)
             }),
         MainMenuItem(
-            title = "Logout",
+            title = "تسجيل خروج",
             icon = painterResource(id = R.drawable.ic_logout),
             onClick = { /*TODO*/ }
         )
@@ -205,7 +205,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                 )
                                 if (drawerState.isOpen) {
                                     Text(
-                                        text = "Account",
+                                        text = "حسابي",
                                         style = MaterialTheme.typography.headlineLarge
                                     )
                                 } else {
@@ -236,15 +236,16 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                             verticalAlignment = Alignment.CenterVertically,
                                             horizontalArrangement = Arrangement.SpaceBetween
                                         ) {
-                                            Text(
-                                                text = menuItems[item].title,
-                                                style = MaterialTheme.typography.headlineLarge
-                                            )
                                             Icon(
                                                 painter = menuItems[item].icon,
                                                 contentDescription = null,
                                                 modifier = Modifier.size(50.dp)
                                             )
+                                            Text(
+                                                text = menuItems[item].title,
+                                                style = MaterialTheme.typography.headlineLarge
+                                            )
+
                                         }
                                     }
                                 }
@@ -281,7 +282,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                 }
                                 Spacer(modifier = Modifier.width(15.dp))
                                 Text(
-                                    text = "Welcome, $studentFirstName",
+                                    text = "اهلا, $studentFirstName",
                                     style = TextStyle(fontSize = 36.sp),
                                     modifier = Modifier.padding(top = 58.dp),
                                     overflow = TextOverflow.Visible,
@@ -309,11 +310,11 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                         }
                         // To Do Section Title
                         Text(
-                            text = "To Do",
+                            text = "واجباتي",
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.displayLarge,
                             color = MaterialTheme.colorScheme.secondary,
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp).fillMaxWidth()
                         )
                         // Homework List
                         LazyColumn(
@@ -330,7 +331,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                 HomeworkLoadingState.Initial -> {
                                     item {
                                         Text(
-                                            "No homework available",
+                                            "لا يوجد واجبات",
                                             modifier = Modifier.padding(16.dp),
                                             style = MaterialTheme.typography.bodyLarge,
                                             fontSize = 20.sp
@@ -353,7 +354,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                             )
                                             Spacer(modifier = Modifier.height(16.dp))
                                             Text(
-                                                "Checking homework...",
+                                                "يتم البحث عن اي واجبات",
                                                 style = MaterialTheme.typography.bodyLarge
                                             )
                                         }
@@ -372,7 +373,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                             )
                                             Spacer(modifier = Modifier.height(16.dp))
                                             Text(
-                                                "Getting homework...",
+                                                "يتم البحث عن اي واجبات",
                                                 style = MaterialTheme.typography.bodyLarge
                                             )
                                         }
@@ -391,7 +392,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                             )
                                             Spacer(modifier = Modifier.height(16.dp))
                                             Text(
-                                                "Checking new homework...",
+                                                "يتم البحث عن اي واجبات",
                                                 style = MaterialTheme.typography.bodyLarge
                                             )
                                         }

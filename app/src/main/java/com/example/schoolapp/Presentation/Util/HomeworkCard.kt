@@ -95,27 +95,26 @@ fun homeworkCard(
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
             Row {
-                Text(
-                    text = homework.homeworkTeacherSubject,
-                    style = MaterialTheme.typography.headlineLarge
-                )
-                Spacer(modifier = Modifier.weight(1f))
+
 
                 Column {
                     Row {
-                        Text("date start ")
                         Text(homework.homeworkStartDate)
+                        Text("  من")
                     }
                     Row {
-                        Text("Submit By ")
                         Text(homework.homeworkEndDate)
+                        Text("  إلى")
                     }
 
                     //Text(homework.homeworkEndDay)
                     Spacer(modifier = Modifier.width(8.dp))
-
-
                 }
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = homework.homeworkTeacherSubject,
+                    style = MaterialTheme.typography.headlineLarge
+                )
             }
             if (isExpanded) {
                 Spacer(modifier = Modifier.height(8.dp))
@@ -138,6 +137,16 @@ fun homeworkCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
                 ) {
+
+                    Icon(
+                        modifier = Modifier.size(30.dp),
+                        painter =
+                        if (homework.homeworkIsComplete) {
+                            painterResource(id = R.drawable.baseline_check_circle_24)
+                        } else {
+                            painterResource(id = R.drawable.baseline_radio_button_unchecked_24)
+                        }, contentDescription = null
+                    )
                     Button(
                         enabled = if (homework.homeworkIsComplete) false else true,
                         onClick = {
@@ -153,17 +162,8 @@ fun homeworkCard(
                             contentColor = MaterialTheme.colorScheme.primary
                         )
                     ) {
-                        Text("Upload File")
+                        Text("رفع ملف")
                     }
-                    Icon(
-                        modifier = Modifier.size(30.dp),
-                        painter =
-                        if (homework.homeworkIsComplete) {
-                            painterResource(id = R.drawable.baseline_check_circle_24)
-                        } else {
-                            painterResource(id = R.drawable.baseline_radio_button_unchecked_24)
-                        }, contentDescription = null
-                    )
                 }
             }
         }

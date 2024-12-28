@@ -119,7 +119,7 @@ fun CounselorPage(
                             }
                             Spacer(modifier = Modifier.width(5.dp))
                             Text(
-                                text = "Counselor", fontSize = 70.sp,
+                                text = "المرشد", fontSize = 70.sp,
                                 fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
                                 modifier = Modifier.padding(top = 40.dp),
                                 color = MaterialTheme.colorScheme.onPrimary
@@ -154,7 +154,7 @@ fun CounselorPage(
                                 .width(150.dp), onClick = {
                                 mainViewModel.toggleContactDialog()
                             }) {
-                                Text(text = "Contact")
+                                Text(text = "للتواصل")
                             }
                             Button(modifier = Modifier
                                 .padding(10.dp)
@@ -163,7 +163,7 @@ fun CounselorPage(
 
 
                             }) {
-                                Text(text = "Requests")
+                                Text(text = "مواعيد")
                             }
                         }
                         Divider(
@@ -184,7 +184,6 @@ fun CounselorPage(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(text = "Name: ")
                                 ExposedDropdownMenuBox(
                                     expanded = expanded,
                                     onExpandedChange = { expanded = !expanded }
@@ -219,13 +218,14 @@ fun CounselorPage(
                                         }
                                     }
                                 }
+                                Text(text = "نوع المشكلة")
                             }
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(text = "Date: ")
+
                                 //Problem with date picker
                                 TextField(
                                     value = state.value.selectedDate.format(formatter),
@@ -254,6 +254,7 @@ fun CounselorPage(
                                                 )
                                                 .show()
                                         })
+                                Text(text = "تاريخ")
                             }
                             Row(
                                 modifier = Modifier
@@ -262,7 +263,6 @@ fun CounselorPage(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(text = "Details: ")
                                 TextField(
                                     value = state.value.time,
                                     onValueChange = {
@@ -276,6 +276,7 @@ fun CounselorPage(
                                     label = { Text("Enter your text here") },
                                     textStyle = TextStyle(fontSize = 16.sp)
                                 )
+                                Text(text = "تفاصيل")
                             }
 
                             Button(modifier = Modifier
@@ -283,7 +284,7 @@ fun CounselorPage(
                                 .width(150.dp), onClick = {
                                 mainViewModel.submitRequest()
                             }) {
-                                Text(text = if (state.value.isLoading) "Submitting..." else "Submit")
+                                Text(text = if (state.value.isLoading) "يتم التسليم" else "حجز")
                             }
 
                         }

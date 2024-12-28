@@ -93,7 +93,7 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "Welcome Back",
+                        text = "اهلا بك",
                         color = MaterialTheme.colorScheme.onPrimary,
                         style = MaterialTheme.typography.displayMedium,
                         overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
@@ -102,7 +102,7 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
                     Spacer(modifier = Modifier.size(30.dp))
                     //TextFields = 2 and a button
                     TextField(
-                        label = { Text(text = "Username") },
+                        label = { Text(text = "اسم المستخدم") },
                         maxLines = 1,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                         //save value to the ViewModel
@@ -113,7 +113,7 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
                         })
                     Spacer(modifier = Modifier.size(15.dp))
                     TextField(
-                        label = { Text(text = "Password") },
+                        label = { Text(text = "كلمة المرور") },
                         maxLines = 1,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                         //store value to the viewModel
@@ -149,7 +149,7 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
                             // Validation logic
                             if (state.value.userName.isEmpty() || state.value.password.isEmpty()) {
                                 //New Alert dialog
-                                viewModel.onDialog(true, "Please enter both username and password")
+                                viewModel.onDialog(true, "يرجى ادخال اسم المستخدم و كلمة المرور")
                                 return@Button
                             }
                             viewModel.signInFromApi(object : SignInCallBack {
@@ -176,7 +176,7 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
 
 
                                 },
-                                title = { Text("Pop-up Title") },
+                                title = { Text("حدث خطأ") },
                                 text = { Text(viewModel.signInState.value.message) },
                                 confirmButton = {
 
@@ -185,7 +185,7 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
 
 
                                     }) {
-                                        Text("OK")
+                                        Text("حسنا")
 
                                     }
                                 }
@@ -195,7 +195,7 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
 
 
                         Text(
-                            text = "Sign In",
+                            text = "تسجيل دخول",
                             style = MaterialTheme.typography.bodyLarge,
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Bold

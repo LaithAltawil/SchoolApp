@@ -98,7 +98,7 @@ fun StartPage(onSignInClick: () -> Unit={}) {
                         )
                     ) {
                         Text(
-                            text = "Sign in",
+                            text = "تسجيل دخول",
                             color = MaterialTheme.colorScheme.primary,
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Bold,
@@ -115,7 +115,7 @@ fun StartPage(onSignInClick: () -> Unit={}) {
                         )
                     ) {
                         Text(
-                            text = "Not A student? Click Here ",
+                            text = "لست طالب؟ اضغط هنا",
                             color = MaterialTheme.colorScheme.primary,
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Bold,

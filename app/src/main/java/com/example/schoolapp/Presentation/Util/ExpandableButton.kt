@@ -75,8 +75,8 @@ fun ExpandableButton(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = name, fontSize = 28.sp)
                 Icon(imageVector = Icons.Default.KeyboardArrowDown, contentDescription = null)
+                Text(text = name, fontSize = 28.sp)
             }
         }
 
@@ -94,8 +94,8 @@ fun ExpandableButton(
                     CalenderState.EVENT_STATE -> {
                         if (eventList.value.isNullOrEmpty()) {
                             EmptyStateMessage(
-                                "No events available",
-                                "Check back later for upcoming events"
+                                "لا احداث رئيسية",
+                                "عد هنا لاحقا للتحقق من اي احداث مهمة"
                             )
                         } else {
                             eventList.value?.forEach { event ->
@@ -110,8 +110,8 @@ fun ExpandableButton(
                     CalenderState.EXAM_STATE -> {
                         if (examList.value.isNullOrEmpty()) {
                             EmptyStateMessage(
-                                "No exams scheduled",
-                                "Exam schedule will be posted when available"
+                                "لا يوجد اختبارات",
+                                "سوف يتم نشر جدول الامتحانات هنا عند توفره"
                             )
                         } else {
                             examList.value?.forEach { exam ->
@@ -126,8 +126,8 @@ fun ExpandableButton(
                     CalenderState.CALENDER_STATE -> {
                         if (calenderEventList.value.isNullOrEmpty()) {
                             EmptyStateMessage(
-                                "No semester events",
-                                "Semester schedule will be updated soon"
+                                "لا جدول للفصل حاليا",
+                                "سوف يتم نشر جدول الفصل هنا عند توفره"
                             )
                         } else {
                             calenderEventList.value?.forEach { calenderEvent ->

@@ -65,17 +65,17 @@ fun CalenderPage(viewModel: MainViewModel, navController: NavController) {
     //=======================================================
     val calendarItems = listOf(
         CalenderDays(
-            "Main Events",
+            "الاحداث الرئيسية",
             "A huge Open Day for jobs in tech for the future",
             CalenderState.EVENT_STATE,
             {}),
         CalenderDays(
-            "Exam's Schedule",
+            "جدول الامتحانات",
             "A huge Open Day for jobs in medicine for the future",
             CalenderState.EXAM_STATE,
             {}),
         CalenderDays(
-            "Semester Schedule",
+            "جدول الفصل",
             "A huge Open Day for jobs in finance for the future",
             CalenderState.CALENDER_STATE,
             {})
@@ -119,7 +119,7 @@ fun CalenderPage(viewModel: MainViewModel, navController: NavController) {
                             }
                             Spacer(modifier = Modifier.width(20.dp))
                             Text(
-                                text = "Calender",
+                                text = "الرزنامة",
                                 fontSize = 70.sp,
                                 fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
                                 modifier = Modifier.padding(top = 40.dp),
@@ -214,7 +214,7 @@ fun CalenderPage(viewModel: MainViewModel, navController: NavController) {
                                                 Text(
                                                     text = when (calendarItems.elementAt(0).calenderState) {
                                                         CalenderState.EVENT_STATE -> "No events available"
-                                                        CalenderState.EXAM_STATE -> "No exams scheduled"
+                                                        CalenderState.EXAM_STATE -> "لا يوجد اختبارات"
                                                         CalenderState.CALENDER_STATE -> "No calendar events"
                                                         else -> "No items available"
                                                     },

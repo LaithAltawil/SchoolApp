@@ -84,13 +84,6 @@ fun ExpandableCard(
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
             Row(modifier = Modifier.fillMaxSize(),verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = homework.homeworkTeacherSubject,
-                    style = MaterialTheme.typography.headlineLarge
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Text("Submit by")
-                Spacer(modifier = Modifier.width(8.dp))
                 Card(modifier = Modifier.height(50.dp).width(100.dp)){
                     Column(horizontalAlignment = Alignment.CenterHorizontally
                         ,verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
@@ -104,6 +97,28 @@ fun ExpandableCard(
 
                     }
                 }
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text("اخر يوم تسليم")
+                Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.width(8.dp))
+//                Card(modifier = Modifier.height(50.dp).width(100.dp)){
+//                    Column(horizontalAlignment = Alignment.CenterHorizontally
+//                        ,verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
+//                        modifier =Modifier.fillMaxSize() ) {
+//                        Text(homework.homeworkEndDay)
+//                        Spacer(modifier = Modifier.width(8.dp))
+//                        Text(
+//                            text = homework.homeworkEndDate,
+//                            style = MaterialTheme.typography.labelLarge
+//                        )
+//
+//                    }
+//                }
+                Text(
+                    text = homework.homeworkTeacherSubject,
+                    style = MaterialTheme.typography.headlineLarge
+                )
 
             }
         }

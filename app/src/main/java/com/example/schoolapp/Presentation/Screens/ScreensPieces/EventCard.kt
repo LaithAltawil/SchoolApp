@@ -1,5 +1,6 @@
 package com.example.schoolapp.Presentation.Screens.ScreensPieces
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -50,16 +51,18 @@ fun EventCard(event: Event, modifier: Modifier) {
                 // From date
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
                 ) {
-                    Text(
-                        text = "From: ",
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.SemiBold
-                    )
+
                     Text(
                         text = "${event.eventStartDay}, ${event.eventStartDate}",
                         style = MaterialTheme.typography.bodyLarge
+                    )
+                    Text(
+                        text = " : "+"من",
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.SemiBold
                     )
                 }
                 Spacer(modifier = Modifier.height(4.dp))
@@ -67,15 +70,18 @@ fun EventCard(event: Event, modifier: Modifier) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
+                    ,
+                    horizontalArrangement = Arrangement.End
                 ) {
-                    Text(
-                        text = "To: ",
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.SemiBold
-                    )
+
                     Text(
                         text = "${event.eventEndDay}, ${event.eventEndDate}",
                         style = MaterialTheme.typography.bodyLarge
+                    )
+                    Text(
+                        text = " : "+"إلى ",
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.SemiBold
                     )
                 }
             }
@@ -85,11 +91,14 @@ fun EventCard(event: Event, modifier: Modifier) {
                 color = MaterialTheme.colorScheme.outlineVariant
             )
             // Event details/notes
-            Text(
+            Column(modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.End,
+            ) { Text(
                 text = event.eventDetails,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.fillMaxWidth()
-            )
+            ) }
+
         }
     }
 }

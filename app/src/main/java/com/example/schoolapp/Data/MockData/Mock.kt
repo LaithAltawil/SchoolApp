@@ -145,9 +145,9 @@ object Mock {
         OtherDetails
     )
     val Titles = listOf(
-        "Personal Information",
-        "Parents Details",
-        "Other Details"
+        "معلومات شخصية",
+        "معلومات الاهل",
+        "معلومات اخرى"
     )
     val mockEvents = listOf(
         Event("Opening Ceremony", 1, "15/12/2023", "Friday", "The grand opening of the event."),

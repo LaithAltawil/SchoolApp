@@ -56,12 +56,13 @@ fun ProfilePageBox(
                 modifier = Modifier
             ) {
                 Text(
-                    text = listOfLists[index][0][0]+": ",
+                    text = listOfLists[index][0][1]+ " ",
                     style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
                 Text(
-                    text = listOfLists[index][0][1]+ " ",
+
+                    text = ": "+listOfLists[index][0][0],
                     style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
@@ -70,38 +71,38 @@ fun ProfilePageBox(
             Spacer(modifier = Modifier.height(10.dp))
             Row {
                 Text(
-                    text = listOfLists[index][1][0]+": ",
+                    text = listOfLists[index][1][1],
                     style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
-                Text(
-                    text = listOfLists[index][1][1],
+                Text(": "+listOfLists[index][1][0],
                     style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
             }
             Spacer(modifier = Modifier.height(10.dp))
             Row {
-                Text(
-                    text =  listOfLists[index][2][0]+" ",
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = Color.White
-                )
                 Text(
                     text = listOfLists[index][2][1],
                     style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
+                Text(
+
+                    text = ": "+listOfLists[index][2][0],
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = Color.White
+                )
             }
             Spacer(modifier = Modifier.height(10.dp))
             Row {
                 Text(
-                    text =   listOfLists[index][3][0]+": ",
+                    text =  listOfLists[index][3][1],
                     style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
                 Text(
-                    text =  listOfLists[index][3][1],
+                    text = ": "+listOfLists[index][3][0],
                     style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
@@ -110,12 +111,12 @@ fun ProfilePageBox(
             Spacer(modifier = Modifier.height(10.dp))
             Row {
                 Text(
-                    text =   listOfLists[index][4][0],
+                    text =   listOfLists[index][4][1],
                     style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )
                 Text(
-                    text =  listOfLists[index][4][1],
+                    text = ": "+listOfLists[index][4][0],
                     style = MaterialTheme.typography.headlineSmall,
                     color = Color.White
                 )

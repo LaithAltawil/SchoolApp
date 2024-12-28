@@ -123,27 +123,28 @@ fun ExamsPage(mainViewModel: MainViewModel, navController: NavController) {
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
-                                    .height(120.dp)
+                                    .height(170.dp)
                                     .background(MaterialTheme.colorScheme.primary)
                             ) {
                                 Row(
                                     modifier = Modifier.fillMaxSize(),
-                                ) {
+                                    ) {
                                     IconButton(
                                         modifier = Modifier.padding(top = 50.dp, start = 5.dp),
-                                        onClick = { navController.popBackStack() }
+                                        onClick = { navController?.popBackStack() }
                                     ) {
                                         Icon(
                                             Icons.Outlined.ArrowBack,
                                             contentDescription = "Back",
-                                            modifier = Modifier.size(32.dp),
+                                            modifier = Modifier.size(50.dp),
                                             tint = MaterialTheme.colorScheme.onPrimary
                                         )
                                     }
                                     Spacer(modifier = Modifier.width(20.dp))
                                     Text(
                                         text = "الامتحانات",
-                                        fontSize = 40.sp,
+                                        fontSize = 70.sp,
+                                        fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
                                         modifier = Modifier.padding(top = 40.dp),
                                         color = MaterialTheme.colorScheme.onPrimary
                                     )

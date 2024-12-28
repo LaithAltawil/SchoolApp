@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.AlertDialog
@@ -232,27 +233,27 @@ fun SettingPage(
 
     val settings = listOf(
         setting(
-            "Profile",
+            "حسابي",
             painterResource(id = R.drawable.baseline_account_box_24),
             "Edit your personal information and preferences",
             onClick = {
                 navController?.navigate(Screen.ProfilePage.route)
             }
         ),
+//        setting(
+//            "Notifications",
+//            painterResource(id = R.drawable.baseline_notifications_24),
+//            "Configure your notification preferences",
+//            onClick = {}
+//        ),
         setting(
-            "Notifications",
-            painterResource(id = R.drawable.baseline_notifications_24),
-            "Configure your notification preferences",
-            onClick = {}
-        ),
-        setting(
-            "Help & FAQ",
+            "مساعدة",
             painterResource(id = R.drawable.help),
             "Find answers to common questions",
             onClick = {}
         ),
         setting(
-            "Contact us",
+            "تواصل معنا",
             painterResource(id = R.drawable.contact_us),
             "Get in touch with our support team",
             onClick = {}
@@ -320,7 +321,7 @@ private fun SettingsTopBar(navController: NavController?) {
             }
             Spacer(modifier = Modifier.width(20.dp))
             Text(
-                text = "Settings",
+                text = "تواصلوا معنا",
                 fontSize = 70.sp,
                 fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
                 modifier = Modifier.padding(top = 40.dp),
@@ -373,25 +374,29 @@ private fun SettingCardContent(item: setting) {
         verticalArrangement = Arrangement.Center
     ) {
         Row {
-            item.imagePath?.let { icon ->
-                Icon(
-                    painter = icon,
-                    contentDescription = item.name,
-                    modifier = Modifier.size(30.dp)
-                )
-            }
+            Icon(
+                imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                contentDescription = "Navigate"
+            )
             Spacer(modifier = Modifier.width(16.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
+
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                Spacer(modifier = Modifier.width(16.dp))
                 Text(text = item.name)
-                Icon(
-                    imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
-                    contentDescription = "Navigate"
-                )
+                item.imagePath?.let { icon ->
+                    Icon(
+                        painter = icon,
+                        contentDescription = item.name,
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
+
             }
+
         }
     }
 }

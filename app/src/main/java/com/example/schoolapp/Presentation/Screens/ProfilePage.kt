@@ -59,28 +59,28 @@ fun Profile_page(viewModel: MainViewModel, navController: NavController) {
     val studentFirstName = studentState.value?.studentFirstName
     val studentSecondName = studentState.value?.studentSecondName
     val studentDetails: MutableList<MutableList<String>> = mutableListOf(
-        mutableListOf("Class", studentState.value?.studentClass.toString()),
-        mutableListOf("Gender", studentState.value?.studentGender.toString()),
-        mutableListOf("Nationality:", studentState.value?.studentNationality.toString()),
+        mutableListOf("الصف", studentState.value?.studentClass.toString()),
+        mutableListOf("الجنس", studentState.value?.studentGender.toString()),
+        mutableListOf("الجنسية", studentState.value?.studentNationality.toString()),
         mutableListOf(
-            "Date of Birth",
+            "يوم الميلاد",
             studentState.value?.studentDateOfBirth.toString()
         ),
         mutableListOf("", "")
     )
     val parentsDetails: MutableList<MutableList<String>> = mutableListOf(
-        mutableListOf("Name", studentSecondName.toString()),
-        mutableListOf("Phone Number", parentState.value?.parentPhoneNumber.toString()),
-        mutableListOf("Job:", parentState.value?.parentJob.toString()),
-        mutableListOf("Nationality", parentState.value?.parentNationality.toString()),
-        mutableListOf("Address: ", parentState.value?.parentAddress.toString())
+        mutableListOf("الاسم", studentSecondName.toString()),
+        mutableListOf("رقم الهاتف", parentState.value?.parentPhoneNumber.toString()),
+        mutableListOf("الوظيفة", parentState.value?.parentJob.toString()),
+        mutableListOf("الجنسية", parentState.value?.parentNationality.toString()),
+        mutableListOf("عنوان ", parentState.value?.parentAddress.toString())
 
     )
     val otherDetails: MutableList<MutableList<String>> = mutableListOf(
-        mutableListOf("National Id", studentState.value?.studentNationalId.toString()),
-        mutableListOf("Birth", studentState.value?.studentPlaceOfBirth.toString()),
-        mutableListOf("Residence:", studentState.value?.studentCity.toString()),
-        mutableListOf("Residential area", studentState.value?.studentResidence.toString()),
+        mutableListOf("الرقم الوطني", studentState.value?.studentNationalId.toString()),
+        mutableListOf("مكان الميلاد", studentState.value?.studentPlaceOfBirth.toString()),
+        mutableListOf("عنوان السكن", studentState.value?.studentCity.toString()),
+        mutableListOf("الحي", studentState.value?.studentResidence.toString()),
         mutableListOf("", "")
     )
     val allDetails: MutableList<MutableList<MutableList<String>>> = mutableListOf(
@@ -105,7 +105,7 @@ fun Profile_page(viewModel: MainViewModel, navController: NavController) {
                         horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
                     ) {
                         Box(
-                            modifier = Modifier
+                            modifier = Modifier.clip(RoundedCornerShape(16.dp))
                                 .width(450.dp)
                                 .height(200.dp)
                                 .background(MaterialTheme.colorScheme.primary),
