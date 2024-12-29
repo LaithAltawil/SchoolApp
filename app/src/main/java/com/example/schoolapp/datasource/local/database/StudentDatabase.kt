@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.schoolapp.datasource.local.dao.CalenderDao
 import com.example.schoolapp.datasource.local.dao.ExamDao
 import com.example.schoolapp.datasource.local.dao.HomeworkDao
+import com.example.schoolapp.datasource.local.dao.MarkDao
 import com.example.schoolapp.datasource.local.dao.ParentDao
 import com.example.schoolapp.datasource.local.dao.SessionDao
 import com.example.schoolapp.datasource.local.dao.StudentDao
@@ -14,6 +15,7 @@ import com.example.schoolapp.datasource.local.entity.CalenderEvent
 import com.example.schoolapp.datasource.local.entity.Event
 import com.example.schoolapp.datasource.local.entity.Exam
 import com.example.schoolapp.datasource.local.entity.Homework
+import com.example.schoolapp.datasource.local.entity.Mark
 import com.example.schoolapp.datasource.local.entity.Parent
 import com.example.schoolapp.datasource.local.entity.Session
 import com.example.schoolapp.datasource.local.entity.Student
@@ -25,8 +27,9 @@ import com.example.schoolapp.datasource.local.entity.Student
         Event::class,
         Exam::class,
         CalenderEvent::class,
-        Session::class],
-    version = 13,
+        Session::class,
+        Mark::class],
+    version = 15,
     exportSchema = false
 )
 abstract class StudentDatabase : RoomDatabase() {
@@ -37,6 +40,7 @@ abstract class StudentDatabase : RoomDatabase() {
     abstract val calenderDao: CalenderDao
     abstract val examDao: ExamDao
     abstract val sessionDao: SessionDao
+    abstract val markDao: MarkDao
 
     companion object {
 
@@ -121,5 +125,11 @@ abstract class StudentDatabase : RoomDatabase() {
     suspend fun getSessionsByDay(day: String) = sessionDao.getSessionsByDay(day)
     suspend fun deleteAllSessions() = sessionDao.deleteAllSessions()
     suspend fun deleteSessionsByClass(classId: String) = sessionDao.deleteSessionsByClass(classId)
+
+    // Mark functions
+    suspend fun insertMark(mark: Mark) = markDao.insert(mark)
+    suspend fun getMarks(studentId: Int) = markDao.getMarks(studentId)
+    suspend fun deleteMarks(studentId: Int) = markDao.deleteMarks(studentId)
+    suspend fun deleteAllMarks() = markDao.deleteAllMarks()
 
 }

@@ -122,7 +122,7 @@ fun Navigation() {
                 val context = LocalContext.current
                 val viewModel = it.MainViewModel<MainViewModel>(navController, context)
                 MarksPage(
-                    mainviewmodel = viewModel,
+                    mainViewModel = viewModel,
                     navController = navController
                 )
             }

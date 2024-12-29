@@ -10,6 +10,7 @@ import com.example.schoolapp.Presentation.VM.States.CalenderState
 import com.example.schoolapp.Presentation.VM.States.ExamLoadingState
 import com.example.schoolapp.Presentation.VM.States.HomeworkLoadingState
 import com.example.schoolapp.Presentation.VM.States.MainDataClass
+import com.example.schoolapp.Presentation.VM.States.MarksLoadingState
 import com.example.schoolapp.Presentation.VM.States.SessionLoadingState
 import com.example.schoolapp.Presentation.VM.States.SessionState
 import com.example.schoolapp.datasource.local.database.StudentDatabase
@@ -17,6 +18,7 @@ import com.example.schoolapp.datasource.local.entity.CalenderEvent
 import com.example.schoolapp.datasource.local.entity.Event
 import com.example.schoolapp.datasource.local.entity.Exam
 import com.example.schoolapp.datasource.local.entity.Homework
+import com.example.schoolapp.datasource.local.entity.Mark
 import com.example.schoolapp.datasource.local.entity.Parent
 import com.example.schoolapp.datasource.local.entity.Student
 import com.example.schoolapp.datasource.repository.StudentRepository
@@ -140,13 +142,23 @@ class MainViewModel(private val context: Context) : ViewModel() {
     private val _teacherName = MutableStateFlow<String?>(null)
     val teacherName: StateFlow<String?> = _teacherName.asStateFlow()
 
+    //============================================================================================
+    // Marks page                                                                                =
+    //============================================================================================
+    private val _marksList = MutableStateFlow<List<Mark>?>(null)
+    val marksList: StateFlow<List<Mark>?> = _marksList.asStateFlow()
+
+    private val _marksLoadingState = MutableStateFlow<MarksLoadingState>(MarksLoadingState.Initial)
+    val marksLoadingState: StateFlow<MarksLoadingState> = _marksLoadingState.asStateFlow()
+
+
     //Exam Page
     private val _Examstate = MutableStateFlow(MainDataClass.ExamPageState1())
     val Examstate: StateFlow<MainDataClass.ExamPageState1> = _Examstate.asStateFlow()
 
     //Marks Page
-    private val _Marksstate = MutableStateFlow(MainDataClass.MarkspageState1())
-    val Marksstate: StateFlow<MainDataClass.MarkspageState1> = _Marksstate.asStateFlow()
+    private val _Marksstate = MutableStateFlow(MainDataClass.MarksPageState1())
+    val Marksstate: StateFlow<MainDataClass.MarksPageState1> = _Marksstate.asStateFlow()
 
     //setting page
 //    private val _settingstate = MutableStateFlow<setting?>(null) // Initialize with null
@@ -879,6 +891,42 @@ class MainViewModel(private val context: Context) : ViewModel() {
         }
     }
 
+    //============================================================================================
+    // Marks page                                                                                =
+    //============================================================================================
+
+    // Check and sync marks data
+    // In MainViewModel.kt
+    fun checkMarks() {
+        viewModelScope.launch {
+            try {
+                _marksLoadingState.value = MarksLoadingState.Checking
+
+                // Get current student ID
+                val currentStudent = student.value
+                if (currentStudent == null) {
+                    Log.e("MarksDebug", "Student is null")
+                    _marksLoadingState.value = MarksLoadingState.Error("Student data not available")
+                    return@launch
+                }
+
+                Log.d("MarksDebug", "Current student ID: ${currentStudent.studentId}")
+                _marksLoadingState.value = MarksLoadingState.Loading
+
+                // Fetch and store marks from API
+                studentRepository.getMarksWithSync(currentStudent.studentId)
+
+                // Get marks from local database
+                _marksList.value = studentRepository.getMarks(currentStudent.studentId)
+
+                _marksLoadingState.value = MarksLoadingState.Completed
+            } catch (e: Exception) {
+                Log.e("MarksDebug", "Error checking marks", e)
+                _marksLoadingState.value = MarksLoadingState.Error(e.message ?: "Unknown error occurred")
+            }
+        }
+    }
+
     //===========================================================================================
     //functions: public & private                                                               =
     //===========================================================================================
@@ -911,9 +959,15 @@ class MainViewModel(private val context: Context) : ViewModel() {
     }
 
     fun updateBottomSheetState1(index: Int, newState: Boolean) {
-        // Ensure index is within bounds
-        if (index in _Marksstate.value.BottomSheet.indices) {
-            _Marksstate.value.BottomSheet[index] = newState
+        try {
+            // Make sure we have enough space in the list
+            while (index >= _Marksstate.value.bottomSheet.size) {
+                _Marksstate.value.bottomSheet.add(false)
+            }
+            // Now safely update the state
+            _Marksstate.value.bottomSheet[index] = newState
+        } catch (e: Exception) {
+            Log.e("MarksPage", "Error updating bottom sheet state", e)
         }
     }
 

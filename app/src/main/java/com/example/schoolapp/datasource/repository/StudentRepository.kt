@@ -1,5 +1,6 @@
 package com.example.schoolapp.datasource.repository
 
+import android.util.Log
 import com.example.schoolapp.datasource.local.dao.ExamDao
 import com.example.schoolapp.datasource.local.dao.HomeworkDao
 import com.example.schoolapp.datasource.local.database.StudentDatabase
@@ -7,6 +8,7 @@ import com.example.schoolapp.datasource.local.entity.CalenderEvent
 import com.example.schoolapp.datasource.local.entity.Event
 import com.example.schoolapp.datasource.local.entity.Exam
 import com.example.schoolapp.datasource.local.entity.Homework
+import com.example.schoolapp.datasource.local.entity.Mark
 import com.example.schoolapp.datasource.local.entity.Parent
 import com.example.schoolapp.datasource.local.entity.Session
 import com.example.schoolapp.datasource.local.entity.Student
@@ -301,6 +303,38 @@ class StudentRepository(
         }
     }
 
+    //===============================================
+    //marks dao's fun                               =
+    //===============================================
+
+    // Insert mark into local database
+    suspend fun insertMark(mark: Mark) {
+        withContext(Dispatchers.IO) {
+            studentDatabase.insertMark(mark)
+        }
+    }
+
+    // Get all marks for a student from local database
+    suspend fun getMarks(studentId: Int): List<Mark> {
+        return withContext(Dispatchers.IO) {
+            studentDatabase.getMarks(studentId)
+        }
+    }
+
+    // Delete marks for a specific student
+    suspend fun deleteMarks(studentId: Int) {
+        withContext(Dispatchers.IO) {
+            studentDatabase.deleteMarks(studentId)
+        }
+    }
+
+    // Delete all marks
+    suspend fun deleteAllMarks() {
+        withContext(Dispatchers.IO) {
+            studentDatabase.deleteAllMarks()
+        }
+    }
+
     //===========================================================================================
     //API                                                                                       =
     //===========================================================================================
@@ -428,4 +462,114 @@ class StudentRepository(
         }
     }
 
+    //===============================================
+    //marks API fun                                 =
+    //===============================================
+    // Get marks from API and store in local database
+    private suspend fun fetchAndStoreMarks(studentId: Int) {
+        withContext(Dispatchers.IO) {
+            try {
+                // First delete existing marks for this student
+                deleteMarks(studentId)
+
+                // Fetch marks from API
+                val response = studentApi.marks(studentId)
+
+                if (!response.isSuccessful) {
+                    Log.e("StudentRepository", "Error fetching marks: ${response.message()}")
+                    return@withContext
+                }
+
+                val marksResponse = response.body()
+                if (marksResponse?.error == true) {
+                    Log.e("StudentRepository", "API returned error: ${marksResponse.message}")
+                    return@withContext
+                }
+
+                // Store each mark in local database
+                marksResponse?.marks?.forEach { markData ->
+                    val mark = Mark(
+                        markStudentId = markData.markStudentId,
+                        markTeacherSubject = markData.markTeacherSubject,
+                        firstMark = markData.firstMark,
+                        secondMark = markData.secondMark,
+                        thirdMark = markData.thirdMark,
+                        forthMark = markData.forthMark,
+                        totalMark = markData.totalMark
+                    )
+                    insertMark(mark)
+                }
+            } catch (e: Exception) {
+                Log.e("StudentRepository", "Error in fetchAndStoreMarks", e)
+            }
+        }
+    }
+
+    // Sync marks - fetch fresh data from API and update local storage
+    suspend fun syncMarks(studentId: Int) {
+        withContext(Dispatchers.IO) {
+            try {
+                fetchAndStoreMarks(studentId)
+            } catch (e: Exception) {
+                Log.e("StudentRepository", "Error syncing marks", e)
+            }
+        }
+    }
+
+    // Get marks with automatic sync
+    // In StudentRepository.kt
+    suspend fun getMarksWithSync(studentId: Int) {
+        withContext(Dispatchers.IO) {
+            try {
+                Log.d("MarksDebug", "Fetching marks for student ID: $studentId")
+                // First delete existing marks for this student
+                deleteMarks(studentId)
+                Log.d("MarksDebug", "Deleted existing marks for student")
+
+                // Fetch marks from API
+                val response = studentApi.marks(studentId)
+                Log.d("MarksDebug", "API Response: ${response.body()}")
+
+                if (!response.isSuccessful) {
+                    Log.e("MarksDebug", "Error fetching marks: ${response.message()}")
+                    return@withContext
+                }
+
+                val marksResponse = response.body()
+                if (marksResponse?.error == true) {
+                    Log.e("MarksDebug", "API returned error: ${marksResponse.message}")
+                    return@withContext
+                }
+
+                // Log the number of marks received
+                Log.d("MarksDebug", "Number of marks received: ${marksResponse?.marks?.size}")
+
+                marksResponse?.marks?.forEachIndexed { index, markData ->
+                    val mark = Mark(
+                        markStudentId = studentId,
+                        markTeacherSubject = markData.markTeacherSubject,
+                        firstMark = markData.firstMark,
+                        secondMark = markData.secondMark,
+                        thirdMark = markData.thirdMark,
+                        forthMark = markData.forthMark,
+                        totalMark = markData.totalMark
+                    )
+                    Log.d("MarksDebug", "Attempting to insert mark $index: $mark")
+                    insertMark(mark)
+                    Log.d("MarksDebug", "Successfully inserted mark $index")
+                }
+
+                // Verify marks after insertion
+                val savedMarks = getMarks(studentId)
+                Log.d("MarksDebug", "Total marks saved in Room: ${savedMarks.size}")
+                savedMarks.forEach { mark ->
+                    Log.d("MarksDebug", "Saved mark: $mark")
+                }
+
+            } catch (e: Exception) {
+                Log.e("MarksDebug", "Error in getMarksWithSync", e)
+                e.printStackTrace()
+            }
+        }
+    }
 }

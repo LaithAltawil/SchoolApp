@@ -1,5 +1,6 @@
 package com.example.schoolapp.Presentation.Screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -7,35 +8,34 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,203 +48,171 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.compose.AppTheme
-import com.example.schoolapp.Data.Exam
-import com.example.schoolapp.Data.Marks
-import com.example.schoolapp.Data.MarksSubjects
-import com.example.schoolapp.Data.Subjects
 import com.example.schoolapp.Presentation.VM.MainViewModel
+import com.example.schoolapp.Presentation.VM.States.MarksLoadingState
 import com.example.schoolapp.R
+import com.example.schoolapp.datasource.local.entity.Mark
 
-//=======================================================
-//solved @LT #simple || explain this fun logic here       =
-//a Lazy grid with each row having 2 items and when pressed it will open a bottom sheet with the exam name and details
-//=======================================================
-//solved @LT #simple || @(44:15)=="MainViewModel" variable name must start with small litter
-//solved @LT #medium~#hard || try adding the @preview notation to be able to use the design tab
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MarksPage(mainviewmodel: MainViewModel ,navController: NavController) {
+fun MarksPage(mainViewModel: MainViewModel, navController: NavController) {
+    val marksState = mainViewModel.Marksstate.collectAsStateWithLifecycle()
+    val student = mainViewModel.student.collectAsState()
+    val marksList = mainViewModel.marksList.collectAsState()
+    val loadingState = mainViewModel.marksLoadingState.collectAsState()
 
-    //todo @MAS #simple || please add the usage after answering the referred todo task
+    // Initialize marks data when screen is first loaded
+    LaunchedEffect(Unit) {
+        if (student.value != null) {
+            Log.d("MarksPage", "Student ID for marks: ${student.value?.studentId}")
+            mainViewModel.checkMarks()
+        } else {
+            Log.e("MarksPage", "Student is null in MarksPage")
+        }
+    }
 
+    // Get class number and define subjects based on class level
+    val classNumber = when (student.value?.studentClass?.lowercase()) {
+        "first" -> 1
+        "second" -> 2
+        "third" -> 3
+        "fourth" -> 4
+        "fifth" -> 5
+        "sixth" -> 6
+        "seventh" -> 7
+        "eighth" -> 8
+        "ninth" -> 9
+        "tenth" -> 10
+        else -> 0
+    }
 
-    //=======================================================
-    //variables: local & states                             =
-    //=======================================================
-    val state = mainviewmodel.Marksstate.collectAsStateWithLifecycle()
-    val mainMenuItem = listOf(
-        MarksSubjects("Maths", painterResource(id = R.drawable.math),
-            Marks = Marks(25,22,50),
-            onClick = {}
-        ),
-        MarksSubjects("Science", painterResource(id = R.drawable.science),
-            Marks = Marks(22,32,50),
-            onClick = {}),
-        MarksSubjects("English", painterResource(id = R.drawable.english),
-            Marks = Marks(32,22,60),
-            onClick = {}),
-        MarksSubjects(
-            "History",
-            painterResource(id = R.drawable.history),
-            Marks = Marks(22,29,50),
-            onClick = {}
-        ),
-        MarksSubjects(
-            "Arabic",
-            painterResource(id = R.drawable.arabic),
-            Marks = Marks(22,26,50),
-            onClick = {}
-        ),
-        MarksSubjects(
-            "Computer Science",
-            painterResource(id = R.drawable.science),
-            Marks = Marks(29,26,50),
-            onClick = {}
-        ),
-        MarksSubjects(
-            "Geography",
-            painterResource(id = R.drawable.geography),
-            Marks = Marks(28,22,50),
-            onClick = {}
+    val subjects = when (classNumber) {
+        in 1..3 -> listOf(
+            "عربي", "انجليزي", "رياضة", "رياضيات",
+            "تربية اسلامية", "تربية مهنية", "علوم", "اجتماعيات"
         )
-    )
 
-    //=======================================================
-    //Logic & UI                                            =
-    //=======================================================
+        in 4..8 -> listOf(
+            "عربي", "انجليزي", "رياضة", "رياضيات",
+            "تربية اسلامية", "تربية مهنية", "ثقافة مالية", "علوم",
+            "تربية وطنية", "جغرافيا", "تاريخ"
+        )
+
+        in 9..10 -> listOf(
+            "عربي", "انجليزي", "رياضة", "رياضيات",
+            "تربية اسلامية", "تربية مهنية", "ثقافة مالية",
+            "فيزياء", "احياء", "كيمياء", "علوم الأرض",
+            "تربية وطنية", "جغرافيا", "تاريخ"
+        )
+
+        else -> emptyList()
+    }
+
     AppTheme {
         Surface(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.primaryContainer
         ) {
-            Scaffold(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                topBar = {
+            when (val currentState = loadingState.value) {
+                is MarksLoadingState.Initial,
+                is MarksLoadingState.Loading,
+                is MarksLoadingState.Checking -> {
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
-                            .height(170.dp)
-                            .background(MaterialTheme.colorScheme.primary)
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Row(
-                            modifier = Modifier.fillMaxSize(),
-
-                            ) {
-                            IconButton(
-                                modifier = Modifier.padding(top = 50.dp, start = 5.dp),
-                                onClick = {
-                                    navController.popBackStack()
-                                }
-                            ) {
-                                Icon(
-                                    Icons.Outlined.ArrowBack,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(50.dp),
-                                    tint = MaterialTheme.colorScheme.onPrimary
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(20.dp))
-                            Text(
-                                text = "Marks", fontSize = 70.sp,
-                                fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
-                                modifier = Modifier.padding(top=40.dp),
-                                color = MaterialTheme.colorScheme.onPrimary
-                            )
-                        }
+                        CircularProgressIndicator()
                     }
-                },
-                // Add content padding
-            ) { innerPadding ->
-                Column(
-                    modifier = Modifier.padding(innerPadding),
-                    horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
-                ) {
-                    //lazy grid to hold the data logic & UI design
-                    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+                }
 
-                        //controls the lazy size
-                        itemsIndexed(mainMenuItem) { index,item ->
-                            //hold the subject details
-                            Card(
-                                colors = CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.primary
-                                ),
+                is MarksLoadingState.Error -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = currentState.message,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
+
+                else -> {
+                    Scaffold(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        topBar = {
+                            Box(
                                 modifier = Modifier
-                                    .padding(16.dp)
-                                    .wrapContentHeight()
-                                    .size(200.dp)
-                                    .width(100.dp)
-                                    .clickable {
-                                        mainviewmodel.updateBottomSheetState1(index, true)
-                                    },
+                                    .fillMaxWidth()
+                                    .clip(
+                                        RoundedCornerShape(
+                                            bottomEnd = 16.dp,
+                                            bottomStart = 16.dp
+                                        )
+                                    )
+                                    .height(170.dp)
+                                    .background(MaterialTheme.colorScheme.primary)
                             ) {
-                                //main card UI
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(16.dp)
-                                        .wrapContentSize(Alignment.Center),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.Center
+                                Row(
+                                    modifier = Modifier.fillMaxSize(),
                                 ) {
-                                    //solved @LT:Icon will be changed when we find all the required icons
-                                    //they will be in a list with the subject names
-                                    mainMenuItem[index].imagePath?.let {
+                                    IconButton(
+                                        modifier = Modifier.padding(top = 50.dp, start = 5.dp),
+                                        onClick = { navController.popBackStack() }
+                                    ) {
                                         Icon(
-                                            painter =
-                                            it,
-                                            contentDescription = null
+                                            Icons.Outlined.ArrowBack,
+                                            contentDescription = "Back",
+                                            modifier = Modifier.size(50.dp),
+                                            tint = MaterialTheme.colorScheme.onPrimary
                                         )
                                     }
-                                    //subject name
+                                    Spacer(modifier = Modifier.width(20.dp))
                                     Text(
-                                        modifier = Modifier.padding(10.dp),
-                                        text = mainMenuItem[index].name,
-                                        fontSize = 24.sp,
-                                        color = Color.White,
-                                        textAlign = TextAlign.Center,
-                                        overflow = TextOverflow.Visible
+                                        text = "العلامات",
+                                        fontSize = 70.sp,
+                                        fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+                                        modifier = Modifier.padding(top = 40.dp),
+                                        color = MaterialTheme.colorScheme.onPrimary
                                     )
                                 }
                             }
-                            //this is an if statement which by using the state showBottomSheet
-                            //it will either show or hide the bottom sheet
-                            if (state.value.BottomSheet[index]) {
-                                ModalBottomSheet(containerColor = MaterialTheme.colorScheme.primary,
-                                    onDismissRequest = {
-                                        mainviewmodel.updateBottomSheetState1(index,false)
-                                    }
-                                ) {
-                                    // Bottom sheet content
-                                    Column(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(16.dp)
-                                    ) {
-                                        Text(text = mainMenuItem[index].name,
-                                            fontSize = 40.sp)
-                                        Spacer(modifier = Modifier.height(8.dp))
-                                        Divider(modifier = Modifier.fillMaxWidth().size(1.dp))
-                                        Spacer(modifier = Modifier.height(8.dp))
-                                        //todo @LT #qustion[not answered] || what to do here?
-                                        Row(modifier = Modifier.fillMaxWidth()) {
-                                            Text(text = "First Exam:", fontSize = 30.sp)
-                                            Spacer(modifier = Modifier.width(8.dp))
-                                            Text(text =mainMenuItem[index].Marks!!.firstMark.toString(), fontSize = 30.sp )
+                        }
+                    ) { innerPadding ->
+                        Column(
+                            modifier = Modifier.padding(innerPadding),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            LazyVerticalGrid(
+                                columns = GridCells.Fixed(2),
+                                modifier = Modifier.fillMaxSize()
+                            ) {
+                                itemsIndexed(subjects) { index, subject ->
+                                    SubjectMarkCard(
+                                        subject = subject,
+                                        marks = marksList.value?.filter {
+                                            it.markTeacherSubject == subject
+                                        } ?: emptyList(),
+                                        onClick = {
+                                            mainViewModel.updateBottomSheetState1(index, true)
                                         }
-                                        Row(modifier = Modifier.fillMaxWidth()) {
-                                            Text(text = "Second Exam:", fontSize = 30.sp)
-                                            Spacer(modifier = Modifier.width(8.dp))
-                                            Text(text = mainMenuItem[index].Marks!!.secondMark.toString(), fontSize = 30.sp)
-                                        }
-                                        Row(modifier = Modifier.fillMaxWidth()) {
-                                            Text(text = "Final Exam:", fontSize = 30.sp)
-                                            Spacer(modifier = Modifier.width(8.dp))
-                                            Text(text = mainMenuItem[index].Marks!!.finalMark.toString(), fontSize = 30.sp
-                                                )
+                                    )
+
+                                    // Safe access to BottomSheet state
+                                    if (index < marksState.value.bottomSheet.size && marksState.value.bottomSheet[index]) {
+                                        ModalBottomSheet(
+                                            containerColor = MaterialTheme.colorScheme.surface,
+                                            onDismissRequest = {
+                                                mainViewModel.updateBottomSheetState1(index, false)
+                                            }
+                                        ) {
+                                            MarkDetailSheet(
+                                                subject = subject,
+                                                marks = marksList.value?.filter {
+                                                    it.markTeacherSubject == subject
+                                                } ?: emptyList()
+                                            )
                                         }
                                     }
                                 }
@@ -256,8 +224,145 @@ fun MarksPage(mainviewmodel: MainViewModel ,navController: NavController) {
         }
     }
 }
-//@Composable
-//@Preview
-//fun MarksPagePreview() {
-//    MarksPage()
-//}
+
+@Composable
+private fun SubjectMarkCard(
+    subject: String,
+    marks: List<Mark>,
+    onClick: () -> Unit
+) {
+    // Create default mark if list is empty
+    val mark = marks.firstOrNull() ?: Mark.empty(0, subject)
+
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primary
+        ),
+        modifier = Modifier
+            .padding(8.dp)
+            .aspectRatio(1f)
+            .clickable(onClick = onClick),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                painter = painterResource(
+                    id = when (subject) {
+                        "عربي" -> R.drawable.arabic
+                        "انجليزي" -> R.drawable.english
+                        "رياضة" -> R.drawable.sport
+                        "رياضيات" -> R.drawable.math
+                        "تربية اسلامية" -> R.drawable.baseline_broken
+                        "تربية مهنية" -> R.drawable.baseline_broken
+                        "علوم" -> R.drawable.science
+                        "اجتماعيات" -> R.drawable.baseline_broken
+                        "ثقافة مالية" -> R.drawable.baseline_broken
+                        "تربية وطنية" -> R.drawable.baseline_broken
+                        "جغرافيا" -> R.drawable.geography
+                        "تاريخ" -> R.drawable.history
+                        "فيزياء" -> R.drawable.baseline_broken
+                        "احياء" -> R.drawable.baseline_broken
+                        "كيمياء" -> R.drawable.baseline_broken
+                        "علوم الأرض" -> R.drawable.baseline_broken
+                        else -> R.drawable.baseline_broken
+                    }
+                ),
+                contentDescription = subject,
+                modifier = Modifier.size(48.dp),
+                tint = Color.White
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = subject,
+                style = MaterialTheme.typography.titleLarge,
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            Text(
+                text = "المجموع: ${mark.totalMark.toInt()}",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.White.copy(alpha = 0.7f)
+            )
+        }
+    }
+}
+
+@Composable
+private fun MarkDetailSheet(
+    subject: String,
+    marks: List<Mark>
+) {
+    // Create default mark if list is empty
+    val mark = marks.firstOrNull() ?: Mark.empty(0, subject)
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Text(
+            text = subject,
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        MarkItem(mark = mark)
+    }
+}
+
+@Composable
+private fun MarkItem(mark: Mark) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                MarkRow("الامتحان الأول", mark.firstMark)
+                MarkRow("الامتحان الثاني", mark.secondMark)
+                MarkRow("الامتحان الثالث", mark.thirdMark)
+                MarkRow("الامتحان الرابع", mark.forthMark)
+                Divider(modifier = Modifier.padding(vertical = 4.dp))
+                MarkRow("المجموع", mark.totalMark, isTotal = true)
+            }
+        }
+    }
+}
+
+@Composable
+private fun MarkRow(label: String, value: Float, isTotal: Boolean = false) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = label,
+            style = if (isTotal) MaterialTheme.typography.titleMedium
+            else MaterialTheme.typography.bodyLarge
+        )
+        Text(
+            // Convert float to int to remove decimal places when the value is whole
+            text = value.toInt().toString(),
+            style = if (isTotal) MaterialTheme.typography.titleMedium
+            else MaterialTheme.typography.bodyLarge,
+            color = if (isTotal) MaterialTheme.colorScheme.primary
+            else MaterialTheme.colorScheme.onSurface
+        )
+    }
+}

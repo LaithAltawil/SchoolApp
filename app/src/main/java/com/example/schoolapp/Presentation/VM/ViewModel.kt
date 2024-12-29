@@ -2,6 +2,7 @@ package com.example.schoolapp.Presentation.VM
 
 import android.app.AlertDialog
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.schoolapp.Presentation.Util.callbacks.DatabaseCallback
@@ -68,42 +69,54 @@ class AppViewModel(private val context: Context) : ViewModel() {
 
     fun insertApiStudentToLocalDatabase() {
         if (!studentResponse.value!!.error) {
-            studentResponse
-                .value!!
-                .student!!
-                .let {
-                _student.value = Student(
-                    //always 0 cus I want only one student
-                    studentId = 0,
-                    studentUsername = it.studentUsername,
-                    studentPassword = it.studentPassword,
-                    studentClass = it.studentClass,
-                    studentStatus = it.studentStatus,
-                    studentGender = it.studentGender,
-                    studentFirstName = it.studentFirstName,
-                    studentSecondName = it.studentSecondName,
-                    studentThirdName = it.studentThirdName,
-                    studentNationalId = it.studentNationalId,
-                    studentDateOfRegistration = it.studentDateOfRegistration.toString(),
-                    studentDateOfBirth = it.studentDateOfBirth.toString(),
-                    studentPlaceOfBirth = it.studentPlaceOfBirth,
-                    studentCity = it.studentCity,
-                    studentResidence = it.studentResidence,
-                    studentNationality = it.studentNationality,
-                    studentNotes = it.studentNotes,
-                    studentProfileImage = it.studentProfileImage,
-                    imageFlag = it.imageFlag
-                )
-            }
-            insertStudent(student.value!!, object : DatabaseCallback {
-                override fun onSuccess(message: String) {
-                    _studentFlag.value = true
-                }
+            // First, delete any existing student
+            viewModelScope.launch {
+                try {
+                    // Get the student ID before deletion for logging
+                    val existingStudent = studentRepository.setStudent()
+                    existingStudent?.let {
+                        studentRepository.deleteStudent(it.studentId)
+                    }
 
-                override fun onFailure(error: String) {
+                    // Now map and insert the new student with their actual ID
+                    studentResponse.value!!.student!!.let {
+                        _student.value = Student(
+                            studentId = it.studentId,  // Use actual ID from API
+                            studentUsername = it.studentUsername,
+                            studentPassword = it.studentPassword,
+                            studentClass = it.studentClass,
+                            studentStatus = it.studentStatus,
+                            studentGender = it.studentGender,
+                            studentFirstName = it.studentFirstName,
+                            studentSecondName = it.studentSecondName,
+                            studentThirdName = it.studentThirdName,
+                            studentNationalId = it.studentNationalId,
+                            studentDateOfRegistration = it.studentDateOfRegistration.toString(),
+                            studentDateOfBirth = it.studentDateOfBirth.toString(),
+                            studentPlaceOfBirth = it.studentPlaceOfBirth,
+                            studentCity = it.studentCity,
+                            studentResidence = it.studentResidence,
+                            studentNationality = it.studentNationality,
+                            studentNotes = it.studentNotes,
+                            studentProfileImage = it.studentProfileImage,
+                            imageFlag = it.imageFlag
+                        )
+                    }
+
+                    insertStudent(student.value!!, object : DatabaseCallback {
+                        override fun onSuccess(message: String) {
+                            _studentFlag.value = true
+                        }
+
+                        override fun onFailure(error: String) {
+                            _studentFlag.value = false
+                        }
+                    })
+                } catch (e: Exception) {
+                    Log.e("AppViewModel", "Error managing student data", e)
                     _studentFlag.value = false
                 }
-            })
+            }
         }
     }
 
