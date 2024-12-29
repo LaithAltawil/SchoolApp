@@ -286,7 +286,8 @@ fun SettingPage(
                                 item = item,
                                 index = index,
                                 mainviewmodel = mainviewmodel,
-                                state = state
+                                state = state,
+                                navController = navController
                             )
                         }
                     }
@@ -336,7 +337,8 @@ private fun SettingCard(
     item: setting,
     index: Int,
     mainviewmodel: MainViewModel,
-    state: State<MainViewModel.SettingsState>
+    state: State<MainViewModel.SettingsState>,
+    navController: NavController? = null
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -353,7 +355,7 @@ private fun SettingCard(
         // Custom dialog content for each setting
         if (state.value.showAlertDialog[index]) {
             when (index) {
-                0 -> ProfileDialog(onDismiss = { mainviewmodel.showAlertDialog(index, false) })
+                0 -> ProfileDialog(onDismiss = { navController?.navigate(Screen.ProfilePage.route) })
                 1 -> NotificationsDialog(onDismiss = { mainviewmodel.showAlertDialog(index, false) })
                 2 -> HelpFAQDialog(onDismiss = { mainviewmodel.showAlertDialog(index, false) })
                 3 -> ContatDialog(onDismiss = { mainviewmodel.showAlertDialog(index, false) })
@@ -405,22 +407,17 @@ private fun SettingCardContent(item: setting) {
 private fun ProfileDialog(onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Profile Settings") },
+        title = {  },
         text = {
-            Column {
-                Text("Current Profile:")
+            Column(modifier = Modifier,
+                horizontalAlignment = Alignment.End) {
+                Text("اضغط حسنا للذهاب الى حسابك")
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("• Name: John Doe")
-                Text("• ID: 12345")
-                Text("• Department: Computer Science")
-                Text("• Year: 3rd Year")
-                Spacer(modifier = Modifier.height(8.dp))
-                Text("Click OK to edit your profile details")
             }
         },
         confirmButton = {
             Button(onClick = onDismiss) {
-                Text("OK")
+                Text("حسنا")
             }
         }
     )
@@ -457,15 +454,15 @@ private fun HelpFAQDialog(onDismiss: () -> Unit) {
         onDismissRequest = onDismiss,
         title = { Text("Help & FAQ") },
         text = {
-            Column {
-                Text("Common Questions:")
+            Column(modifier = Modifier.fillMaxWidth(),horizontalAlignment = Alignment.End) {
+                Text("الأسئلة الشائعة")
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("• How to view my schedule?")
-                Text("• How to check assignments?")
-                Text("• How to contact professors?")
-                Text("• How to update personal info?")
-                Spacer(modifier = Modifier.height(8.dp))
-                Text("Tap OK to view detailed FAQ section")
+                Text("• كيف يمكنني تسجيل الدخول إلى النظام؟")
+                Text("للدخول إلى النظام، يجب عليك استخدام اسم المستخدم وكلمة المرور المقدمة لك من قبل المدرسة. تأكد من إدخال المعلومات بشكل صحيح وإذا واجهت أي مشكلة، يمكنك التواصل مع الدعم الفني.")
+                Text("كيف يمكنني تسجيل طلاب جدد؟")
+                Text("يمكن لمسؤولي النظام تسجيل طلاب جدد عن طريق الدخول إلى لوحة التحكم واختيار \"إضافة طالب جديد\". ستحتاج إلى إدخال البيانات الشخصية للطالب والمعلومات الأكاديمية المطلوبة.")
+                Text("كيف يمكنني رفع الواجبات المنزلية؟")
+                Text("لرفع الواجبات المنزلية، يجب على الطلاب الدخول إلى تطبيق الهاتف المحمول، اختيار المادة المناسبة، ومن ثم اختيار \"رفع الواجب\" وإرفاق الملف المطلوب.")
             }
         },
         confirmButton = {
@@ -480,22 +477,23 @@ private fun HelpFAQDialog(onDismiss: () -> Unit) {
 private fun ContatDialog(onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Contact Us") },
+        title = { Text("تواصل معنا") },
         text = {
             Column {
-                Text("Support Contact Information:")
+                Text("لديك أي استفسارات أو تحتاج إلى مساعدة، يمكنك التواصل معنا عبر المعلومات التالية:")
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("• Email: support@school.edu")
-                Text("• Phone: (555) 123-4567")
-                Text("• Hours: Mon-Fri 8AM-5PM")
-                Text("• Location: Admin Building, Room 101")
+                Text("• البريد الإلكتروني: support@example.com")
+                Text("الهاتف: +962 6 1234567 " )
+                Text("العنوان: شارع الملك عبدالله الثاني، عمان، الأردن")
+                Text("ساعات العمل:")
+                Text("من 8:00 ص إلى 5:00 م")
+                Text("الجمعة - السبت: مغلق")
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("Tap OK to send us a message")
             }
         },
         confirmButton = {
             Button(onClick = onDismiss) {
-                Text("OK")
+                Text("حسنا")
             }
         }
     )

@@ -273,7 +273,8 @@ private fun SessionCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.End
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -303,8 +304,8 @@ private fun SessionCard(
 
             Text(
                 text = when {
-                    teacherName != null -> "Teacher: $teacherName"
-                    else -> "Loading teacher..."
+                    teacherName != null -> " $teacherName المدرس:"
+                    else -> "يتم البحث عن اسم المدرس"
                 },
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.background

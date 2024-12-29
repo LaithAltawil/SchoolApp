@@ -307,19 +307,24 @@ fun CounselorPage(
 fun ContactDialog(onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Contact Information") },
+        title = { Column(modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.End) { Text("معلومات التواصل") } },
         text = {
-            Column {
-                Text("School Counselor: John Doe")
-                Text("Email: counselor@school.edu")
-                Text("Phone: (555) 123-4567")
-                Text("Office: Room 101")
-                Text("Hours: Mon-Fri 8:00 AM - 4:00 PM")
+            Column(modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.End) {
+                Text(" المرشد المدرسي : جميل عبده")
+                Text("ايميل : tdmer1994@dad.edu")
+                Text("هاتف : 0799681787")
+                Text("مكتب رقم 2019")
+                Text("مواعيد المكتبية : من الساعة الثامنة صباحا الى الخامسة عصرا")
             }
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text("Close")
+                Column(modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.End){
+                    Text(text ="اغلق")
+                }
             }
         }
     )

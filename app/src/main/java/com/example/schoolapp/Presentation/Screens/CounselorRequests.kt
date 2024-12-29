@@ -45,12 +45,12 @@ fun Requests(
     //variables:local & states                              =
     //=======================================================
     val calendarItems = listOf(
-        Counselorevents("Current Requests", "A huge Open Day for jobs in tech for the future", {}),
+        Counselorevents("مواعيد حالية", "A huge Open Day for jobs in tech for the future", {}),
         Counselorevents(
-            "submitted Requests",
+            "مواعيد تم تحديدها",
             "A huge Open Day for jobs in medicine for the future",
             {}),
-        Counselorevents("Done Requests", "A huge Open Day for jobs in finance for the future", {})
+        Counselorevents("مواعيد سابقة", "A huge Open Day for jobs in finance for the future", {})
     )
     //=======================================================
     // logic & UI                                           =

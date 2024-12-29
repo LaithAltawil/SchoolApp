@@ -285,7 +285,8 @@ private fun ExamDetailSheet(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.End
     ) {
         Text(
             text = subject,
@@ -320,19 +321,19 @@ private fun ExamItem(exam: com.example.schoolapp.datasource.local.entity.Exam) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "التاريخ: ${exam.examDate}",
-                style = MaterialTheme.typography.bodyLarge
-            )
-            Text(
                 text = exam.examDay,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                text = "التاريخ: ${exam.examDate}",
+                style = MaterialTheme.typography.bodyLarge
             )
         }
 
         if (!exam.examMaterial.isNullOrBlank()) {
             Text(
-                text = "المواد المطلوبة: ${exam.examMaterial}",
+                text = "${exam.examMaterial}المواد المطلوبة:",
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(top = 4.dp)
             )
@@ -340,7 +341,7 @@ private fun ExamItem(exam: com.example.schoolapp.datasource.local.entity.Exam) {
 
         if (!exam.examNotes.isNullOrBlank()) {
             Text(
-                text = "ملاحظات: ${exam.examNotes}",
+                text = " ${exam.examNotes}ملاحظات: ",
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(top = 4.dp)
             )

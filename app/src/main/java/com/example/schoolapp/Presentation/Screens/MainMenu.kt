@@ -102,7 +102,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
             }
         ),
         MainMenuItem(
-            title = "امتحناتي",
+            title = "امتحاناتي",
             icon = painterResource(id = R.drawable.exam__1_),
             onClick = {
                 navController.navigate(Screen.ExamsPage.route)
