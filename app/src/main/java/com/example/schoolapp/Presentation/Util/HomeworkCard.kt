@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -124,11 +125,15 @@ fun homeworkCard(
                         .height(90.dp)
                         .padding(10.dp)
                 ) {
-                    Text(
+                    Column(
+                        modifier = Modifier.padding(4.dp).fillMaxSize(),
+                        horizontalAlignment = androidx.compose.ui.Alignment.End
+                    ) {Text(
                         modifier = Modifier.padding(10.dp),
                         text = homework.homeworkDetails,
                         style = MaterialTheme.typography.titleMedium
-                    )
+                    )  }
+
 
                 }
 

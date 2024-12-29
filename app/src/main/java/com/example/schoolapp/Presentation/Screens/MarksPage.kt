@@ -255,20 +255,20 @@ private fun SubjectMarkCard(
                     id = when (subject) {
                         "عربي" -> R.drawable.arabic
                         "انجليزي" -> R.drawable.english
-                        "رياضة" -> R.drawable.sport
+                        "رياضة" -> R.drawable.sports
                         "رياضيات" -> R.drawable.math
-                        "تربية اسلامية" -> R.drawable.baseline_broken
-                        "تربية مهنية" -> R.drawable.baseline_broken
+                        "تربية اسلامية" -> R.drawable.quran
+                        "تربية مهنية" -> R.drawable.worker
                         "علوم" -> R.drawable.science
-                        "اجتماعيات" -> R.drawable.baseline_broken
-                        "ثقافة مالية" -> R.drawable.baseline_broken
-                        "تربية وطنية" -> R.drawable.baseline_broken
+                        "اجتماعيات" -> R.drawable.social
+                        "ثقافة مالية" -> R.drawable.finance
+                        "تربية وطنية" -> R.drawable.jordan
                         "جغرافيا" -> R.drawable.geography
                         "تاريخ" -> R.drawable.history
-                        "فيزياء" -> R.drawable.baseline_broken
-                        "احياء" -> R.drawable.baseline_broken
-                        "كيمياء" -> R.drawable.baseline_broken
-                        "علوم الأرض" -> R.drawable.baseline_broken
+                        "فيزياء" -> R.drawable.physics
+                        "احياء" -> R.drawable.biology
+                        "كيمياء" -> R.drawable.chem
+                        "علوم الأرض" -> R.drawable.pickaxe
                         else -> R.drawable.baseline_broken
                     }
                 ),
@@ -307,12 +307,13 @@ private fun MarkDetailSheet(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.End
     ) {
         Text(
             text = subject,
             style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 16.dp),
         )
 
         MarkItem(mark = mark)
@@ -351,11 +352,7 @@ private fun MarkRow(label: String, value: Float, isTotal: Boolean = false) {
             .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(
-            text = label,
-            style = if (isTotal) MaterialTheme.typography.titleMedium
-            else MaterialTheme.typography.bodyLarge
-        )
+
         Text(
             // Convert float to int to remove decimal places when the value is whole
             text = value.toInt().toString(),
@@ -363,6 +360,11 @@ private fun MarkRow(label: String, value: Float, isTotal: Boolean = false) {
             else MaterialTheme.typography.bodyLarge,
             color = if (isTotal) MaterialTheme.colorScheme.primary
             else MaterialTheme.colorScheme.onSurface
+        )
+        Text(
+            text = label,
+            style = if (isTotal) MaterialTheme.typography.titleMedium
+            else MaterialTheme.typography.bodyLarge
         )
     }
 }

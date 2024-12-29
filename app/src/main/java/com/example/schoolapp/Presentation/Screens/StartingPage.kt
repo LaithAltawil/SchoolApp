@@ -82,7 +82,7 @@ fun StartPage(onSignInClick: () -> Unit={}) {
 //                    )
                     //logo for a bit until
                     Image(
-                        painter = painterResource(id = R.drawable.math),
+                        painter = painterResource(id = R.drawable.school),
                         contentDescription = "logo",
                         modifier = Modifier.size(150.dp)
 
