@@ -355,10 +355,11 @@ private fun SettingCard(
         // Custom dialog content for each setting
         if (state.value.showAlertDialog[index]) {
             when (index) {
-                0 -> ProfileDialog(onDismiss = { navController?.navigate(Screen.ProfilePage.route) })
-                1 -> NotificationsDialog(onDismiss = { mainviewmodel.showAlertDialog(index, false) })
-                2 -> HelpFAQDialog(onDismiss = { mainviewmodel.showAlertDialog(index, false) })
-                3 -> ContatDialog(onDismiss = { mainviewmodel.showAlertDialog(index, false) })
+                0 -> ProfileDialog(onDismiss = { navController?.navigate(Screen.ProfilePage.route)
+                mainviewmodel.showAlertDialog(index, false)
+                })
+                1 -> HelpFAQDialog(onDismiss = { mainviewmodel.showAlertDialog(index, false) })
+                2 -> ContatDialog(onDismiss = { mainviewmodel.showAlertDialog(index, false) })
             }
         }
 
@@ -416,6 +417,7 @@ private fun ProfileDialog(onDismiss: () -> Unit) {
             }
         },
         confirmButton = {
+
             Button(onClick = onDismiss) {
                 Text("حسنا")
             }
@@ -479,10 +481,10 @@ private fun ContatDialog(onDismiss: () -> Unit) {
         onDismissRequest = onDismiss,
         title = { Text("تواصل معنا") },
         text = {
-            Column {
+            Column(modifier = Modifier.fillMaxWidth(),horizontalAlignment = Alignment.End) {
                 Text("لديك أي استفسارات أو تحتاج إلى مساعدة، يمكنك التواصل معنا عبر المعلومات التالية:")
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("• البريد الإلكتروني: support@example.com")
+                Text("البريد الإلكتروني: support@example.com")
                 Text("الهاتف: +962 6 1234567 " )
                 Text("العنوان: شارع الملك عبدالله الثاني، عمان، الأردن")
                 Text("ساعات العمل:")

@@ -161,7 +161,7 @@ private fun ClassesTopBar(onBackClick: () -> Unit) {
             }
             Spacer(modifier = Modifier.width(20.dp))
             Text(
-                text = "Classes",
+                text = "حصصي",
                 fontSize = 70.sp,
                 fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
                 modifier = Modifier.padding(top = 40.dp),
@@ -304,7 +304,7 @@ private fun SessionCard(
 
             Text(
                 text = when {
-                    teacherName != null -> " $teacherName المدرس:"
+                    teacherName != null -> " $teacherName :المدرس "
                     else -> "يتم البحث عن اسم المدرس"
                 },
                 style = MaterialTheme.typography.bodyMedium,
