@@ -14,9 +14,11 @@ import com.example.schoolapp.datasource.local.entity.Session
 import com.example.schoolapp.datasource.local.entity.Student
 import com.example.schoolapp.datasource.online.api.StudentDatabaseApi
 import com.example.schoolapp.datasource.online.response.CalenderSemesterListResponse
+import com.example.schoolapp.datasource.online.response.DefaultResponse
 import com.example.schoolapp.datasource.online.response.EventListResponse
 import com.example.schoolapp.datasource.online.response.ExamListResponse
 import com.example.schoolapp.datasource.online.response.HomeworkListResponse
+import com.example.schoolapp.datasource.online.response.HomeworkResponseListResponse
 import com.example.schoolapp.datasource.online.response.ParentResponse
 import com.example.schoolapp.datasource.online.response.SessionListResponse
 import com.example.schoolapp.datasource.online.response.StudentResponse
@@ -368,13 +370,6 @@ class StudentRepository(
         return homeworkResponse
     }
 
-    //update homework
-    suspend fun updateHomework(isCompleted: Boolean, filePath: String, id: Int) {
-        withContext(Dispatchers.IO) {
-            studentApi.updateHomework(isCompleted, filePath, id)
-        }
-    }
-
     //==========================================
     //parent Api                               =
     //==========================================
@@ -572,4 +567,21 @@ class StudentRepository(
             }
         }
     }
+
+    suspend fun getHomeworkResponses(studentId: Int): Response<HomeworkResponseListResponse> {
+        return withContext(Dispatchers.IO) {
+            studentApi.getHomeworkResponses(studentId)
+        }
+    }
+
+    suspend fun submitHomeworkResponse(
+        homeworkId: Int,
+        studentId: Int,
+        filePath: String
+    ): Response<DefaultResponse> {
+        return withContext(Dispatchers.IO) {
+            studentApi.submitHomeworkResponse(homeworkId, studentId, filePath)
+        }
+    }
+
 }

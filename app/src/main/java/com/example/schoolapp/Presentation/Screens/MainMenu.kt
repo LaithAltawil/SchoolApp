@@ -72,6 +72,8 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
     val loadingState = viewModel.loadingState.collectAsState()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val homeworkResponsesState = viewModel.homeworkResponses.collectAsState() // Move state collection here
+
 
     //=======================================================
     //local variables                                       =
@@ -162,6 +164,10 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
     LaunchedEffect(Unit) {
         //setting todo_list with homeworks
         viewModel.checkHomework()
+        // Fetch homework responses
+        studentState.value?.studentId?.let { studentId ->
+            viewModel.fetchHomeworkResponses(studentId)
+        }
     }
     AppTheme {
         ModalNavigationDrawer(
@@ -404,19 +410,20 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                 HomeworkLoadingState.Completed -> {
                                     if (homeworkListState.value != null) {
                                         items(homeworkListState.value!!.size) { index ->
-                                            val isComplete =
-                                                homeworkListState.value!![index].homeworkIsComplete
-                                                    ?: false
+                                            val homework = homeworkListState.value!![index]
+                                            // Check completion status from responses
+                                            val isComplete = homeworkResponsesState.value?.any {
+                                                it.homeworkId == homework.homeworkId && it.isComplete
+                                            } ?: false
+
                                             if (!isComplete) {
                                                 ExpandableCard(
-                                                    homeworkListState.value!![index],
-                                                    viewModel,
-                                                    LocalContext.current,
+                                                    homework = homework,
+                                                    viewModel = viewModel,
+                                                    context = LocalContext.current
                                                 ) {
                                                     navController.navigate(Screen.HomeworkPage.route)
                                                 }
-
-
                                             }
                                         }
                                     }

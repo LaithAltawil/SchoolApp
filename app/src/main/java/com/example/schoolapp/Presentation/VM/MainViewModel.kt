@@ -21,6 +21,7 @@ import com.example.schoolapp.datasource.local.entity.Homework
 import com.example.schoolapp.datasource.local.entity.Mark
 import com.example.schoolapp.datasource.local.entity.Parent
 import com.example.schoolapp.datasource.local.entity.Student
+import com.example.schoolapp.datasource.online.model.HomeworkResponseModel
 import com.example.schoolapp.datasource.repository.StudentRepository
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
@@ -69,6 +70,10 @@ class MainViewModel(private val context: Context) : ViewModel() {
     //homework string represent the last homework class
     private val _lastHomeworkClass = MutableStateFlow<String?>(null) // Initialize with null
     val lastHomeworkClass: StateFlow<String?> = _lastHomeworkClass.asStateFlow()
+
+    private val _homeworkResponses = MutableStateFlow<List<HomeworkResponseModel>?>(null)
+    val homeworkResponses: StateFlow<List<HomeworkResponseModel>?> = _homeworkResponses.asStateFlow()
+
 
     //handle the homework loading state operations
     private val _loadingState = MutableStateFlow<HomeworkLoadingState>(HomeworkLoadingState.Initial)
@@ -360,7 +365,6 @@ class MainViewModel(private val context: Context) : ViewModel() {
                 ).body()!!
                     .homeworks[numOfHomework - 1]
                     .let {
-
                         apiHomework = Homework(
                             homeworkId = it.homeworkId,
                             homeworkTeacherId = it.homeworkTeacherId,
@@ -370,9 +374,7 @@ class MainViewModel(private val context: Context) : ViewModel() {
                             homeworkStartDate = it.homeworkStartDate.toString(),
                             homeworkEndDate = it.homeworkEndDate.toString(),
                             homeworkStartDay = it.homeworkStartDay,
-                            homeworkEndDay = it.homeworkEndDay,
-                            homeworkIsComplete = it.homeworkIsCompleted,
-                            homeworkFilePath = it.homeworkFilePath
+                            homeworkEndDay = it.homeworkEndDay
                         )
                     }
                 //inserting every homework to the local database
@@ -419,9 +421,7 @@ class MainViewModel(private val context: Context) : ViewModel() {
                                 homeworkStartDate = it.homeworkStartDate.toString(),
                                 homeworkEndDate = it.homeworkEndDate.toString(),
                                 homeworkStartDay = it.homeworkStartDay,
-                                homeworkEndDay = it.homeworkEndDay,
-                                homeworkIsComplete = it.homeworkIsCompleted,
-                                homeworkFilePath = it.homeworkFilePath
+                                homeworkEndDay = it.homeworkEndDay
                             )
                         }
                     //inserting every homework to the local database
@@ -438,6 +438,20 @@ class MainViewModel(private val context: Context) : ViewModel() {
                 _loadingState.value = HomeworkLoadingState.CheckingNewHomework
                 //getting only the homework that are not in the local database
                 getHomeworkByIdListFromApi()
+            }
+        }
+    }
+
+    fun fetchHomeworkResponses(studentId: Int) {
+        viewModelScope.launch {
+            try {
+                //here: Unresolved reference: getHomeworkResponses
+                val response = studentRepository.getHomeworkResponses(studentId)
+                if (response.isSuccessful) {
+                    _homeworkResponses.value = response.body()?.responses
+                }
+            } catch (e: Exception) {
+                Log.e("Homework", "Error fetching homework responses", e)
             }
         }
     }
@@ -469,6 +483,22 @@ class MainViewModel(private val context: Context) : ViewModel() {
     //calling the compare function
     fun checkHomework() {
         compareHomeworkByClass()
+    }
+
+    // Add these functions to MainViewModel.kt
+
+    fun submitHomeworkResponse(homeworkId: Int, studentId: Int, filePath: String) {
+        viewModelScope.launch {
+            try {
+                val response = studentRepository.submitHomeworkResponse(homeworkId, studentId, filePath)
+                if (response.isSuccessful && !response.body()?.error!!) {
+                    // Refresh homework list to reflect changes
+                    getHomeworkList()
+                }
+            } catch (e: Exception) {
+                Log.e("HomeworkResponse", "Error submitting homework response", e)
+            }
+        }
     }
 
     //=======================================================
@@ -726,10 +756,11 @@ class MainViewModel(private val context: Context) : ViewModel() {
                 }
 
                 // Then check for updates
-                val onlineExams = studentRepository.getExamCalenderFromApi(student.value!!.studentClass)
-                    .body()
-                    ?.exams
-                    ?: emptyList()
+                val onlineExams =
+                    studentRepository.getExamCalenderFromApi(student.value!!.studentClass)
+                        .body()
+                        ?.exams
+                        ?: emptyList()
 
                 val localExamNum = examCompareList.value?.count() ?: 0
 
@@ -766,61 +797,6 @@ class MainViewModel(private val context: Context) : ViewModel() {
     //=======================================================
     // session page api                                     =
     //=======================================================
-    /*// Function to fetch and organize sessions by day
-    fun fetchSessions() {
-        viewModelScope.launch {
-            _sessionLoadingState.value = SessionLoadingState.LoadingData
-            try {
-                val response =
-                    studentRepository.getSessionsFromApi(student.value?.studentClass ?: "")
-                if (response.isSuccessful && response.body() != null) {
-                    val sessions = response.body()!!.sessions
-                    // Group and sort sessions by day
-                    val sessionsByDay = sessions
-                        .groupBy { it.day }
-                        .mapValues { (_, daySessions) ->
-                            daySessions.sortedBy { it.session.toIntOrNull() ?: 0 }
-                        }
-
-                    _sessionState.value = _sessionState.value.copy(
-                        sessions = sessionsByDay,
-                        currentDay = sessionsByDay.keys.minOrNull() ?: ""
-                    )
-                    _sessionLoadingState.value = SessionLoadingState.Completed
-                } else {
-                    _sessionLoadingState.value =
-                        SessionLoadingState.Error("Failed to fetch sessions")
-                }
-            } catch (e: Exception) {
-                _sessionLoadingState.value = SessionLoadingState.Error(e.message ?: "Unknown error")
-            }
-        }
-    }
-
-    // Function to get sessions for current day
-    fun getCurrentDaySessions(): List<SessionModel> {
-        return _sessionState.value.sessions[_sessionState.value.currentDay] ?: emptyList()
-    }
-
-    private suspend fun loadSessionsForCurrentDay(day: String) {
-        try {
-            val response = studentRepository.getSessionsFromApi(student.value?.studentClass ?: "")
-            if (response.isSuccessful && response.body() != null) {
-                val allSessions = response.body()!!.sessions
-                // Filter sessions for the current day and sort them
-                val daySessions = allSessions
-                    .filter { it.day == day }
-                    .sortedBy { it.session.toIntOrNull() ?: 0 }
-
-                _sessionState.value = _sessionState.value.copy(
-                    sessions = mapOf(day to daySessions)
-                )
-            }
-        } catch (e: Exception) {
-            _sessionLoadingState.value = SessionLoadingState.Error(e.message ?: "Unknown error")
-        }
-    }*/
-
     fun setCurrentDay(day: String) {
         viewModelScope.launch {
             _sessionLoadingState.value = SessionLoadingState.LoadingData
@@ -894,7 +870,6 @@ class MainViewModel(private val context: Context) : ViewModel() {
     //============================================================================================
     // Marks page                                                                                =
     //============================================================================================
-
     // Check and sync marks data
     // In MainViewModel.kt
     fun checkMarks() {
@@ -922,7 +897,8 @@ class MainViewModel(private val context: Context) : ViewModel() {
                 _marksLoadingState.value = MarksLoadingState.Completed
             } catch (e: Exception) {
                 Log.e("MarksDebug", "Error checking marks", e)
-                _marksLoadingState.value = MarksLoadingState.Error(e.message ?: "Unknown error occurred")
+                _marksLoadingState.value =
+                    MarksLoadingState.Error(e.message ?: "Unknown error occurred")
             }
         }
     }

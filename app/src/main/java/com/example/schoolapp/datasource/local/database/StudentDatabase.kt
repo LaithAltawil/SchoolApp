@@ -29,7 +29,7 @@ import com.example.schoolapp.datasource.local.entity.Student
         CalenderEvent::class,
         Session::class,
         Mark::class],
-    version = 15,
+    version = 16,
     exportSchema = false
 )
 abstract class StudentDatabase : RoomDatabase() {

@@ -1,8 +1,6 @@
 package com.example.schoolapp.datasource.online.model
 
 import com.google.gson.annotations.SerializedName
-import java.time.DayOfWeek
-import java.util.Date
 
 data class HomeworkModel(
     @SerializedName("homeworkId") val homeworkId: Int,
@@ -13,7 +11,5 @@ data class HomeworkModel(
     @SerializedName("homeworkStartDate") val homeworkStartDate: String,
     @SerializedName("homeworkEndDate") val homeworkEndDate: String,
     @SerializedName("homeworkStartDay") val homeworkStartDay: String,
-    @SerializedName("homeworkEndDay") val homeworkEndDay: String,
-    @SerializedName("homeworkIsCompleted") val homeworkIsCompleted: Boolean,
-    @SerializedName("homeworkFilePath") val homeworkFilePath: String
+    @SerializedName("homeworkEndDay") val homeworkEndDay: String
 )

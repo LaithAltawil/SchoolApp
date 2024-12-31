@@ -2,9 +2,11 @@ package com.example.schoolapp.datasource.online.api
 
 import com.example.schoolapp.datasource.online.response.CalenderSemesterListResponse
 import com.example.schoolapp.datasource.online.response.CounselorCalenderListResponse
+import com.example.schoolapp.datasource.online.response.DefaultResponse
 import com.example.schoolapp.datasource.online.response.EventListResponse
 import com.example.schoolapp.datasource.online.response.ExamListResponse
 import com.example.schoolapp.datasource.online.response.HomeworkListResponse
+import com.example.schoolapp.datasource.online.response.HomeworkResponseListResponse
 import com.example.schoolapp.datasource.online.response.MarksListResponse
 import com.example.schoolapp.datasource.online.response.NotificationExamsListResponse
 import com.example.schoolapp.datasource.online.response.NotificationProblemsListResponse
@@ -77,14 +79,19 @@ interface StudentDatabaseApi {
         @Query("endApiCall") endApiCall: String = "homeworks_by_id"
     ): Response<HomeworkListResponse>
 
-    //update homework
     @GET(studentApi)
-    suspend fun updateHomework(
-        @Query("homeworkIsCompleted") homeworkIsCompleted: Boolean,
-        @Query("homeworkFilePath") homeworkFilePath: String,
+    suspend fun submitHomeworkResponse(
         @Query("homeworkId") homeworkId: Int,
-        @Query("endApiCall") endApiCall: String = "update_homework"
-    )
+        @Query("studentId") studentId: Int,
+        @Query("filePath") filePath: String,
+        @Query("endApiCall") endApiCall: String = "insert_homework_response"
+    ): Response<DefaultResponse>
+
+    @GET(studentApi)
+    suspend fun getHomeworkResponses(
+        @Query("studentId") studentId: Int,
+        @Query("endApiCall") endApiCall: String = "get_homework_responses"
+    ): Response<HomeworkResponseListResponse>
 
     //calender of the semester API
     @GET(studentApi)

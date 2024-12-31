@@ -15,24 +15,23 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -42,8 +41,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.compose.AppTheme
-import com.example.schoolapp.Presentation.Util.homeworkCard
+import com.example.schoolapp.Presentation.Util.HomeworkCard
 import com.example.schoolapp.Presentation.VM.MainViewModel
+import java.time.LocalDate
 
 
 //=======================================================
@@ -51,36 +51,32 @@ import com.example.schoolapp.Presentation.VM.MainViewModel
 //=======================================================
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeworkPage(viewModel: MainViewModel, navController: NavController,opened:Int?=null) {
-    //=======================================================
-    //variables: local & states                             =
-    //=======================================================
-    //states                                                =
-    //=======================================================
+fun HomeworkPage(viewModel: MainViewModel, navController: NavController, opened: Int? = null) {
     val state = viewModel.state.collectAsStateWithLifecycle()
     val homeworkListState = viewModel.homeworkList.collectAsState()
+    val homeworkResponsesState = viewModel.homeworkResponses.collectAsState() // New state for responses
     val studentState = viewModel.student.collectAsState()
-    var isExpanded by remember { mutableStateOf(false) }
+    var showFinishedHomeworks by remember { mutableStateOf(false) }
+    var showOverdueHomeworks by remember { mutableStateOf(false) }
 
-    //=======================================================
-    //local variables                                       =
-    //=======================================================
     val context = LocalContext.current
 
-    //=======================================================
-    //UI & Logic                                            =
-    //=======================================================
-    AppTheme{
+    // Effect to load homework responses when page opens
+    LaunchedEffect(Unit) {
+        studentState.value?.studentId?.let { studentId ->
+            viewModel.fetchHomeworkResponses(studentId)
+        }
+    }
+
+    AppTheme {
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxSize(),
             color = MaterialTheme.colorScheme.primaryContainer
         ) {
-            //main page UI:scaffold
             Scaffold(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
-                //TAB: UI & Logic
                 topBar = {
                     Box(
                         modifier = Modifier
@@ -89,12 +85,10 @@ fun HomeworkPage(viewModel: MainViewModel, navController: NavController,opened:I
                             .height(170.dp)
                             .background(MaterialTheme.colorScheme.primary)
                     ) {
-                        Row(
-                            modifier = Modifier.fillMaxSize(),
-                        ) {
+                        Row(modifier = Modifier.fillMaxSize()) {
                             IconButton(
                                 modifier = Modifier.padding(top = 50.dp, start = 5.dp),
-                                onClick = { navController?.popBackStack() }
+                                onClick = { navController.popBackStack() }
                             ) {
                                 Icon(
                                     Icons.Outlined.ArrowBack,
@@ -113,146 +107,139 @@ fun HomeworkPage(viewModel: MainViewModel, navController: NavController,opened:I
                             )
                         }
                     }
-
-                },
-                // Add content padding
+                }
             ) { innerPadding ->
-                val homeworks = homeworkListState.value
-                //main homeWork UI: column
                 Column(
                     modifier = Modifier.padding(innerPadding),
-                    horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    //lazy column to hold the data logic & UI design
+                    // Current Homeworks
+                    Text(
+                        "Current Homeworks",
+                        style = MaterialTheme.typography.headlineMedium,
+                        modifier = Modifier.padding(vertical = 16.dp)
+                    )
+
                     LazyColumn {
+                        if (!homeworkListState.value.isNullOrEmpty()) {
+                            items(homeworkListState.value!!.size) { index ->
+                                val homework = homeworkListState.value!![index]
+                                val response = homeworkResponsesState.value?.find {
+                                    it.homeworkId == homework.homeworkId
+                                }
 
-                        if (homeworks != null) {
-                            items(homeworks.size) { index ->
-                                if(
-
-                                    true
-                                    //will replace it with a checker to expand the clicked
-                                ){homeworkCard(
-                                    homework = homeworks[index],
+                                HomeworkCard(
+                                    homework = homework,
+                                    response = response,
                                     viewModel = viewModel,
                                     context = context
-                                )}
-
+                                )
                             }
                         } else {
                             item {
                                 Text(
-                                    "No homework available",
+                                    "No current homework available",
                                     modifier = Modifier.padding(16.dp),
                                     style = MaterialTheme.typography.bodyLarge
                                 )
                             }
                         }
                     }
-                    Column(
-                        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+
+                    // Finished Homeworks Section
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
                     ) {
-                        Card {
-                            Text(textAlign = TextAlign.Center,
-                                text = "Finished Homeworks", fontSize = 32.sp,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        isExpanded = !isExpanded
-                                    } // Toggle expansion
-                                    .padding(16.dp)
-                            )
-                            // Show child items if expanded
-                            if (isExpanded) {
-                                Column(modifier = Modifier.fillMaxWidth()) {
-                                    LazyColumn {
-                                        if (homeworks!=null) {
-                                            items(homeworks.size) { index ->
-                                                if(
-                                                    homeworks[index].homeworkIsComplete
-                                                //will replace it with a checker to expand the clicked
-                                                ){homeworkCard(
-                                                    homework = homeworks[index],
-                                                    viewModel = viewModel,
-                                                    context = context
-                                                )}
+                        Text(
+                            text = "Finished Homeworks",
+                            fontSize = 32.sp,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { showFinishedHomeworks = !showFinishedHomeworks }
+                                .padding(16.dp)
+                        )
 
-                                            }
-                                        } else {
-                                            item {
-                                                Text(
-                                                    "No homework available",
-                                                    modifier = Modifier.padding(16.dp),
-                                                    style = MaterialTheme.typography.bodyLarge,
+                        if (showFinishedHomeworks) {
+                            val finishedHomeworks = homeworkListState.value?.filter { homework ->
+                                homeworkResponsesState.value?.any {
+                                    it.homeworkId == homework.homeworkId && it.isComplete
+                                } ?: false
+                            }
 
-                                                    )
-                                            }
-                                        }
+                            if (finishedHomeworks.isNullOrEmpty()) {
+                                Text(
+                                    "No finished homeworks",
+                                    modifier = Modifier.padding(16.dp),
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
+                            } else {
+                                finishedHomeworks.forEach { homework ->
+                                    val response = homeworkResponsesState.value?.find {
+                                        it.homeworkId == homework.homeworkId
                                     }
-
+                                    HomeworkCard(
+                                        homework = homework,
+                                        response = response,
+                                        viewModel = viewModel,
+                                        context = context
+                                    )
                                 }
                             }
                         }
-
                     }
-                    Column(
-                        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+
+                    // Overdue Homeworks Section
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
                     ) {
-                        Card {
-                            Text(textAlign = TextAlign.Center,
-                                text = "overDue homeworks", fontSize = 32.sp,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        isExpanded = !isExpanded
-                                    } // Toggle expansion
-                                    .padding(16.dp)
-                            )
-                            // Show child items if expanded
-                            if (isExpanded) {
-                                Column(modifier = Modifier.fillMaxWidth()) {
-                                    LazyColumn {
-                                        if (homeworks!=null) {
-                                            items(homeworks.size) { index ->
-                                                if(true
-                                                //homeworks[index].homeworkIsComplete
-                                                //will replace it with a checker to expand the clicked
-                                                ){homeworkCard(
-                                                    homework = homeworks[index],
-                                                    viewModel = viewModel,
-                                                    context = context
-                                                )}
+                        Text(
+                            text = "Overdue Homeworks",
+                            fontSize = 32.sp,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { showOverdueHomeworks = !showOverdueHomeworks }
+                                .padding(16.dp)
+                        )
 
-                                            }
-                                        } else {
-                                            item {
-                                                Text(
-                                                    "No homework available",
-                                                    modifier = Modifier.padding(16.dp),
-                                                    style = MaterialTheme.typography.bodyLarge,
-
-                                                    )
-                                            }
-                                        }
-                                    }
-
+                        if (showOverdueHomeworks) {
+                            val currentDate = LocalDate.now()
+                            val overdueHomeworks = homeworkListState.value?.filter { homework ->
+                                val endDate = LocalDate.parse(homework.homeworkEndDate)
+                                val response = homeworkResponsesState.value?.find {
+                                    it.homeworkId == homework.homeworkId
                                 }
+                                endDate.isBefore(currentDate) && response?.isComplete != true
                             }
 
+                            if (overdueHomeworks.isNullOrEmpty()) {
+                                Text(
+                                    "No overdue homeworks",
+                                    modifier = Modifier.padding(16.dp),
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
+                            } else {
+                                overdueHomeworks.forEach { homework ->
+                                    val response = homeworkResponsesState.value?.find {
+                                        it.homeworkId == homework.homeworkId
+                                    }
+                                    HomeworkCard(
+                                        homework = homework,
+                                        response = response,
+                                        viewModel = viewModel,
+                                        context = context
+                                    )
+                                }
+                            }
                         }
-
                     }
-
-
-
                 }
             }
         }
     }
 }
-//Cant use preview due to the need of navcontroller to be parsed from navhost
-//@Composable
-//@Preview
-//fun HomeworkPagePreview() {
-//    HomeworkPage()
-//}
