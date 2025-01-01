@@ -1,12 +1,13 @@
 package com.example.ui.theme
-
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.googlefonts.Font
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+
 import androidx.compose.ui.text.googlefonts.GoogleFont
+import androidx.compose.ui.text.googlefonts.Font
 import com.example.schoolapp.R
-
-
 
 val provider = GoogleFont.Provider(
     providerAuthority = "com.google.android.gms.fonts",
@@ -16,14 +17,14 @@ val provider = GoogleFont.Provider(
 
 val bodyFontFamily = FontFamily(
     Font(
-        googleFont = GoogleFont("Ysabeau"),
+        googleFont = GoogleFont("Roboto Condensed"),
         fontProvider = provider,
     )
 )
 
 val displayFontFamily = FontFamily(
     Font(
-        googleFont = GoogleFont("Lora"),
+        googleFont = GoogleFont("Roboto"),
         fontProvider = provider,
     )
 )

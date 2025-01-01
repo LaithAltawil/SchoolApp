@@ -1,8 +1,10 @@
 package com.example.schoolapp.Presentation.Screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -11,6 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -62,24 +65,37 @@ fun HomeworkPage(viewModel: MainViewModel, navController: NavController) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        "واجباتي",
-                        style = MaterialTheme.typography.headlineMedium
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Outlined.ArrowBack, contentDescription = "Back")
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
+                    .height(170.dp)
+                    .background(MaterialTheme.colorScheme.primary)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                    IconButton(
+                        modifier = Modifier.padding(top = 50.dp, start = 5.dp),
+                        onClick = { navController?.popBackStack() }
+                    ) {
+                        Icon(
+                            Icons.Outlined.ArrowBack,
+                            contentDescription = "Back",
+                            modifier = Modifier.size(50.dp),
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
                     }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
-                )
-            )
+                    Spacer(modifier = Modifier.width(20.dp))
+                    Text(
+                        text = "واجباتي",
+                        fontSize = 70.sp,
+                        fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+                        modifier = Modifier.padding(top = 40.dp),
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            }
         }
     ) { paddingValues ->
         LazyColumn(

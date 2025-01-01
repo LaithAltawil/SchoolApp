@@ -229,7 +229,8 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                                         .clickable {
                                             menuItems[item].onClick()
                                         }, colors = CardDefaults.cardColors(
-                                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                                     )
                                 ) {
                                     Column(
@@ -319,7 +320,7 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
                             text = "واجباتي",
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.displayLarge,
-                            color = MaterialTheme.colorScheme.secondary,
+                            color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp).fillMaxWidth()
                         )
                         // Homework List
