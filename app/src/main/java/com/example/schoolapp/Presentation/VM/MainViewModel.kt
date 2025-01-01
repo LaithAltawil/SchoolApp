@@ -904,6 +904,57 @@ class MainViewModel(private val context: Context) : ViewModel() {
     }
 
     //===========================================================================================
+    // Homework page                                                                            =
+    //===========================================================================================
+    fun markHomeworkAsSolved(homeworkId: Int) {
+        viewModelScope.launch {
+            try {
+                val response = studentRepository.submitHomeworkResponse(
+                    homeworkId = homeworkId,
+                    studentId = student.value?.studentId ?: return@launch,
+                    filePath = "" // Empty string since we're just marking it as solve
+                )
+
+                if (response.isSuccessful) {
+                    // Refresh the homework lists
+                    getHomeworkList()
+                    student.value?.studentId?.let { fetchHomeworkResponses(it) }
+                }
+            } catch (e: Exception) {
+                Log.e("Homework", "Error marking homework as solved", e)
+            }
+        }
+    }
+    fun submitHomeworkResponse(
+        homeworkId: Int,
+        studentId: Int,
+        filePath: String,
+        isComplete: Boolean
+    ) {
+        viewModelScope.launch {
+            try {
+                // Submit the homework response
+                val response = studentRepository.submitHomeworkResponse(
+                    homeworkId = homeworkId,
+                    studentId = studentId,
+                    filePath = filePath
+                )
+
+                if (response.isSuccessful) {
+                    // Refresh the homework lists immediately
+                    getHomeworkList()
+                    fetchHomeworkResponses(studentId)
+                } else {
+                    Log.e("Homework", "Error submitting homework response: ${response.message()}")
+                }
+            } catch (e: Exception) {
+                Log.e("Homework", "Error submitting homework response", e)
+            }
+        }
+    }
+
+
+    //===========================================================================================
     //functions: public & private                                                               =
     //===========================================================================================
     // main menu                                            =
@@ -989,4 +1040,5 @@ class MainViewModel(private val context: Context) : ViewModel() {
         _Classesstate.value =
             MainDataClass.ClassesPageState(isTopAppBarVisible = !_Classesstate.value.isTopAppBarVisible)
     }
+
 }
