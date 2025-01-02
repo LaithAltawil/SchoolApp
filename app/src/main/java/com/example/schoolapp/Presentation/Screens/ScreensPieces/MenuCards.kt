@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 fun MainCards() {
     Card(
         modifier = Modifier
-            .width(400.dp)
+            .width(370.dp)
             .height(200.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary
