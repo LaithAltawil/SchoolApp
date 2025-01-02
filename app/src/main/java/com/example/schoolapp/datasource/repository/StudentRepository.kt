@@ -1,7 +1,6 @@
 package com.example.schoolapp.datasource.repository
 
 import android.util.Log
-import com.example.schoolapp.datasource.local.dao.ExamDao
 import com.example.schoolapp.datasource.local.dao.HomeworkDao
 import com.example.schoolapp.datasource.local.database.StudentDatabase
 import com.example.schoolapp.datasource.local.entity.CalenderEvent
@@ -10,6 +9,7 @@ import com.example.schoolapp.datasource.local.entity.Exam
 import com.example.schoolapp.datasource.local.entity.Homework
 import com.example.schoolapp.datasource.local.entity.Mark
 import com.example.schoolapp.datasource.local.entity.Parent
+import com.example.schoolapp.datasource.local.entity.Problem
 import com.example.schoolapp.datasource.local.entity.Session
 import com.example.schoolapp.datasource.local.entity.Student
 import com.example.schoolapp.datasource.online.api.StudentDatabaseApi
@@ -20,6 +20,8 @@ import com.example.schoolapp.datasource.online.response.ExamListResponse
 import com.example.schoolapp.datasource.online.response.HomeworkListResponse
 import com.example.schoolapp.datasource.online.response.HomeworkResponseListResponse
 import com.example.schoolapp.datasource.online.response.ParentResponse
+import com.example.schoolapp.datasource.online.response.ProblemListResponse
+import com.example.schoolapp.datasource.online.response.ProblemResponse
 import com.example.schoolapp.datasource.online.response.SessionListResponse
 import com.example.schoolapp.datasource.online.response.StudentResponse
 import com.example.schoolapp.datasource.online.response.TeacherResponse
@@ -584,4 +586,123 @@ class StudentRepository(
         }
     }
 
+    //===========================================
+// Problem ROOM Functions                  =
+//===========================================
+    suspend fun insertProblem(problem: Problem) {
+        withContext(Dispatchers.IO) {
+            studentDatabase.insertProblem(problem)
+        }
+    }
+
+    suspend fun getStudentProblems(studentId: Int): List<Problem> {
+        return withContext(Dispatchers.IO) {
+            studentDatabase.getStudentProblems(studentId)
+        }
+    }
+
+    suspend fun getActiveProblems(studentId: Int): List<Problem> {
+        return withContext(Dispatchers.IO) {
+            studentDatabase.getActiveProblems(studentId)
+        }
+    }
+
+    suspend fun getResolvedProblems(studentId: Int): List<Problem> {
+        return withContext(Dispatchers.IO) {
+            studentDatabase.getResolvedProblems(studentId)
+        }
+    }
+
+    suspend fun deleteStudentProblems(studentId: Int) {
+        withContext(Dispatchers.IO) {
+            studentDatabase.deleteStudentProblems(studentId)
+        }
+    }
+
+    suspend fun updateProblem(problem: Problem) {
+        withContext(Dispatchers.IO) {
+            studentDatabase.updateProblem(problem)
+        }
+    }
+
+    suspend fun getScheduledProblems(studentId: Int): List<Problem> {
+        return withContext(Dispatchers.IO) {
+            studentDatabase.getScheduledProblems(studentId)
+        }
+    }
+
+    //===========================================
+    // Problem API Functions                   =
+    //===========================================
+    suspend fun submitProblemToApi(
+        studentId: Int,
+        problemType: String,
+        problemNotes: String,
+        problemDate: String
+    ): Response<ProblemResponse> {
+        return withContext(Dispatchers.IO) {
+            studentApi.submitProblem(
+                studentId = studentId,
+                problemType = problemType,
+                problemNotes = problemNotes,
+                problemDate = problemDate
+            )
+        }
+    }
+
+    suspend fun getStudentProblemsFromApi(studentId: Int): Response<ProblemListResponse> {
+        return withContext(Dispatchers.IO) {
+            studentApi.getStudentProblems(studentId)
+        }
+    }
+
+    suspend fun getScheduledMeetingsFromApi(studentId: Int): Response<ProblemListResponse> {
+        return withContext(Dispatchers.IO) {
+            studentApi.getScheduledMeetings(studentId)
+        }
+    }
+
+    // Add sync function to manage local storage
+    suspend fun syncProblemData(studentId: Int) {
+        withContext(Dispatchers.IO) {
+            try {
+                Log.d("ProblemDebug", "Starting syncProblemData for student: $studentId")
+
+                // Get problems from API
+                val problemsResponse = getStudentProblemsFromApi(studentId)
+                Log.d("ProblemDebug", "API Response: ${problemsResponse.body()}")
+
+                if (problemsResponse.isSuccessful) {
+                    // Clear existing problems
+                    Log.d("ProblemDebug", "Clearing existing problems...")
+                    deleteStudentProblems(studentId)
+
+                    // Insert new problems
+                    val problems = problemsResponse.body()?.problems ?: emptyList()
+                    Log.d("ProblemDebug", "Inserting ${problems.size} problems from API")
+
+                    problems.forEach { problemModel ->
+                        val problem = Problem(
+                            problemId = problemModel.problemId,
+                            studentIdProblem = problemModel.studentIdProblem,
+                            problemType = problemModel.problemType,
+                            problemNotes = problemModel.problemNotes,
+                            problemDate = problemModel.problemDate,
+                            problemStatus = problemModel.problemStatus,
+                            problemDiscussionDate = problemModel.problemDiscussionDate,
+                            problemDiscussionSession = problemModel.problemDiscussionSession
+                        )
+                        Log.d("ProblemDebug", "Inserting problem: $problem")
+                        insertProblem(problem)
+                    }
+                    Log.d("ProblemDebug", "Problems sync complete")
+                } else {
+                    Log.e("ProblemDebug", "API error: ${problemsResponse.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                Log.e("ProblemDebug", "Error syncing problem data", e)
+                throw e
+            }
+        }
+    }
 }

@@ -15,12 +15,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.example.schoolapp.Presentation.Screens.CalenderPage
-import com.example.schoolapp.Presentation.Screens.CounselorPage
-
 import com.example.schoolapp.Presentation.Screens.ExamsPage
 import com.example.schoolapp.Presentation.Screens.HomeworkPage
 import com.example.schoolapp.Presentation.Screens.MainMenu
 import com.example.schoolapp.Presentation.Screens.MarksPage
+import com.example.schoolapp.Presentation.Screens.ProblemPage
 import com.example.schoolapp.Presentation.Screens.Profile_page
 import com.example.schoolapp.Presentation.Screens.Requests
 import com.example.schoolapp.Presentation.Screens.ResourcesPage
@@ -97,9 +96,9 @@ fun Navigation() {
             composable(Screen.CounselorPage.route) {
                 val context = LocalContext.current
                 val viewModel = it.MainViewModel<MainViewModel>(navController, context)
-                CounselorPage(
+                ProblemPage(
                     navController = navController,
-                    mainViewModel = viewModel
+                    viewModel = viewModel
                 )
             }
             composable(Screen.HomeworkPage.route) {

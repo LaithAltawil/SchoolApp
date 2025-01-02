@@ -9,6 +9,7 @@ import com.example.schoolapp.datasource.local.dao.ExamDao
 import com.example.schoolapp.datasource.local.dao.HomeworkDao
 import com.example.schoolapp.datasource.local.dao.MarkDao
 import com.example.schoolapp.datasource.local.dao.ParentDao
+import com.example.schoolapp.datasource.local.dao.ProblemDao
 import com.example.schoolapp.datasource.local.dao.SessionDao
 import com.example.schoolapp.datasource.local.dao.StudentDao
 import com.example.schoolapp.datasource.local.entity.CalenderEvent
@@ -17,6 +18,7 @@ import com.example.schoolapp.datasource.local.entity.Exam
 import com.example.schoolapp.datasource.local.entity.Homework
 import com.example.schoolapp.datasource.local.entity.Mark
 import com.example.schoolapp.datasource.local.entity.Parent
+import com.example.schoolapp.datasource.local.entity.Problem
 import com.example.schoolapp.datasource.local.entity.Session
 import com.example.schoolapp.datasource.local.entity.Student
 
@@ -28,8 +30,10 @@ import com.example.schoolapp.datasource.local.entity.Student
         Exam::class,
         CalenderEvent::class,
         Session::class,
-        Mark::class],
-    version = 16,
+        Mark::class,
+        Problem::class    // Add Problem entity
+    ],
+    version = 18,
     exportSchema = false
 )
 abstract class StudentDatabase : RoomDatabase() {
@@ -41,6 +45,7 @@ abstract class StudentDatabase : RoomDatabase() {
     abstract val examDao: ExamDao
     abstract val sessionDao: SessionDao
     abstract val markDao: MarkDao
+    abstract val problemDao: ProblemDao
 
     companion object {
 
@@ -131,5 +136,14 @@ abstract class StudentDatabase : RoomDatabase() {
     suspend fun getMarks(studentId: Int) = markDao.getMarks(studentId)
     suspend fun deleteMarks(studentId: Int) = markDao.deleteMarks(studentId)
     suspend fun deleteAllMarks() = markDao.deleteAllMarks()
+
+    // Add Problem functions to existing Dao functions section
+    suspend fun insertProblem(problem: Problem) = problemDao.insertProblem(problem)
+    suspend fun getStudentProblems(studentId: Int) = problemDao.getStudentProblems(studentId)
+    suspend fun getActiveProblems(studentId: Int) = problemDao.getActiveProblems(studentId)
+    suspend fun getResolvedProblems(studentId: Int) = problemDao.getResolvedProblems(studentId)
+    suspend fun deleteStudentProblems(studentId: Int) = problemDao.deleteStudentProblems(studentId)
+    suspend fun updateProblem(problem: Problem) = problemDao.updateProblem(problem)
+    suspend fun getScheduledProblems(studentId: Int) = problemDao.getScheduledProblems(studentId)
 
 }

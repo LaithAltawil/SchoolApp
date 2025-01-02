@@ -11,6 +11,9 @@ import com.example.schoolapp.Presentation.VM.States.ExamLoadingState
 import com.example.schoolapp.Presentation.VM.States.HomeworkLoadingState
 import com.example.schoolapp.Presentation.VM.States.MainDataClass
 import com.example.schoolapp.Presentation.VM.States.MarksLoadingState
+import com.example.schoolapp.Presentation.VM.States.ProblemLoadingState
+import com.example.schoolapp.Presentation.VM.States.ProblemPageState
+import com.example.schoolapp.Presentation.VM.States.ProblemSubmissionState
 import com.example.schoolapp.Presentation.VM.States.SessionLoadingState
 import com.example.schoolapp.Presentation.VM.States.SessionState
 import com.example.schoolapp.datasource.local.database.StudentDatabase
@@ -72,7 +75,8 @@ class MainViewModel(private val context: Context) : ViewModel() {
     val lastHomeworkClass: StateFlow<String?> = _lastHomeworkClass.asStateFlow()
 
     private val _homeworkResponses = MutableStateFlow<List<HomeworkResponseModel>?>(null)
-    val homeworkResponses: StateFlow<List<HomeworkResponseModel>?> = _homeworkResponses.asStateFlow()
+    val homeworkResponses: StateFlow<List<HomeworkResponseModel>?> =
+        _homeworkResponses.asStateFlow()
 
 
     //handle the homework loading state operations
@@ -490,7 +494,8 @@ class MainViewModel(private val context: Context) : ViewModel() {
     fun submitHomeworkResponse(homeworkId: Int, studentId: Int, filePath: String) {
         viewModelScope.launch {
             try {
-                val response = studentRepository.submitHomeworkResponse(homeworkId, studentId, filePath)
+                val response =
+                    studentRepository.submitHomeworkResponse(homeworkId, studentId, filePath)
                 if (response.isSuccessful && !response.body()?.error!!) {
                     // Refresh homework list to reflect changes
                     getHomeworkList()
@@ -523,14 +528,6 @@ class MainViewModel(private val context: Context) : ViewModel() {
             }
         //insert in local database
         insertParent(theParent)
-    }
-
-    init {
-        viewModelScope.launch {
-            setStudent()
-            getParentFromApi()
-            setParent()
-        }
     }
 
     //=======================================================
@@ -925,6 +922,7 @@ class MainViewModel(private val context: Context) : ViewModel() {
             }
         }
     }
+
     fun submitHomeworkResponse(
         homeworkId: Int,
         studentId: Int,
@@ -952,7 +950,6 @@ class MainViewModel(private val context: Context) : ViewModel() {
             }
         }
     }
-
 
     //===========================================================================================
     //functions: public & private                                                               =
@@ -1013,11 +1010,6 @@ class MainViewModel(private val context: Context) : ViewModel() {
         _Counselorstate.value = _Counselorstate.value.copy(time = time)
     }
 
-    fun toggleContactDialog() {
-        _Counselorstate.value =
-            _Counselorstate.value.copy(showContactDialog = !_Counselorstate.value.showContactDialog)
-    }
-
     fun submitRequest() {
         // Implement submission logic here
         _Counselorstate.value = _Counselorstate.value.copy(isLoading = true)
@@ -1039,6 +1031,181 @@ class MainViewModel(private val context: Context) : ViewModel() {
     fun isTopAppbarVisible5() {
         _Classesstate.value =
             MainDataClass.ClassesPageState(isTopAppBarVisible = !_Classesstate.value.isTopAppBarVisible)
+    }
+
+    // Add to MainViewModel.kt
+
+    private val _problemLoadingState =
+        MutableStateFlow<ProblemLoadingState>(ProblemLoadingState.Initial)
+    val problemLoadingState: StateFlow<ProblemLoadingState> = _problemLoadingState.asStateFlow()
+
+    private val _problemPageState = MutableStateFlow(ProblemPageState())
+    val problemPageState: StateFlow<ProblemPageState> = _problemPageState.asStateFlow()
+
+    private val _problemSubmissionState =
+        MutableStateFlow<ProblemSubmissionState>(ProblemSubmissionState.Initial)
+    val problemSubmissionState: StateFlow<ProblemSubmissionState> =
+        _problemSubmissionState.asStateFlow()
+
+    // Tab management
+    fun setCurrentProblemTab(tabIndex: Int) {
+        _problemPageState.update { it.copy(currentTab = tabIndex) }
+    }
+
+    // Form management
+    fun updateProblemForm(
+        problemType: String = _problemPageState.value.problemType,
+        problemDate: String = _problemPageState.value.problemDate,
+        problemNotes: String = _problemPageState.value.problemNotes
+    ) {
+        _problemPageState.update {
+            it.copy(
+                problemType = problemType,
+                problemDate = problemDate,
+                problemNotes = problemNotes,
+                validationError = null // Clear validation error when form is updated
+            )
+        }
+    }
+
+    // Clear form
+    private fun clearProblemForm() {
+        _problemPageState.update {
+            it.copy(
+                problemType = "",
+                problemNotes = "",
+            )
+        }
+    }
+
+    // Submit new problem
+    fun submitProblem() {
+        viewModelScope.launch {
+            // Validate form
+            when {
+                problemPageState.value.problemType.isEmpty() -> {
+                    _problemPageState.update { it.copy(validationError = "الرجاء اختيار نوع المشكلة") }
+                    return@launch
+                }
+                problemPageState.value.problemDate.isEmpty() -> {
+                    _problemPageState.update { it.copy(validationError = "الرجاء اختيار تاريخ المشكلة") }
+                    return@launch
+                }
+                problemPageState.value.problemNotes.isEmpty() -> {
+                    _problemPageState.update { it.copy(validationError = "الرجاء ادخال تفاصيل المشكلة") }
+                    return@launch
+                }
+            }
+
+            _problemSubmissionState.value = ProblemSubmissionState.Submitting
+            _problemPageState.update { it.copy(isLoading = true, validationError = null) }
+
+            try {
+                val response = studentRepository.submitProblemToApi(
+                    studentId = student.value?.studentId ?: return@launch,
+                    problemType = problemPageState.value.problemType,
+                    problemNotes = problemPageState.value.problemNotes,
+                    problemDate = problemPageState.value.problemDate
+                )
+
+                if (response.isSuccessful && response.body()?.error == false) {
+                    _problemSubmissionState.value = ProblemSubmissionState.Success
+                    clearProblemForm()
+                    fetchProblemData()
+                } else {
+                    _problemSubmissionState.value = ProblemSubmissionState.Error(
+                        response.body()?.message ?: "Failed to submit problem"
+                    )
+                }
+            } catch (e: Exception) {
+                _problemSubmissionState.value = ProblemSubmissionState.Error(e.message ?: "Unknown error")
+            } finally {
+                _problemPageState.update { it.copy(isLoading = false) }
+            }
+        }
+    }
+
+
+    // Get filtered lists
+    fun getUpcomingMeetings() = problemPageState.value.scheduledMeetings.filter {
+        it.problemDiscussionDate?.let { date ->
+            LocalDate.parse(date).isAfter(LocalDate.now())
+        } ?: false
+    }
+
+    // Initial load
+    fun initializeProblemData() {
+        viewModelScope.launch {
+            if (_problemLoadingState.value == ProblemLoadingState.Initial) {
+                fetchProblemData()
+            }
+        }
+    }
+
+    fun toggleTypeDropdown() {
+        _problemPageState.update { it.copy(showTypeDropdown = !it.showTypeDropdown) }
+    }
+
+    fun toggleContactDialog() {
+        _problemPageState.update { it.copy(showContactDialog = !it.showContactDialog) }
+    }
+
+    fun fetchProblemData() {
+        viewModelScope.launch {
+            try {
+                _problemLoadingState.value = ProblemLoadingState.Loading
+                val studentId = student.value?.studentId ?: return@launch
+
+                Log.d("ProblemDebug", "Fetching problems for student: $studentId")
+
+                // Add log to check API call
+                Log.d("ProblemDebug", "Calling syncProblemData...")
+                studentRepository.syncProblemData(studentId)
+
+                Log.d("ProblemDebug", "Getting problems from local DB...")
+                val problems = studentRepository.getStudentProblems(studentId)
+                val meetings = studentRepository.getScheduledProblems(studentId)
+
+                Log.d("ProblemDebug", "Retrieved problems: ${problems.size}")
+                Log.d("ProblemDebug", "Retrieved meetings: ${meetings.size}")
+                Log.d("ProblemDebug", "Problems: $problems")
+                Log.d("ProblemDebug", "Meetings: $meetings")
+
+                _problemPageState.update {
+                    it.copy(
+                        problems = problems,
+                        scheduledMeetings = meetings,
+                        isLoading = false
+                    )
+                }
+
+                _problemLoadingState.value = ProblemLoadingState.Success
+            } catch (e: Exception) {
+                Log.e("ProblemDebug", "Error fetching problems", e)
+                Log.e("ProblemDebug", "Stack trace:", e)
+                _problemLoadingState.value = ProblemLoadingState.Error(e.message ?: "Unknown error")
+                _problemPageState.update { it.copy(isLoading = false) }
+            }
+        }
+    }
+
+    fun getActiveProblems() = problemPageState.value.problems.also {
+        Log.d("ProblemDebug", "Filtering active problems from ${it.size} total")
+    }.filter { it.problemStatus == 0 }
+
+    fun getResolvedProblems() = problemPageState.value.problems.also {
+        Log.d("ProblemDebug", "Filtering resolved problems from ${it.size} total")
+    }.filter { it.problemStatus == 1 }
+
+    init {
+        viewModelScope.launch {
+            setStudent() // Wait for student data
+            Log.d("ProblemDebug", "Student set, studentId: ${student.value?.studentId}")
+            getParentFromApi()
+            setParent()
+            Log.d("ProblemDebug", "Init complete, starting initializeProblemData...")
+            initializeProblemData() // Now load problems
+        }
     }
 
 }

@@ -11,6 +11,8 @@ import com.example.schoolapp.datasource.online.response.MarksListResponse
 import com.example.schoolapp.datasource.online.response.NotificationExamsListResponse
 import com.example.schoolapp.datasource.online.response.NotificationProblemsListResponse
 import com.example.schoolapp.datasource.online.response.ParentResponse
+import com.example.schoolapp.datasource.online.response.ProblemListResponse
+import com.example.schoolapp.datasource.online.response.ProblemResponse
 import com.example.schoolapp.datasource.online.response.SessionListResponse
 import com.example.schoolapp.datasource.online.response.StudentResponse
 import com.example.schoolapp.datasource.online.response.TeacherResponse
@@ -133,6 +135,33 @@ interface StudentDatabaseApi {
         @Query("teacherId") teacherId: Int,
         @Query("endApiCall") endApiCall: String = "teacher",
     ): Response<TeacherResponse>
+
+    @GET(studentApi)
+    suspend fun submitProblem(
+        @Query("studentId") studentId: Int,
+        @Query("problemType") problemType: String,
+        @Query("problemNotes") problemNotes: String,
+        @Query("problemDate") problemDate: String,
+        @Query("endApiCall") endApiCall: String = "submit_problem"
+    ): Response<ProblemResponse>
+
+    @GET(studentApi)
+    suspend fun getStudentProblems(
+        @Query("studentId") studentId: Int,
+        @Query("endApiCall") endApiCall: String = "get_student_problems"
+    ): Response<ProblemListResponse>
+
+    @GET(studentApi)
+    suspend fun getActiveProblems(
+        @Query("studentId") studentId: Int,
+        @Query("endApiCall") endApiCall: String = "get_active_problems"
+    ): Response<ProblemListResponse>
+
+    @GET(studentApi)
+    suspend fun getScheduledMeetings(
+        @Query("studentId") studentId: Int,
+        @Query("endApiCall") endApiCall: String = "get_scheduled_meetings"
+    ): Response<ProblemListResponse>
 
     companion object {
         operator fun invoke(): StudentDatabaseApi {
