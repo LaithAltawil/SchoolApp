@@ -33,7 +33,7 @@ import com.example.schoolapp.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExamsPage(mainViewModel: MainViewModel, navController: NavController) {
-    val examState = mainViewModel.Examstate.collectAsStateWithLifecycle()
+    val examState = mainViewModel.examState.collectAsStateWithLifecycle()
     val student = mainViewModel.student.collectAsState()
     val examList = mainViewModel.examList.collectAsState()
     val loadingState = mainViewModel.examLoadingState.collectAsState()

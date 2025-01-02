@@ -23,11 +23,17 @@ data class Problem(
     val problemDate: String,
 
     @ColumnInfo(name = "problem_status")
-    val problemStatus: Int = 0,
+    val problemStatus: Boolean = false,
 
     @ColumnInfo(name = "problem_discussion_date")
     val problemDiscussionDate: String? = null,
 
     @ColumnInfo(name = "problem_discussion_session")
-    val problemDiscussionSession: String? = null
+    val problemDiscussionSession: String? = null,
+
+    @ColumnInfo(name = "submission_timestamp")
+    val submissionTimestamp: Long = System.currentTimeMillis(),
+
+    @ColumnInfo(name = "response_timestamp")
+    val responseTimestamp: Long? = null
 )

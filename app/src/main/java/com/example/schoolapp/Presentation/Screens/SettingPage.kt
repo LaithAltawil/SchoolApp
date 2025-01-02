@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -229,7 +228,7 @@ fun SettingPage(
     mainviewmodel: MainViewModel,
     navController: NavController?
 ) {
-    val state = mainviewmodel.Settingstate.collectAsStateWithLifecycle()
+    val state = mainviewmodel.settingState.collectAsStateWithLifecycle()
 
     val settings = listOf(
         setting(

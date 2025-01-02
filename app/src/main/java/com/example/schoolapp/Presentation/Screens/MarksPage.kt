@@ -56,7 +56,7 @@ import com.example.schoolapp.datasource.local.entity.Mark
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MarksPage(mainViewModel: MainViewModel, navController: NavController) {
-    val marksState = mainViewModel.Marksstate.collectAsStateWithLifecycle()
+    val marksState = mainViewModel.marksState.collectAsStateWithLifecycle()
     val student = mainViewModel.student.collectAsState()
     val marksList = mainViewModel.marksList.collectAsState()
     val loadingState = mainViewModel.marksLoadingState.collectAsState()

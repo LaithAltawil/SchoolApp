@@ -9,8 +9,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,8 +24,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.schoolapp.datasource.local.entity.Problem
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
+private fun Char.isArabic(): Boolean {
+    val arabicRange = '\u0600'..'\u06FF'
+    val arabicPresentationRange = '\uFB50'..'\uFDFF'
+    val arabicExtendedRange = '\uFE70'..'\uFEFF'
+
+    return this in arabicRange ||
+            this in arabicPresentationRange ||
+            this in arabicExtendedRange
+}
+
+fun String.hasArabicText() = any { it.isArabic() }
 
 //=======================================================
 //Expandable card holds the logic for viewing it        =
@@ -29,9 +48,9 @@ import com.example.schoolapp.datasource.local.entity.Problem
 @Composable
 fun ProblemCard(
     problem: Problem,
-    isAppointment: Boolean = false
+    expanded: Boolean = false
 ) {
-    var isExpanded by remember { mutableStateOf(false) }
+    var isExpanded by remember { mutableStateOf(expanded) }
 
     Card(
         modifier = Modifier
@@ -39,59 +58,79 @@ fun ProblemCard(
             .padding(vertical = 8.dp)
             .clickable { isExpanded = !isExpanded },
         colors = CardDefaults.cardColors(
-            containerColor = when {
-                isAppointment -> MaterialTheme.colorScheme.tertiaryContainer
-                problem.problemStatus == 1 -> MaterialTheme.colorScheme.secondaryContainer
-                else -> MaterialTheme.colorScheme.primaryContainer
+            containerColor = if (!problem.problemStatus && problem.problemDiscussionDate == null) {
+                MaterialTheme.colorScheme.primaryContainer
+            } else if (!problem.problemStatus && problem.problemDiscussionDate != null) {
+                MaterialTheme.colorScheme.secondaryContainer
+            } else {
+                MaterialTheme.colorScheme.tertiaryContainer
             }
         )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.End
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                horizontalArrangement = Arrangement.End
             ) {
-                Column {
+                Column(horizontalAlignment = Alignment.End) {
                     Text(
-                        text = "problem.problemTitle",
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Text(
-                        text = problem.problemType,
+                        text = "تاريخ تقديم المشكلة: ${
+                            LocalDate.parse(problem.problemDate).format(
+                                DateTimeFormatter.ofPattern("dd-MM-yyyy")
+                            )
+                        }",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        textAlign = TextAlign.Right
                     )
-                }
-
-                if (isAppointment && problem.problemDiscussionSession != null) {
                     Text(
-                        text = problem.problemDiscussionSession,
-                        style = MaterialTheme.typography.bodyLarge
+                        text = "نوع المشكلة: ${problem.problemType}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Right
                     )
                 }
             }
 
             if (isExpanded) {
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = problem.problemNotes,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-
-                if (isAppointment) {
-                    Spacer(modifier = Modifier.height(8.dp))
+                Column(horizontalAlignment = Alignment.End) {
                     Text(
-                        text = "تاريخ الموعد: ${problem.problemDiscussionDate}",
-                        style = MaterialTheme.typography.bodyMedium
+                        text = "تفاصيل المشكلة:",
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Right
                     )
-                } else {
+                    Text(
+                        text = problem.problemNotes,
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = if (problem.problemNotes.any { it.isArabic() })
+                            TextAlign.Right
+                        else
+                            TextAlign.Left,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
+                if (problem.problemDiscussionDate != null) {
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "تاريخ التقديم: ${problem.problemDate}",
-                        style = MaterialTheme.typography.bodyMedium
+                        text = "موعد المناقشة: ${
+                            LocalDate.parse(problem.problemDiscussionDate)
+                                .format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                        }",
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Right
+                    )
+                }
+
+                if (problem.problemDiscussionSession != null) {
+                    Text(
+                        text = "حصة المناقشة: ${problem.problemDiscussionSession}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Right
                     )
                 }
             }

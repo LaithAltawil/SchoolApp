@@ -33,7 +33,7 @@ import com.example.schoolapp.datasource.local.entity.Student
         Mark::class,
         Problem::class    // Add Problem entity
     ],
-    version = 18,
+    version = 20,
     exportSchema = false
 )
 abstract class StudentDatabase : RoomDatabase() {

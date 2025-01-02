@@ -1,7 +1,8 @@
 package com.example.schoolapp.Presentation.Screens
 
-import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,27 +16,34 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -46,15 +54,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.compose.AppTheme
 import com.example.schoolapp.Presentation.Util.ProblemCard
 import com.example.schoolapp.Presentation.VM.MainViewModel
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 //=======================================================
@@ -172,25 +184,32 @@ private fun TabButton(
 
 @Composable
 private fun AppointmentsTab(viewModel: MainViewModel) {
-    val problemState = viewModel.problemPageState.collectAsState()
-    val activeProblems = viewModel.getActiveProblems()
-    val resolvedProblems = viewModel.getResolvedProblems()
-
-    // Add debug logging
-    LaunchedEffect(Unit) {
-        Log.d("ProblemDebug", "All problems: ${problemState.value.problems.size}")
-        Log.d("ProblemDebug", "Active problems: ${activeProblems.size}")
-        Log.d("ProblemDebug", "Resolved problems: ${resolvedProblems.size}")
-    }
+    val sections = listOf(
+        Triple(
+            "طلبات جديدة",
+            viewModel.getNewRequests(),
+            MaterialTheme.colorScheme.primaryContainer
+        ),
+        Triple(
+            "طلبات قيد المعالجة",
+            viewModel.getActiveProblems(),
+            MaterialTheme.colorScheme.secondaryContainer
+        ),
+        Triple(
+            "طلبات تم حلها",
+            viewModel.getSolvedProblems(),
+            MaterialTheme.colorScheme.tertiaryContainer
+        )
+    )
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp)
     ) {
-        if (activeProblems.isEmpty() && resolvedProblems.isEmpty()) {
+        if (sections.all { it.second.isEmpty() }) {
             item {
                 Text(
-                    text = "لا يوجد مشاكل مسجلة",
+                    text = "لا يوجد طلبات مسجلة",
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(32.dp),
@@ -199,33 +218,65 @@ private fun AppointmentsTab(viewModel: MainViewModel) {
                 )
             }
         } else {
-            if (activeProblems.isNotEmpty()) {
-                item {
-                    Text(
-                        text = "المشاكل النشطة",
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(vertical = 8.dp)
-                    )
-                }
-                items(activeProblems) { problem ->
-                    ProblemCard(problem = problem)
-                    Spacer(modifier = Modifier.height(8.dp))
+            sections.forEach { (title, problems, color) ->
+                if (problems.isNotEmpty()) {
+                    item {
+                        ExpandableSection(
+                            title = title,
+                            containerColor = color
+                        ) {
+                            Column {
+                                problems.forEach { problem ->
+                                    ProblemCard(problem = problem)
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                }
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
                 }
             }
+        }
+    }
+}
 
-            if (resolvedProblems.isNotEmpty()) {
-                item {
-                    Text(
-                        text = "المشاكل المحلولة",
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(vertical = 8.dp)
-                    )
-                }
-                items(resolvedProblems) { problem ->
-                    ProblemCard(problem = problem)
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
+@Composable
+private fun ExpandableSection(
+    title: String,
+    containerColor: Color,
+    content: @Composable () -> Unit
+) {
+    var isExpanded by remember { mutableStateOf(true) }
+
+    Column {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .clickable { isExpanded = !isExpanded },
+            colors = CardDefaults.cardColors(containerColor = containerColor)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = if (isExpanded) Icons.Default.KeyboardArrowDown
+                    else Icons.Default.KeyboardArrowLeft,
+                    contentDescription = null
+                )
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleLarge
+                )
             }
+        }
+
+        if (isExpanded) {
+            content()
         }
     }
 }
@@ -237,14 +288,21 @@ private fun ProblemSubmissionTab(
     options: List<String>
 ) {
     val problemState = viewModel.problemPageState.collectAsState()
-    var showDatePicker by remember { mutableStateOf(false) }
-
+    val context = LocalContext.current
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is MainViewModel.UiEvent.ShowToast -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        // Problem Type Dropdown
         ExposedDropdownMenuBox(
             expanded = problemState.value.showTypeDropdown,
             onExpandedChange = { viewModel.toggleTypeDropdown() }
@@ -276,43 +334,31 @@ private fun ProblemSubmissionTab(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Date Selection
-        TextField(
-            value = if (problemState.value.problemDate.isNotEmpty()) {
-                LocalDate.parse(problemState.value.problemDate).format(
-                    DateTimeFormatter.ofPattern("yyyy/MM/dd")
-                )
-            } else "اختر تاريخ",
-            onValueChange = {},
-            readOnly = true,
-            label = { Text("تاريخ المشكلة") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { showDatePicker = true }
+        DateSelectionBox(
+            selectedDate = problemState.value.problemDate,
+            onDateSelected = { date ->
+                viewModel.updateProblemForm(problemDate = date.toString())
+            }
         )
 
-        // Date Picker Dialog
-        if (showDatePicker) {
-            ProblemDatePicker(
-                onDismiss = { showDatePicker = false },
-                onDateSelected = { date ->
-                    viewModel.updateProblemForm(problemDate = date) }
-            )
-        }
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Details field
         TextField(
             value = problemState.value.problemNotes,
             onValueChange = { viewModel.updateProblemForm(problemNotes = it) },
             label = { Text("تفاصيل المشكلة") },
+            textStyle = LocalTextStyle.current.copy(textDirection = TextDirection.ContentOrRtl),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp),
-            maxLines = 10
+                .height(200.dp)
+                .background(MaterialTheme.colorScheme.surface),
+            maxLines = 10,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface
+            )
         )
 
-        // Validation Error
         problemState.value.validationError?.let { error ->
             Text(
                 text = error,
@@ -366,70 +412,31 @@ fun ContactDialog(onDismiss: () -> Unit) {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProblemDatePicker(
     onDismiss: () -> Unit,
-    onDateSelected: (String) -> Unit
+    onDateSelected: (LocalDate) -> Unit
 ) {
     val today = LocalDate.now()
     var selectedDate by remember { mutableStateOf(today) }
 
-    AlertDialog(
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = today.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
+    )
+
+    DatePickerDialog(
         onDismissRequest = onDismiss,
-        title = {
-            Text(
-                text = "اختر تاريخ المشكلة",
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
-        },
-        text = {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(
-                        onClick = { selectedDate = selectedDate.minusDays(1) },
-                        enabled = selectedDate.isAfter(today.minusMonths(1))
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.KeyboardArrowLeft,
-                            contentDescription = "Previous Day"
-                        )
-                    }
-
-                    Text(
-                        text = selectedDate.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")),
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-
-                    IconButton(
-                        onClick = { selectedDate = selectedDate.plusDays(1) },
-                        enabled = selectedDate.isBefore(today)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.KeyboardArrowRight,
-                            contentDescription = "Next Day"
-                        )
-                    }
-                }
-            }
-        },
         confirmButton = {
-            TextButton(
-                onClick = {
-                    onDateSelected(selectedDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
-                    onDismiss()
+            TextButton(onClick = {
+                datePickerState.selectedDateMillis?.let {
+                    val date = Instant.ofEpochMilli(it)
+                        .atZone(ZoneOffset.UTC)
+                        .toLocalDate()
+                    onDateSelected(date)
                 }
-            ) {
+                onDismiss()
+            }) {
                 Text("تأكيد")
             }
         },
@@ -438,5 +445,53 @@ fun ProblemDatePicker(
                 Text("إلغاء")
             }
         }
-    )
+    ) {
+        DatePicker(
+            state = datePickerState,
+            showModeToggle = false
+        )
+    }
+}
+
+
+@Composable
+private fun DateSelectionBox(
+    selectedDate: String,
+    onDateSelected: (LocalDate) -> Unit
+) {
+    var showDatePicker by remember { mutableStateOf(false) }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.outline,
+                shape = RoundedCornerShape(4.dp)
+            )
+            .height(56.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = if (selectedDate.isNotEmpty()) {
+                LocalDate.parse(selectedDate).format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+            } else "اختر تاريخ المشكلة",
+            modifier = Modifier.padding(start = 16.dp)
+        )
+
+        IconButton(onClick = { showDatePicker = true }) {
+            Icon(Icons.Default.DateRange, contentDescription = "اختر التاريخ")
+        }
+    }
+
+    if (showDatePicker) {
+        ProblemDatePicker(
+            onDismiss = { showDatePicker = false },
+            onDateSelected = { date ->
+                onDateSelected(date)
+                showDatePicker = false
+            }
+        )
+    }
 }

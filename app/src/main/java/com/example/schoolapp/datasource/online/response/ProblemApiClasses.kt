@@ -9,7 +9,7 @@ data class ProblemModel(
     @SerializedName("problemType") val problemType: String,
     @SerializedName("problemNotes") val problemNotes: String,
     @SerializedName("problemDate") val problemDate: String,
-    @SerializedName("problemStatus") val problemStatus: Int,
+    @SerializedName("problemStatus") val problemStatus: Boolean,
     @SerializedName("problemDiscussionDate") val problemDiscussionDate: String?,
     @SerializedName("problemDiscussionSession") val problemDiscussionSession: String?
 )

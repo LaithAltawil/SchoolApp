@@ -41,7 +41,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -70,7 +69,7 @@ fun ResourcesPage(mainviewmodel: MainViewModel ,navController: NavController?=nu
     //=======================================================
     //variables: local & states                             =
     //=======================================================
-    val state = mainviewmodel.Resourcesstate.collectAsStateWithLifecycle()
+    val state = mainviewmodel.resourcesState.collectAsStateWithLifecycle()
     val mainMenuItem = listOf(
         Subjects("Maths", painterResource(id = R.drawable.math),
             exam = Exam("Mathematics", "2023-12-15", "10:00 AM", "Room A101"),

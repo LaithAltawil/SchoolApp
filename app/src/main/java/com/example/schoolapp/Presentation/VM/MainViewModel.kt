@@ -1,12 +1,10 @@
 package com.example.schoolapp.Presentation.VM
 
 import android.content.Context
-import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.schoolapp.Presentation.VM.States.CalenderLoadingState
-import com.example.schoolapp.Presentation.VM.States.CalenderState
 import com.example.schoolapp.Presentation.VM.States.ExamLoadingState
 import com.example.schoolapp.Presentation.VM.States.HomeworkLoadingState
 import com.example.schoolapp.Presentation.VM.States.MainDataClass
@@ -26,15 +24,16 @@ import com.example.schoolapp.datasource.local.entity.Parent
 import com.example.schoolapp.datasource.local.entity.Student
 import com.example.schoolapp.datasource.online.model.HomeworkResponseModel
 import com.example.schoolapp.datasource.repository.StudentRepository
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.LocalDate
 
 //Main viewModel
 class MainViewModel(private val context: Context) : ViewModel() {
@@ -78,7 +77,6 @@ class MainViewModel(private val context: Context) : ViewModel() {
     val homeworkResponses: StateFlow<List<HomeworkResponseModel>?> =
         _homeworkResponses.asStateFlow()
 
-
     //handle the homework loading state operations
     private val _loadingState = MutableStateFlow<HomeworkLoadingState>(HomeworkLoadingState.Initial)
     val loadingState: StateFlow<HomeworkLoadingState> = _loadingState.asStateFlow()
@@ -102,17 +100,9 @@ class MainViewModel(private val context: Context) : ViewModel() {
     private val _eventList = MutableStateFlow<List<Event>?>(null) // Initialize with null
     val eventList: StateFlow<List<Event>?> = _eventList.asStateFlow()
 
-    //calender object handles operations for Calender
-    private val _calenderState = MutableStateFlow<CalenderState?>(null) // Initialize with null
-    val calenderState: StateFlow<CalenderState?> = _calenderState.asStateFlow()
-
     //event object handles ROOM operations for Calender
     private val _event = MutableStateFlow<Event?>(null) // Initialize with null
     val event: StateFlow<Event?> = _event.asStateFlow()
-
-    //calender event object handles ROOM operations for Calender
-    private val _calenderEvent = MutableStateFlow<CalenderEvent?>(null) // Initialize with null
-    val calenderEvent: StateFlow<CalenderEvent?> = _calenderEvent.asStateFlow()
 
     private val _calenderLoadingState =
         MutableStateFlow<CalenderLoadingState>(CalenderLoadingState.Initial)
@@ -160,25 +150,14 @@ class MainViewModel(private val context: Context) : ViewModel() {
     private val _marksLoadingState = MutableStateFlow<MarksLoadingState>(MarksLoadingState.Initial)
     val marksLoadingState: StateFlow<MarksLoadingState> = _marksLoadingState.asStateFlow()
 
-
     //Exam Page
-    private val _Examstate = MutableStateFlow(MainDataClass.ExamPageState1())
-    val Examstate: StateFlow<MainDataClass.ExamPageState1> = _Examstate.asStateFlow()
+    private val _examState = MutableStateFlow(MainDataClass.ExamPageState1())
+    val examState: StateFlow<MainDataClass.ExamPageState1> = _examState.asStateFlow()
 
     //Marks Page
-    private val _Marksstate = MutableStateFlow(MainDataClass.MarksPageState1())
-    val Marksstate: StateFlow<MainDataClass.MarksPageState1> = _Marksstate.asStateFlow()
+    private val _marksState = MutableStateFlow(MainDataClass.MarksPageState1())
+    val marksState: StateFlow<MainDataClass.MarksPageState1> = _marksState.asStateFlow()
 
-    //setting page
-//    private val _settingstate = MutableStateFlow<setting?>(null) // Initialize with null
-//    val settingstate: StateFlow<setting?> = _settingstate.asStateFlow()
-//    fun showAlertDialog(index: Int, show: Boolean) {
-//        _settingstate.update { currentState ->
-//            val newDialogStates = currentState.showAlertDialog.toMutableList()
-//            newDialogStates[index] = show
-//            currentState.copy(showAlertDialog = newDialogStates)
-//        }
-//    }
     data class SettingsState(
         val showAlertDialog: List<Boolean> = List(4) { false }  // Initialize with 4 false values
     )
@@ -186,7 +165,7 @@ class MainViewModel(private val context: Context) : ViewModel() {
     private val _settingState = MutableStateFlow(SettingsState())
 
     // Public immutable state
-    val Settingstate = _settingState.asStateFlow()
+    val settingState = _settingState.asStateFlow()
 
     fun showAlertDialog(index: Int, show: Boolean) {
         _settingState.update { currentState ->
@@ -198,22 +177,9 @@ class MainViewModel(private val context: Context) : ViewModel() {
         }
     }
 
-
-    //ClassesPage
-    private val _Classesstate = MutableStateFlow(MainDataClass.ClassesPageState())
-    val Classesstate: StateFlow<MainDataClass.ClassesPageState> = _Classesstate.asStateFlow()
-
-    //CalenderPage
-    private val _Calenderstate = MutableStateFlow(MainDataClass.CalenderPage())
-    val Calenderstate: StateFlow<MainDataClass.CalenderPage> = _Calenderstate.asStateFlow()
-
     // Homework Page
     private val _state = MutableStateFlow(MainDataClass.HomeworkPageState1())
     val state: StateFlow<MainDataClass.HomeworkPageState1> = _state.asStateFlow()
-
-    //=======================================================
-    // Local variables                                      =
-    //=======================================================
 
     //===========================================================================================
     // ROOM side                                                                                =
@@ -291,10 +257,6 @@ class MainViewModel(private val context: Context) : ViewModel() {
         _eventList.value = studentRepository.getAllEvents()
     }
 
-    private suspend fun getEvent(id: Int) {
-        _event.value = studentRepository.getEvent(id)
-    }
-
     //=======================================================
     // Calendar Event ROOM functions                        =
     //=======================================================
@@ -310,10 +272,6 @@ class MainViewModel(private val context: Context) : ViewModel() {
         _calenderEventList.value = studentRepository.getCalenderEvents()
     }
 
-    private suspend fun getCalenderEvent(id: Int) {
-        _calenderEvent.value = studentRepository.getCalenderEvent(id)
-    }
-
     //=======================================================
     // Exam ROOM functions                                  =
     //=======================================================
@@ -327,10 +285,6 @@ class MainViewModel(private val context: Context) : ViewModel() {
 
     private suspend fun getAllExamList() {
         _examCompareList.value = studentRepository.getExams()
-    }
-
-    private suspend fun getExamsByClass(studentClass: String) {
-        _examList.value = studentRepository.getExamsByClass(studentClass)
     }
 
     private suspend fun getNewExamList() {
@@ -487,23 +441,6 @@ class MainViewModel(private val context: Context) : ViewModel() {
     //calling the compare function
     fun checkHomework() {
         compareHomeworkByClass()
-    }
-
-    // Add these functions to MainViewModel.kt
-
-    fun submitHomeworkResponse(homeworkId: Int, studentId: Int, filePath: String) {
-        viewModelScope.launch {
-            try {
-                val response =
-                    studentRepository.submitHomeworkResponse(homeworkId, studentId, filePath)
-                if (response.isSuccessful && !response.body()?.error!!) {
-                    // Refresh homework list to reflect changes
-                    getHomeworkList()
-                }
-            } catch (e: Exception) {
-                Log.e("HomeworkResponse", "Error submitting homework response", e)
-            }
-        }
     }
 
     //=======================================================
@@ -956,27 +893,14 @@ class MainViewModel(private val context: Context) : ViewModel() {
     //===========================================================================================
     // main menu                                            =
     //=======================================================
-    fun uploadFileToFirebase(fileUri: Uri) {
-        val storageRef = FirebaseStorage.getInstance().reference
-        val riversRef =
-            storageRef.child("uploads/${fileUri.lastPathSegment}") // Customize the path as needed
-
-        val uploadTask = riversRef.putFile(fileUri)
-        uploadTask.addOnFailureListener {
-            Log.e("FirebaseUpload", "Upload failed: ${it.message}")
-        }.addOnSuccessListener { taskSnapshot ->
-            Log.d("FirebaseUpload", "Upload succeeded. Metadata: ${taskSnapshot.metadata}")
-        }
-    }
-
     fun updateBottomSheetState(index: Int, newState: Boolean) {
         try {
             // Ensure we have enough space in the array
-            while (index >= _Examstate.value.bottomSheet.size) {
-                _Examstate.value.bottomSheet.add(false)
+            while (index >= _examState.value.bottomSheet.size) {
+                _examState.value.bottomSheet.add(false)
             }
             // Now safely update the state
-            _Examstate.value.bottomSheet[index] = newState
+            _examState.value.bottomSheet[index] = newState
         } catch (e: Exception) {
             Log.e("ExamsDebug", "Error updating bottom sheet state", e)
         }
@@ -985,55 +909,27 @@ class MainViewModel(private val context: Context) : ViewModel() {
     fun updateBottomSheetState1(index: Int, newState: Boolean) {
         try {
             // Make sure we have enough space in the list
-            while (index >= _Marksstate.value.bottomSheet.size) {
-                _Marksstate.value.bottomSheet.add(false)
+            while (index >= _marksState.value.bottomSheet.size) {
+                _marksState.value.bottomSheet.add(false)
             }
             // Now safely update the state
-            _Marksstate.value.bottomSheet[index] = newState
+            _marksState.value.bottomSheet[index] = newState
         } catch (e: Exception) {
             Log.e("MarksPage", "Error updating bottom sheet state", e)
         }
     }
 
-    private val _Counselorstate = MutableStateFlow(MainDataClass.CounselorState())
-    val Counselorstate: StateFlow<MainDataClass.CounselorState> = _Counselorstate.asStateFlow()
-
-    fun updateName(name: String) {
-        _Counselorstate.value = _Counselorstate.value.copy(name = name)
-    }
-
-    fun updateDate(date: LocalDate) {
-        _Counselorstate.value = _Counselorstate.value.copy(selectedDate = date)
-    }
-
-    fun updateTime(time: String) {
-        _Counselorstate.value = _Counselorstate.value.copy(time = time)
-    }
-
-    fun submitRequest() {
-        // Implement submission logic here
-        _Counselorstate.value = _Counselorstate.value.copy(isLoading = true)
-    }
-
-
     //ResourcesPage
-    private val _Resourcesstate = MutableStateFlow(MainDataClass.ResourcesPageState())
-    val Resourcesstate: StateFlow<MainDataClass.ResourcesPageState> =
-        _Resourcesstate.asStateFlow()
+    private val _resourcesState = MutableStateFlow(MainDataClass.ResourcesPageState())
+    val resourcesState: StateFlow<MainDataClass.ResourcesPageState> =
+        _resourcesState.asStateFlow()
 
     fun updateBottomSheetState2(index: Int, newState: Boolean) {
         // Ensure index is within bounds
-        if (index in _Resourcesstate.value.BottomSheet1.indices) {
-            _Resourcesstate.value.BottomSheet1[index] = newState
+        if (index in _resourcesState.value.BottomSheet1.indices) {
+            _resourcesState.value.BottomSheet1[index] = newState
         }
     }
-
-    fun isTopAppbarVisible5() {
-        _Classesstate.value =
-            MainDataClass.ClassesPageState(isTopAppBarVisible = !_Classesstate.value.isTopAppBarVisible)
-    }
-
-    // Add to MainViewModel.kt
 
     private val _problemLoadingState =
         MutableStateFlow<ProblemLoadingState>(ProblemLoadingState.Initial)
@@ -1068,17 +964,20 @@ class MainViewModel(private val context: Context) : ViewModel() {
         }
     }
 
-    // Clear form
-    private fun clearProblemForm() {
-        _problemPageState.update {
-            it.copy(
-                problemType = "",
-                problemNotes = "",
-            )
-        }
+    sealed class ProblemSubmissionState {
+        object Initial : ProblemSubmissionState()
+        object Submitting : ProblemSubmissionState()
+        data class Success(val message: String = "تم تقديم الطلب بنجاح") : ProblemSubmissionState()
+        data class Error(val message: String) : ProblemSubmissionState()
     }
 
-    // Submit new problem
+    sealed class UiEvent {
+        data class ShowToast(val message: String) : UiEvent()
+    }
+
+    private val _uiEvent = MutableSharedFlow<UiEvent>()
+    val uiEvent = _uiEvent.asSharedFlow()
+
     fun submitProblem() {
         viewModelScope.launch {
             // Validate form
@@ -1101,36 +1000,38 @@ class MainViewModel(private val context: Context) : ViewModel() {
             _problemPageState.update { it.copy(isLoading = true, validationError = null) }
 
             try {
-                val response = studentRepository.submitProblemToApi(
-                    studentId = student.value?.studentId ?: return@launch,
-                    problemType = problemPageState.value.problemType,
-                    problemNotes = problemPageState.value.problemNotes,
-                    problemDate = problemPageState.value.problemDate
-                )
-
-                if (response.isSuccessful && response.body()?.error == false) {
-                    _problemSubmissionState.value = ProblemSubmissionState.Success
-                    clearProblemForm()
-                    fetchProblemData()
-                } else {
-                    _problemSubmissionState.value = ProblemSubmissionState.Error(
-                        response.body()?.message ?: "Failed to submit problem"
+                withContext(Dispatchers.IO) {
+                    val response = studentRepository.submitProblemToApi(
+                        studentId = student.value?.studentId ?: return@withContext,
+                        problemType = problemPageState.value.problemType,
+                        problemNotes = problemPageState.value.problemNotes,
+                        problemDate = problemPageState.value.problemDate
                     )
+
+                    if (response.isSuccessful && response.body()?.error == false) {
+                        _problemSubmissionState.value = ProblemSubmissionState.Success()
+                        clearProblemForm()
+                        delay(100) // Ensure form clears before fetch
+                        fetchProblemData()
+                        _uiEvent.emit(UiEvent.ShowToast("تم تقديم الطلب بنجاح"))
+
+                        // Switch to appointments tab
+                        _problemPageState.update { it.copy(currentTab = 0) }
+                    } else {
+                        _problemSubmissionState.value = ProblemSubmissionState.Error(
+                            response.body()?.message ?: "فشل في تقديم الطلب"
+                        )
+                        _uiEvent.emit(UiEvent.ShowToast("فشل في تقديم الطلب"))
+                    }
                 }
             } catch (e: Exception) {
-                _problemSubmissionState.value = ProblemSubmissionState.Error(e.message ?: "Unknown error")
+                Log.e("ProblemSubmission", "Error submitting problem", e)
+                _problemSubmissionState.value = ProblemSubmissionState.Error(e.message ?: "حدث خطأ غير متوقع")
+                _uiEvent.emit(UiEvent.ShowToast("حدث خطأ غير متوقع"))
             } finally {
                 _problemPageState.update { it.copy(isLoading = false) }
             }
         }
-    }
-
-
-    // Get filtered lists
-    fun getUpcomingMeetings() = problemPageState.value.scheduledMeetings.filter {
-        it.problemDiscussionDate?.let { date ->
-            LocalDate.parse(date).isAfter(LocalDate.now())
-        } ?: false
     }
 
     // Initial load
@@ -1189,13 +1090,28 @@ class MainViewModel(private val context: Context) : ViewModel() {
         }
     }
 
-    fun getActiveProblems() = problemPageState.value.problems.also {
-        Log.d("ProblemDebug", "Filtering active problems from ${it.size} total")
-    }.filter { it.problemStatus == 0 }
+    fun getNewRequests() = problemPageState.value.problems.filter { problem ->
+        !problem.problemStatus && problem.problemDiscussionDate == null
+    }
 
-    fun getResolvedProblems() = problemPageState.value.problems.also {
-        Log.d("ProblemDebug", "Filtering resolved problems from ${it.size} total")
-    }.filter { it.problemStatus == 1 }
+    fun getActiveProblems() = problemPageState.value.problems.filter { problem ->
+        !problem.problemStatus && problem.problemDiscussionDate != null
+    }
+
+    fun getSolvedProblems() = problemPageState.value.problems.filter { problem ->
+        problem.problemStatus
+    }
+
+    private fun clearProblemForm() {
+        _problemPageState.update {
+            it.copy(
+                problemType = "اختر نوع المشكلة",
+                problemDate = "",
+                problemNotes = "",
+                showTypeDropdown = false
+            )
+        }
+    }
 
     init {
         viewModelScope.launch {
@@ -1207,5 +1123,4 @@ class MainViewModel(private val context: Context) : ViewModel() {
             initializeProblemData() // Now load problems
         }
     }
-
 }
