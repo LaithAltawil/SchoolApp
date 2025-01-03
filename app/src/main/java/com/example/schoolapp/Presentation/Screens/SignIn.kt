@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,6 +48,7 @@ import com.example.schoolapp.Presentation.Screens.ScreensPieces.Alert_Dialog
 import com.example.schoolapp.Presentation.Util.callbacks.SignInCallBack
 import com.example.schoolapp.Presentation.VM.AppViewModel
 import com.example.schoolapp.R
+import com.google.android.gms.common.api.Scope
 import kotlinx.coroutines.time.delay
 
 //=======================================================
@@ -62,6 +64,9 @@ fun SignIn(viewModel: AppViewModel, onClick: () -> Unit = {}) {
     var loading by remember { mutableStateOf(false) }
     val isLoading by viewModel.isLoading.collectAsState()
     val context = LocalContext.current
+    LaunchedEffect(Unit) {
+       viewModel.reset()
+    }
     //=======================================================
     //Logic & UI                                            =
     //=======================================================

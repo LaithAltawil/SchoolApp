@@ -311,9 +311,12 @@ private fun ProblemSubmissionTab(
                 value = problemState.value.problemType,
                 onValueChange = {},
                 readOnly = true,
-                label = { Text("نوع المشكلة") },
+                label = { Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth()) {
+                    Text("نوع المشكلة")
+                } },
+
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = problemState.value.showTypeDropdown) },
-                modifier = Modifier.menuAnchor()
+                modifier = Modifier.menuAnchor().fillMaxWidth()
             )
 
             ExposedDropdownMenu(
@@ -351,7 +354,7 @@ private fun ProblemSubmissionTab(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp)
-                .background(MaterialTheme.colorScheme.surface),
+                .background(MaterialTheme.colorScheme.onPrimary),
             maxLines = 10,
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colorScheme.surface,
@@ -372,7 +375,7 @@ private fun ProblemSubmissionTab(
 
         Button(
             onClick = { viewModel.submitProblem() },
-            modifier = Modifier.align(Alignment.End),
+            modifier = Modifier.align(Alignment.CenterHorizontally),
             enabled = !problemState.value.isLoading
         ) {
             Text(if (problemState.value.isLoading) "جاري التقديم..." else "تقديم المشكلة")

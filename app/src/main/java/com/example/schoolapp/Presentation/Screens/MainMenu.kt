@@ -145,7 +145,11 @@ fun MainMenu(viewModel: MainViewModel, navController: NavController) {
         MainMenuItem(
             title = "تسجيل خروج",
             icon = painterResource(id = R.drawable.ic_logout),
-            onClick = { /*TODO*/ }
+            onClick = {
+                navController.navigate(Screen.SignInPage.route)
+
+
+            }
         )
     )
     val menuCard = listOf(

@@ -32,7 +32,7 @@ object SubjectUtils {
         "رياضة" to SubjectInfo(
             "رياضة",
             "Physical Education",
-            R.drawable.sport,
+            R.drawable.sports,
             SubjectCategory.PHYSICAL_EDUCATION
         ),
         "رياضيات" to SubjectInfo(

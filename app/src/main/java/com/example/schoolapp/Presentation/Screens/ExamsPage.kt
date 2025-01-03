@@ -71,17 +71,20 @@ fun ExamsPage(mainViewModel: MainViewModel, navController: NavController) {
             "عربي", "انجليزي", "رياضة", "رياضيات",
             "تربية اسلامية", "تربية مهنية", "علوم", "اجتماعيات"
         )
+
         in 4..8 -> listOf(
             "عربي", "انجليزي", "رياضة", "رياضيات",
             "تربية اسلامية", "تربية مهنية", "ثقافة مالية", "علوم",
             "تربية وطنية", "جغرافيا", "تاريخ"
         )
+
         in 9..10 -> listOf(
             "عربي", "انجليزي", "رياضة", "رياضيات",
             "تربية اسلامية", "تربية مهنية", "ثقافة مالية",
             "فيزياء", "احياء", "كيمياء", "علوم الأرض",
             "تربية وطنية", "جغرافيا", "تاريخ"
         )
+
         else -> emptyList()
     }
 
@@ -124,13 +127,18 @@ fun ExamsPage(mainViewModel: MainViewModel, navController: NavController) {
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
+                                    .clip(
+                                        RoundedCornerShape(
+                                            bottomEnd = 16.dp,
+                                            bottomStart = 16.dp
+                                        )
+                                    )
                                     .height(170.dp)
                                     .background(MaterialTheme.colorScheme.primary)
                             ) {
                                 Row(
                                     modifier = Modifier.fillMaxSize(),
-                                    ) {
+                                ) {
                                     IconButton(
                                         modifier = Modifier.padding(top = 50.dp, start = 5.dp),
                                         onClick = { navController?.popBackStack() }
@@ -330,21 +338,26 @@ private fun ExamItem(exam: com.example.schoolapp.datasource.local.entity.Exam) {
                 style = MaterialTheme.typography.bodyLarge
             )
         }
-
-        if (!exam.examMaterial.isNullOrBlank()) {
-            Text(
-                text = "${exam.examMaterial}المواد المطلوبة:",
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(top = 4.dp)
-            )
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            if (!exam.examMaterial.isNullOrBlank()) {
+                Text(
+                    text = "${exam.examMaterial}  :المواد المطلوبة",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
         }
 
-        if (!exam.examNotes.isNullOrBlank()) {
-            Text(
-                text = " ${exam.examNotes}ملاحظات: ",
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(top = 4.dp)
-            )
+        Row(
+            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End
+        ) {
+            if (!exam.examNotes.isNullOrBlank()) {
+                Text(
+                    text = " ${exam.examNotes}  :ملاحظات ",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
         }
     }
 }

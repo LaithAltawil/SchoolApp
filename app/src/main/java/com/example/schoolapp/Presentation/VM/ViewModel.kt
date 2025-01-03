@@ -50,6 +50,7 @@ class AppViewModel(private val context: Context) : ViewModel() {
     private val _studentFlag = MutableStateFlow(false) // Initialize with null
     val studentFlag: StateFlow<Boolean> = _studentFlag.asStateFlow()
 
+
     //=======================================================
     // ROOM side                                            =
     //=======================================================
@@ -143,6 +144,18 @@ class AppViewModel(private val context: Context) : ViewModel() {
     //=======================================================
     fun onDialog(value: Boolean, message: String = "") {
         _signInState.update { it.copy(alertDialog = value, message = message) }
+    }
+
+    fun reset(){
+        _signInState.update {
+            it.copy(
+                userName = "",
+                password = "",
+                isPasswordVisible = false,
+                alertDialog = false,
+                message = ""
+            )
+        }
     }
 
     //dumb i know but i am not touching it :) if it works it works:))))
